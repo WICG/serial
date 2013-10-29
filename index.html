@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Serial API
+    </title>
+    <meta charset='utf-8'>
+    <script src='http://www.w3.org/Tools/respec/respec-w3c-common' async=""
+    class='remove'>
+</script>
+    <script class='remove'>
+var respecConfig = {
+                                        additionalCopyrightHolders: "<a href='http://creativecommons.org/publicdomain/zero/1.0/' rel='license'><img alt='CC0' src='http://i.creativecommons.org/p/zero/1.0/80x15.png'></a> To the extent possible under law, the editor has waived all copyright and related or neighboring rights to this work. In addition, as of 25 October 2013, the editor has made this specification available under the <a href='http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0' rel='license'>Open Web Foundation Agreement Version 1.0</a>, which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.",
+          // specification status (e.g. WD, LCWD, WG-NOTE, etc.). If in doubt use ED.
+          specStatus:           "unofficial",
+          
+          // the specification's short name, as in http://www.w3.org/TR/short-name/
+          shortName:            "serial",
+
+          // if your specification has a subtitle that goes below the main
+          // formal title, define it here
+          subtitle   :  "Living document",
+
+          // if you wish the publication date to be other than the last modification, set this
+          // publishDate:  "2009-08-06",
+
+          // if the specification's copyright date is a range of years, specify
+          // the start date here:
+          // copyrightStart: "2005"
+
+          // if there is a previously published draft, uncomment this and set its YYYY-MM-DD date
+          // and its maturity status
+          // previousPublishDate:  "1977-03-15",
+          // previousMaturity:  "WD",
+
+          // if there a publicly available Editor's Draft, this is the link
+          // edDraftURI:           "http://berjon.com/",
+
+          // if this is a LCWD, uncomment and set the end of its review period
+          // lcEnd: "2009-08-05",
+
+          // editors, add as many as you like
+          // only "name" is required
+          editors:  [
+              {
+                  name:       "See contributors on GH"
+              ,   url:        "https://github.com/whatwg/serial/graphs/contributors"
+              },
+          ],
+          
+          // name of the WG
+          wg:           "A Web of Sensors Community Group / WHATWG Joint",
+          
+          // URI of the public WG page
+          wgURI:        "http://www.w3.org/community/sensorweb/",
+          
+          // name (without the @w3c.org) of the public mailing to which comments are due
+          wgPublicList: "public-sensorweb",
+          
+          // URI of the patent status for this WG, for Rec-track documents
+          // !!!! IMPORTANT !!!!
+          // This is important for Rec-track documents, do not copy a patent URI from a random
+          // document unless you know what you're doing. If in doubt ask your friendly neighbourhood
+          // Team Contact.
+          wgPatentURI:  "",
+          // !!!! IMPORTANT !!!! MAKE THE ABOVE BLINK IN YOUR HEAD
+      };
+    </script>
+  </head>
+  <body>
+    <section id='abstract'>
+      <p>
+        The Serial API provides a way for websites to to read and write from a
+        serial device through script. Such an API would bridge the web and the
+        physical world, by allowing documents to communicate with devices such
+        as Arduinos, 3D printers, and other serial devices.
+      </p>
+    </section>
+    <section id='sotd'>
+      <p>
+        This is a work in progress. All <a href=
+        "https://github.com/whatwg/serial">contributions</a> welcome.
+      </p>
+    </section>
+    <section>
+      <h2>
+        Usage example
+      </h2>
+      <p>
+        This example shows how to find the first "Arduino" device and set it up
+        for use.
+      </p>
+      <pre class="example highlight">
+
+
+//Request the list of ports from the user
+SerialPort.requestList().then(pickPort, console.error);
+
+//Pick the first matching port
+function pickPort(ports) {
+  var serial,
+      kind = "Arduino"
+      arduinos = ports.filter((port) =&gt; {return port.manufacturer.search(kind) &gt; -1;});
+
+  if (arduinos.length) {
+    //create the first one
+    var serial = new SerialPort(arduinos[0].path);
+
+    //set up event listeners
+    serial.addEventListener("data", (e) =&gt; console.log(e.data));
+
+    //open it!
+    serial.open().then();
+  }
+}
+     
+</pre>
+    </section>
+    <section>
+      <h2>
+        <code>SerialPort</code> interface
+      </h2>
+      <dl class="idl" title=
+      "[Constructor, Constructor(DOMString name, optional SerialOptions options)] interface SerialPort : EventTarget">
+      <dt>
+          static Promise requestList()
+        </dt>
+        <dt>
+          static SerialParser getSerialParser(optional Type, optional
+          ParserOptions options)
+        </dt>
+        <dt>
+          Promise open()
+        </dt>
+        <dt>
+          Promise close()
+        </dt>
+        <dt>
+          Promise read()
+        </dt>
+        <dt>
+          Promise write()
+        </dt>
+        <dt>
+          Promise flush()
+        </dt>
+        <dt>
+          Promise resume()
+        </dt>
+        <dt>
+          Promise pause()
+        </dt>
+        <dt>
+          void getControlSignals()
+        </dt>
+        <dt>
+          void setControlSignals()
+        </dt>
+        <dt>
+          readonly attribute boolean paused
+        </dt>
+        <dt>
+          readonly attribute boolean reading
+        </dt>
+        <dt>
+          readonly attribute boolean readable
+        </dt>
+        <dt>
+          readonly attribute DOMString path
+        </dt>
+        <dt>
+          readonly attribute unsigned long bufferSize
+        </dt>
+        <dt>
+          attribute EventHandler ondata
+        </dt>
+        <dt>
+          attribute EventHandler onopen
+        </dt>
+        <dt>
+          attribute EventHandler onerror
+        </dt>
+        <dt>
+          attribute EventHandler ondisconnect
+        </dt>
+      </dl>
+    </section>
+    <section>
+      <h2>
+        <code>SerialPortDetails</code> dictionary
+      </h2>
+      <dl title="dictionary SerialPortDetails">
+        <dt>
+          DOMString comName
+        </dt>
+        <dt>
+          DOMString path
+        </dt>
+        <dt>
+          DOMString ppnpId
+        </dt>
+        <dt>
+          DOMString manufacturer
+        </dt>
+        <dt>
+          DOMString locationID
+        </dt>
+        <dt>
+          DOMString vendorID
+        </dt>
+        <dt>
+          DOMString productId
+        </dt>
+        <dt>
+          DOMString serialNumber
+        </dt>
+      </dl>
+    </section>
+    <section>
+      <h2>
+        <code>ParserType</code> enum
+      </h2>
+      <dl title="enum ParserType">
+        <dt>
+          raw
+        </dt>
+        <dt>
+          readline
+        </dt>
+      </dl>
+    </section>
+    <section>
+      <h2>
+        <code>ParserOptions</code> dictionary
+      </h2>
+      <dl title="dictionary ParserOptions">
+        <dt>
+          delimiter = "\n"
+        </dt>
+      </dl>
+    </section>
+    <section>
+      <h2>
+        <code>SerialOptions</code> dictionary
+      </h2>
+      <dl class="idl" title="dictionary SerialOptions">
+        <dt>
+          long baudrate = 9600
+        </dt>
+        <dd>
+          One of 115200, 57600, 38400, 19200, 9600, 4800, 2400, 1800, 1200,
+          600, 300, 200, 150, 134, 110, 75, or 50.
+        </dd>
+        <dt>
+          octet databits = 8
+        </dt>
+        <dd>
+          One of 8, 7, 6, or 5.
+        </dd>
+        <dt>
+          octet stopbits = 1
+        </dt>
+        <dd>
+          One of 1 or 2.
+        </dd>
+        <dt>
+          ParityType parity = 'none'
+        </dt>
+        <dd>
+          The parity type.
+        </dd>
+        <dt>
+          long buffersize = 255
+        </dt>
+        <dt>
+          SerialParser parser
+        </dt>
+        <dt>
+          boolean rtscts = false
+        </dt>
+        <dt>
+          boolean xon = false
+        </dt>
+        <dt>
+          boolean xoff = false
+        </dt>
+        <dt>
+          boolean xany = false
+        </dt>
+      </dl>
+    </section>
+    <section>
+      <h2>
+        <code>SerialDataEvent</code> interface
+      </h2>
+      <dl title=
+      "[Constructor(DOMString type, optional SerialDataEventInit eventInitDict)]">
+      <dt>
+          readonly attribute data
+        </dt>
+      </dl>
+    </section>
+    <section>
+      <h2>
+        <code>SerialParser</code> interface
+      </h2>
+      <dl class="idl" title="interface SerialParser">
+        <dt>
+          readonly attribute DOMString type;
+        </dt>
+      </dl>
+    </section>
+    <section>
+      <h2>
+        ParityType enum
+      </h2>
+      <dl class="idl" title="enum ParityType">
+        <dt>
+          ''
+        </dt>
+        <dt>
+          'none'
+        </dt>
+        <dt>
+          'even'
+        </dt>
+        <dt>
+          'mark'
+        </dt>
+        <dt>
+          'odd'
+        </dt>
+        <dt>
+          'space'
+        </dt>
+      </dl>
+    </section>
+    <section>
+      <h2>
+        Security Considerations
+      </h2>
+      <p>
+        User agents must not grant Web sites access to any serial ports without
+        the express permission of the user. A conforming implementation of this
+        specification must provide a means for user to control which serial
+        ports the API can access, as well as a means for the end-user to be
+        able to revoke all access to serial ports.
+      </p>
+    </section>
+    <section class='appendix'>
+      <h2>
+        Acknowledgements
+      </h2>
+      <p>
+        ....
+      </p>
+    </section>
+  </body>
+</html>
