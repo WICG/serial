@@ -235,7 +235,7 @@ function pickPort(ports) {
       </h2>
       <dl class="idl" title="dictionary ParserOptions">
         <dt>
-          delimiter = "\n"
+          DOMString delimiter = "\n"
         </dt>
       </dl>
     </section>
@@ -291,17 +291,6 @@ function pickPort(ports) {
     </section>
     <section>
       <h2>
-        <code>SerialDataEvent</code> interface
-      </h2>
-      <dl class="idl" title=
-      "[Constructor(DOMString type, optional SerialDataEventInit eventInitDict)]">
-      <dt>
-          readonly attribute data
-        </dt>
-      </dl>
-    </section>
-    <section>
-      <h2>
         <code>SerialParser</code> interface
       </h2>
       <dl class="idl" title="interface SerialParser">
@@ -312,26 +301,34 @@ function pickPort(ports) {
     </section>
     <section>
       <h2>
-        ParityType enum
+        <code>ParityType</code> enum
       </h2>
       <dl class="idl" title="enum ParityType">
         <dt>
-          ''
+          none
         </dt>
         <dt>
-          'none'
+          even
         </dt>
         <dt>
-          'even'
+          mark
         </dt>
         <dt>
-          'mark'
+          odd
         </dt>
         <dt>
-          'odd'
+          space
         </dt>
-        <dt>
-          'space'
+      </dl>
+    </section>
+    <section>
+      <h2>
+        <code>SerialDataEvent</code> interface
+      </h2>
+      <dl class="idl" title=
+      "[Constructor(DOMString type, optional SerialDataEventInit eventInitDict)] interface SerialDataEvent">
+      <dt>
+          readonly attribute ??? data
         </dt>
       </dl>
     </section>
