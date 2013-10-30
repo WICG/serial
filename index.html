@@ -94,26 +94,26 @@ var respecConfig = {
 
 
 //Request the list of ports from the user
-SerialPort.requestList().then(pickPort, console.error);
-
-//Pick the first matching port
-function pickPort(ports) {
+SerialPort.requestList().then(ports => {
+  //Pick the first matching port
   var serial,
       kind = "Arduino"
-      arduinos = ports.filter((port) =&gt; {return port.manufacturer.search(kind) &gt; -1;});
+      arduinos = ports.filter(port =&gt; port.manufacturer.search(kind) &gt; -1);
 
   if (arduinos.length) {
     //create the first one
     var serial = new SerialPort(arduinos[0].path);
 
     //set up event listeners
-    serial.addEventListener("data", (e) =&gt; console.log(e.data));
+    serial.addEventListener("data", e =&gt; console.log(e.data));
 
     //open it!
-    serial.open().then();
+    return serial.open();
   }
-}
-     
+})
+.catch(console.error);
+
+
 </pre>
     </section>
     <section>
