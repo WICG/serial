@@ -1,42 +1,25 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>
-      Serial API
-    </title>
-    <meta charset='utf-8'>
-    <script src='http://www.w3.org/Tools/respec/respec-w3c-common' async=""
-    class='remove'>
-</script>
-    <script class='remove' src="respecConfig.js">
-</script>
-  </head>
-  <body>
-    <section id='abstract'>
-      <p>
-        The Serial API provides a way for websites to to read and write from a
-        serial device through script. Such an API would bridge the web and the
-        physical world, by allowing documents to communicate with devices such
-        as Arduinos, 3D printers, and other serial devices.
-      </p>
-    </section>
-    <section id='sotd'>
-      <p>
-        This is a work in progress. All <a href=
-        "https://github.com/whatwg/serial">contributions</a> welcome.
-      </p>
-    </section>
-    <section>
-      <h2>
-        Usage example
-      </h2>
-      <p>
-        This example shows how to find the first "Arduino" device and set it up
-        for use.
-      </p>
-      <pre class="example highlight">
+<meta charset='utf-8'>
+<title>Serial API</title>
+<script class='remove' src='http://www.w3.org/Tools/respec/respec-w3c-common' async></script>
+<script class='remove' src="respecConfig.js"></script>
 
+<section id='abstract'>
+The Serial API provides a way for websites to to read and write from a
+serial device through script. Such an API would bridge the web and the
+physical world, by allowing documents to communicate with devices such
+as Arduinos, 3D printers, and other serial devices.
+</section>
 
+<section id='sotd'>
+This is a work in progress. All [contributions](https://github.com/whatwg/serial) 
+welcome.
+</section>
+    
+## Usage example
+This example shows how to find the first "Arduino" device and set it up for use.
+
+<pre class="example highlight">
 //Request the list of ports from the user
 SerialPort.requestList().then(ports => {
   //Pick the first matching port
@@ -56,245 +39,216 @@ SerialPort.requestList().then(ports => {
   }
 })
 .catch(console.error);
-
-
 </pre>
-    </section>
-    <section>
-      <h2>
-        <code>SerialPort</code> interface
-      </h2>
-      <dl class="idl" title=
-      "[Constructor, Constructor(DOMString name, optional SerialOptions options)] interface SerialPort : EventTarget">
-      <dt>
-          static Promise requestList()
-        </dt>
-        <dt>
-          static SerialParser getSerialParser(optional Type, optional
-          ParserOptions options)
-        </dt>
-        <dt>
-          Promise open()
-        </dt>
-        <dt>
-          Promise close()
-        </dt>
-        <dt>
-          Promise read()
-        </dt>
-        <dt>
-          Promise write()
-        </dt>
-        <dt>
-          Promise flush()
-        </dt>
-        <dt>
-          Promise resume()
-        </dt>
-        <dt>
-          Promise pause()
-        </dt>
-        <dt>
-          void getControlSignals()
-        </dt>
-        <dt>
-          void setControlSignals()
-        </dt>
-        <dt>
-          readonly attribute boolean paused
-        </dt>
-        <dt>
-          readonly attribute boolean reading
-        </dt>
-        <dt>
-          readonly attribute boolean readable
-        </dt>
-        <dt>
-          readonly attribute DOMString path
-        </dt>
-        <dt>
-          readonly attribute unsigned long bufferSize
-        </dt>
-        <dt>
-          attribute EventHandler ondata
-        </dt>
-        <dt>
-          attribute EventHandler onopen
-        </dt>
-        <dt>
-          attribute EventHandler onerror
-        </dt>
-        <dt>
-          attribute EventHandler ondisconnect
-        </dt>
-      </dl>
-    </section>
-    <section>
-      <h2>
-        <code>SerialPortDetails</code> dictionary
-      </h2>
-      <dl class="idl" title="dictionary SerialPortDetails">
-        <dt>
-          DOMString comName
-        </dt>
-        <dt>
-          DOMString path
-        </dt>
-        <dt>
-          DOMString ppnpId
-        </dt>
-        <dt>
-          DOMString manufacturer
-        </dt>
-        <dt>
-          DOMString locationID
-        </dt>
-        <dt>
-          DOMString vendorID
-        </dt>
-        <dt>
-          DOMString productId
-        </dt>
-        <dt>
-          DOMString serialNumber
-        </dt>
-      </dl>
-    </section>
-    <section>
-      <h2>
-        <code>ParserType</code> enum
-      </h2>
-      <dl class="idl" title="enum ParserType">
-        <dt>
-          raw
-        </dt>
-        <dt>
-          readline
-        </dt>
-      </dl>
-    </section>
-    <section>
-      <h2>
-        <code>ParserOptions</code> dictionary
-      </h2>
-      <dl class="idl" title="dictionary ParserOptions">
-        <dt>
-          DOMString delimiter = "\n"
-        </dt>
-      </dl>
-    </section>
-    <section>
-      <h2>
-        <code>SerialOptions</code> dictionary
-      </h2>
-      <dl class="idl" title="dictionary SerialOptions">
-        <dt>
-          long baudrate = 9600
-        </dt>
-        <dd>
-          One of 115200, 57600, 38400, 19200, 9600, 4800, 2400, 1800, 1200,
-          600, 300, 200, 150, 134, 110, 75, or 50.
-        </dd>
-        <dt>
-          octet databits = 8
-        </dt>
-        <dd>
-          One of 8, 7, 6, or 5.
-        </dd>
-        <dt>
-          octet stopbits = 1
-        </dt>
-        <dd>
-          One of 1 or 2.
-        </dd>
-        <dt>
-          ParityType parity = 'none'
-        </dt>
-        <dd>
-          The parity type.
-        </dd>
-        <dt>
-          long buffersize = 255
-        </dt>
-        <dt>
-          SerialParser parser
-        </dt>
-        <dt>
-          boolean rtscts = false
-        </dt>
-        <dt>
-          boolean xon = false
-        </dt>
-        <dt>
-          boolean xoff = false
-        </dt>
-        <dt>
-          boolean xany = false
-        </dt>
-      </dl>
-    </section>
-    <section>
-      <h2>
-        <code>SerialParser</code> interface
-      </h2>
-      <dl class="idl" title="interface SerialParser">
-        <dt>
-          readonly attribute DOMString type;
-        </dt>
-      </dl>
-    </section>
-    <section>
-      <h2>
-        <code>ParityType</code> enum
-      </h2>
-      <dl class="idl" title="enum ParityType">
-        <dt>
-          none
-        </dt>
-        <dt>
-          even
-        </dt>
-        <dt>
-          mark
-        </dt>
-        <dt>
-          odd
-        </dt>
-        <dt>
-          space
-        </dt>
-      </dl>
-    </section>
-    <section>
-      <h2>
-        <code>SerialDataEvent</code> interface
-      </h2>
-      <dl class="idl" title=
-      "[Constructor(DOMString type, optional SerialDataEventInit eventInitDict)] interface SerialDataEvent">
-      <dt>
-          readonly attribute ??? data
-        </dt>
-      </dl>
-    </section>
-    <section>
-      <h2>
-        Security Considerations
-      </h2>
-      <p>
-        User agents must not grant Web sites access to any serial ports without
-        the express permission of the user. A conforming implementation of this
-        specification must provide a means for user to control which serial
-        ports the API can access, as well as a means for the end-user to be
-        able to revoke all access to serial ports.
-      </p>
-    </section>
-    <section class='appendix'>
-      <h2>
-        Acknowledgements
-      </h2>
-      <p>
-        ....
-      </p>
-    </section>
-  </body>
-</html>
+
+## `SerialPort` interface
+<dl class="idl" title=
+"[Constructor, Constructor(DOMString name, optional SerialOptions options)] interface SerialPort : EventTarget">
+	<dt>
+    static Promise requestList()
+  </dt>
+  <dt>
+    static SerialParser getSerialParser(optional Type, optional
+    ParserOptions options)
+  </dt>
+  <dt>
+    Promise open()
+  </dt>
+  <dt>
+    Promise close()
+  </dt>
+  <dt>
+    Promise read()
+  </dt>
+  <dt>
+    Promise write()
+  </dt>
+  <dt>
+    Promise flush()
+  </dt>
+  <dt>
+    Promise resume()
+  </dt>
+  <dt>
+    Promise pause()
+  </dt>
+  <dt>
+    void getControlSignals()
+  </dt>
+  <dt>
+    void setControlSignals()
+  </dt>
+  <dt>
+    readonly attribute boolean paused
+  </dt>
+  <dt>
+    readonly attribute boolean reading
+  </dt>
+  <dt>
+    readonly attribute boolean readable
+  </dt>
+  <dt>
+    readonly attribute DOMString path
+  </dt>
+  <dt>
+    readonly attribute unsigned long bufferSize
+  </dt>
+  <dt>
+    attribute EventHandler ondata
+  </dt>
+  <dt>
+    attribute EventHandler onopen
+  </dt>
+  <dt>
+    attribute EventHandler onerror
+  </dt>
+  <dt>
+    attribute EventHandler ondisconnect
+  </dt>
+</dl>
+
+
+## `SerialPortDetails` dictionary
+<dl class="idl" title="dictionary SerialPortDetails">
+  <dt>
+    DOMString comName
+  </dt>
+  <dt>
+    DOMString path
+  </dt>
+  <dt>
+    DOMString ppnpId
+  </dt>
+  <dt>
+    DOMString manufacturer
+  </dt>
+  <dt>
+    DOMString locationID
+  </dt>
+  <dt>
+    DOMString vendorID
+  </dt>
+  <dt>
+    DOMString productId
+  </dt>
+  <dt>
+    DOMString serialNumber
+  </dt>
+</dl>
+
+
+## `ParserType` enum
+<dl class="idl" title="enum ParserType">
+  <dt>
+    raw
+  </dt>
+  <dt>
+    readline
+  </dt>
+</dl>
+
+
+## `ParserOptions` dictionary
+<dl class="idl" title="dictionary ParserOptions">
+  <dt>
+    DOMString delimiter = "\n"
+  </dt>
+</dl>
+
+
+## `SerialOptions` dictionary
+<dl class="idl" title="dictionary SerialOptions">
+  <dt>
+    long baudrate = 9600
+  </dt>
+  <dd>
+    One of 115200, 57600, 38400, 19200, 9600, 4800, 2400, 1800, 1200,
+    600, 300, 200, 150, 134, 110, 75, or 50.
+  </dd>
+  <dt>
+    octet databits = 8
+  </dt>
+  <dd>
+    One of 8, 7, 6, or 5.
+  </dd>
+  <dt>
+    octet stopbits = 1
+  </dt>
+  <dd>
+    One of 1 or 2.
+  </dd>
+  <dt>
+    ParityType parity = 'none'
+  </dt>
+  <dd>
+    The parity type.
+  </dd>
+  <dt>
+    long buffersize = 255
+  </dt>
+  <dt>
+    SerialParser parser
+  </dt>
+  <dt>
+    boolean rtscts = false
+  </dt>
+  <dt>
+    boolean xon = false
+  </dt>
+  <dt>
+    boolean xoff = false
+  </dt>
+  <dt>
+    boolean xany = false
+  </dt>
+</dl>
+
+
+## `SerialParser` interface
+<dl class="idl" title="interface SerialParser">
+  <dt>
+    readonly attribute DOMString type;
+  </dt>
+</dl>
+
+   
+## `ParityType` enum
+<dl class="idl" title="enum ParityType">
+  <dt>
+    none
+  </dt>
+  <dt>
+    even
+  </dt>
+  <dt>
+    mark
+  </dt>
+  <dt>
+    odd
+  </dt>
+  <dt>
+    space
+  </dt>
+</dl>
+
+
+## `SerialDataEvent` interface
+<dl class="idl" title=
+"[Constructor(DOMString type, optional SerialDataEventInit eventInitDict)] interface SerialDataEvent">
+  <dt>
+    readonly attribute ??? data
+  </dt>
+</dl>
+
+## Security Considerations
+User agents must not grant Web sites access to any serial ports without
+the express permission of the user. A conforming implementation of this
+specification must provide a means for user to control which serial
+ports the API can access, as well as a means for the end-user to be
+able to revoke all access to serial ports.
+
+<section class='appendix'>
+## Acknowledgements
+... coming soon...
+</section>
+
