@@ -1,4 +1,5 @@
 var respecConfig = {
+  format: "markdown",
   additionalCopyrightHolders: "<a href='http://creativecommons.org/publicdomain/zero/1.0/' rel='license'><img alt='CC0' src='http://i.creativecommons.org/p/zero/1.0/80x15.png'></a> To the extent possible under law, the editor has waived all copyright and related or neighboring rights to this work. In addition, as of 25 October 2013, the editor has made this specification available under the <a href='http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0' rel='license'>Open Web Foundation Agreement Version 1.0</a>, which is available at http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0.",
   // specification status (e.g. WD, LCWD, WG-NOTE, etc.). If in doubt use ED.
   specStatus: "unofficial",
