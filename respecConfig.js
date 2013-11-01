@@ -1,7 +1,8 @@
 var respecConfig = {
   // disable auto generation of tables by ReSpec
   noLegacyStyle: true,
-	
+  format: "markdown",
+
   // specification status (e.g. WD, LCWD, WG-NOTE, etc.). If in doubt use ED.
   specStatus: "unofficial",
 
