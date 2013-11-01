@@ -48,10 +48,6 @@ SerialPort.requestList().then(ports => {
     static Promise requestList()
   </dt>
   <dt>
-    static SerialParser getSerialParser(optional Type, optional
-    ParserOptions options)
-  </dt>
-  <dt>
     Promise open()
   </dt>
   <dt>
@@ -136,26 +132,6 @@ SerialPort.requestList().then(ports => {
   </dt>
 </dl>
 
-
-## `ParserType` enum
-<dl class="idl" title="enum ParserType">
-  <dt>
-    raw
-  </dt>
-  <dt>
-    readline
-  </dt>
-</dl>
-
-
-## `ParserOptions` dictionary
-<dl class="idl" title="dictionary ParserOptions">
-  <dt>
-    DOMString delimiter = "\n"
-  </dt>
-</dl>
-
-
 ## `SerialOptions` dictionary
 <dl class="idl" title="dictionary SerialOptions">
   <dt>
@@ -187,9 +163,6 @@ SerialPort.requestList().then(ports => {
     long buffersize = 255
   </dt>
   <dt>
-    SerialParser parser
-  </dt>
-  <dt>
     boolean rtscts = false
   </dt>
   <dt>
@@ -202,15 +175,6 @@ SerialPort.requestList().then(ports => {
     boolean xany = false
   </dt>
 </dl>
-
-
-## `SerialParser` interface
-<dl class="idl" title="interface SerialParser">
-  <dt>
-    readonly attribute DOMString type;
-  </dt>
-</dl>
-
    
 ## `ParityType` enum
 <dl class="idl" title="enum ParityType">
