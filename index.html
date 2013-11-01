@@ -31,60 +31,29 @@ SerialPort.requestList().then(ports => {
       arduinos = ports.filter(port =&gt; port.manufacturer.search(kind) &gt; -1);
 
   if (arduinos.length) {
-    //create the first one
-    var serial = new SerialPort(arduinos[0].path);
+     serial = new SerialPort(arduinos[0].path);
+     serial.in.read(readData)
+  }
 
-    //set up event listeners
-    serial.addEventListener("data", e =&gt; console.log(e.data));
-
-    //open it!
-    return serial.open();
+  function readData(){
+    while(let data = yield serial.read()) {
+      console.log(data);
+    }
   }
 })
 .catch(console.error);
 </pre>
 
 ## `SerialPort` interface
-<dl class="idl" title=
-"[Constructor, Constructor(DOMString name, optional SerialOptions options)] interface SerialPort : EventTarget">
+<dl class="idl" title="[constructor(DOMString path, optional SerialOptions options)] interface SerialPort">
 	<dt>
     static Promise requestList()
   </dt>
   <dt>
-    Promise open()
+    readonly attribute ReadableStream in
   </dt>
   <dt>
-    Promise close()
-  </dt>
-  <dt>
-    Promise read()
-  </dt>
-  <dt>
-    Promise write()
-  </dt>
-  <dt>
-    Promise flush()
-  </dt>
-  <dt>
-    Promise resume()
-  </dt>
-  <dt>
-    Promise pause()
-  </dt>
-  <dt>
-    Promise getControlSignals()
-  </dt>
-  <dt>
-    Promise setControlSignals()
-  </dt>
-  <dt>
-    readonly attribute boolean paused
-  </dt>
-  <dt>
-    readonly attribute boolean reading
-  </dt>
-  <dt>
-    readonly attribute boolean readable
+    readonly attribute WritableStream out
   </dt>
   <dt>
     readonly attribute DOMString path
@@ -92,20 +61,10 @@ SerialPort.requestList().then(ports => {
   <dt>
     readonly attribute unsigned long bufferSize
   </dt>
-  <dt>
-    attribute EventHandler ondata
-  </dt>
-  <dt>
-    attribute EventHandler onopen
-  </dt>
-  <dt>
-    attribute EventHandler onerror
-  </dt>
-  <dt>
-    attribute EventHandler ondisconnect
-  </dt>
 </dl>
 
+The <dfn>`ReadableStream`</dfn> and <dfn>`WritableStream`</dfn> interfaces are
+defined in [[!STREAMS]]. 
 
 ## `SerialPortDetails` dictionary
 <dl class="idl" title="dictionary SerialPortDetails">
@@ -195,15 +154,6 @@ SerialPort.requestList().then(ports => {
   </dt>
   <dt>
     space
-  </dt>
-</dl>
-
-
-## `SerialDataEvent` interface
-<dl class="idl" title=
-"[Constructor(DOMString type, optional SerialDataEventInit eventInitDict)] interface SerialDataEvent">
-  <dt>
-    readonly attribute ??? data
   </dt>
 </dl>
 
