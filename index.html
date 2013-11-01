@@ -5,10 +5,10 @@
 <script class='remove' src="respecConfig.js"></script>
 
 <section id='abstract'>
-The Serial API provides a way for websites to to read and write from a
+The Serial API provides a way for websites to read and write from a
 serial device through script. Such an API would bridge the web and the
 physical world, by allowing documents to communicate with devices such
-as Arduinos, 3D printers, and other serial devices.
+as microcontrollers, 3D printers, and other serial devices.
 </section>
 
 <section id='sotd'>
@@ -73,10 +73,10 @@ SerialPort.requestList().then(ports => {
     Promise pause()
   </dt>
   <dt>
-    void getControlSignals()
+    Promise getControlSignals()
   </dt>
   <dt>
-    void setControlSignals()
+    Promise setControlSignals()
   </dt>
   <dt>
     readonly attribute boolean paused
@@ -117,7 +117,7 @@ SerialPort.requestList().then(ports => {
     DOMString path
   </dt>
   <dt>
-    DOMString ppnpId
+    DOMString pndId
   </dt>
   <dt>
     DOMString manufacturer
