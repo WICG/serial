@@ -214,6 +214,37 @@ specification must provide a means for user to control which serial
 ports the API can access, as well as a means for the end-user to be
 able to revoke all access to serial ports.
 
+## Use cases and requirements
+
+### Baud rates
+Traditionally, serial devices have operated at 
+[baud rates](http://en.wikipedia.org/wiki/Baud)
+of between 50 and 115,200 bps. 
+
+However, modern USB serial devices are able to operate at significantly higher 
+baud rates than legacy hardware. For example, the 
+[bioloid servos](http://www.trossenrobotics.com/dynamixel-ax-12-robot-actuator.aspx)
+operate at 1 Mbit (1,000,000 bps). Other USB-to-serial chips are able to 
+ operate at 3 MBit (3,000,000bps).
+
+Additionally, other serial devices have standardized baud rates that
+are not in the commonly accepted value for baud rates. For example, 
+[MIDI](http://en.wikipedia.org/wiki/MIDI) uses a baud rate of 31,250 bps,
+while a [DMX512 controller](http://en.wikipedia.org/wiki/DMX512) 
+transmits data at 250kbps.
+
+As such, it is a requirement that the Serial API does not limit the 
+baud rates to a traditional range. Instead, the API must allow a 
+developer to specify any rate so long as the value is an unsigned number.
+If there is a baud rate that is common for a large range of hardware that
+will make use of this API, the API should provide a default baud rate value. 
+
+Given the above requirement, it is possible to create software to wrap the
+Serial API to restrict the possible baud rates used for communicating with some
+particular hardware. For example, a JavaScript library that communicates with
+a MIDI device could automatically set the baud rate to 31,250 bps without
+needing to bother the developer to specify the value.
+
 <section class='appendix'>
 ## Acknowledgements
 ... coming soon...
