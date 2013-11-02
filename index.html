@@ -216,6 +216,18 @@ able to revoke all access to serial ports.
 
 ## Use cases and requirements
 
+### Hardware disconnection
+Some devices allow users to manually reset the connection between the user
+agent and the physical device (e.g., by pushing a button). One example example
+device is the Arduino. Another example is the user abruptly disconnecting
+one device from another, thus severing the communication channel. 
+
+As such, it is a requirement that the API gracefully handle abrupt
+disconnection caused by a reset or other event. When such disconnections
+occur, the API must make it possible for the developer to be notified of such
+disconnections. When possible, the API should provide details about the 
+disconnection (e.g., reason, time, etc.).
+
 ### Baud rates
 Traditionally, serial devices have operated at 
 [baud rates](http://en.wikipedia.org/wiki/Baud)
@@ -223,7 +235,7 @@ of between 50 and 115,200 bps.
 
 However, modern USB serial devices are able to operate at significantly higher 
 baud rates than legacy hardware. For example, the 
-[bioloid servos](http://www.trossenrobotics.com/dynamixel-ax-12-robot-actuator.aspx)
+[bioloid servos](http://support.robotis.com/en/techsupport_eng.htm#product/dynamixel/ax_series/dxl_ax_actuator.htm)
 operate at 1 Mbit (1,000,000 bps). Other USB-to-serial chips are able to 
  operate at 3 MBit (3,000,000bps).
 
@@ -244,6 +256,8 @@ Serial API to restrict the possible baud rates used for communicating with some
 particular hardware. For example, a JavaScript library that communicates with
 a MIDI device could automatically set the baud rate to 31,250 bps without
 needing to bother the developer to specify the value.
+
+
 
 <section class='appendix'>
 ## Acknowledgements
