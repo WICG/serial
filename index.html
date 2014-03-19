@@ -23,12 +23,12 @@ welcome.
 This example shows how to find the first "Arduino" device and set it up for use.
 
 <pre class="example highlight">
-//Request the list of ports from the user
+// Request the list of ports from the user
 SerialPort.requestList().then(ports => {
-  //Pick the first matching port
+  // Pick the first matching port
   var serial,
       kind = "Arduino"
-      arduinos = ports.filter(port =&gt; port.manufacturer.search(kind) &gt; -1);
+      arduinos = ports.filter(port =&gt; port.manufacturer.contains(kind));
 
   if (arduinos.length) {
      serial = new SerialPort(arduinos[0].path);
