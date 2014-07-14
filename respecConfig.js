@@ -57,7 +57,7 @@ var respecConfig = {
   wgPatentURI: "",
   // !!!! IMPORTANT !!!! MAKE THE ABOVE BLINK IN YOUR HEAD
   otherLinks: [{
-    key: "Repositorty",
+    key: "Repository",
     data: [
       {
         href: "https://github.com/whatwg/serial"
