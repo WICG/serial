@@ -28,7 +28,7 @@ SerialPort.requestList().then(ports => {
   // Pick the first matching port
   var serial,
       kind = "Arduino"
-      arduinos = ports.filter(port =&gt; port.manufacturer.contains(kind));
+      arduinos = ports.filter(port =&gt; port.manufacturer.includes(kind));
 
   if (arduinos.length) {
      serial = new SerialPort(arduinos[0].path);
