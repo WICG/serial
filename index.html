@@ -8,27 +8,30 @@
 <img alt="" width="100" height="100" id="speclogo" src="images/logo_serial.svg">
 
 <section id='abstract'>
-The Serial API provides a way for websites to read and write from a
-serial device through script. Such an API would bridge the web and the
-physical world, by allowing documents to communicate with devices such
-as microcontrollers, 3D printers, and other serial devices.
+The <cite>Serial API</cite> provides a way for websites to read and write from
+a serial device through script. Such an API would bridge the web and the
+physical world, by allowing documents to communicate with devices such as
+microcontrollers, 3D printers, and other serial devices.
 </section>
 
 <section id='sotd'>
-This is a work in progress. All [contributions](https://github.com/whatwg/serial) 
+This is a work in progress. All [contributions](https://github.com/whatwg/serial)
 welcome.
 </section>
-    
+
 ## Usage example
 This example shows how to find the first "Arduino" device and set it up for use.
 
 <pre class="example highlight">
-// Request the list of ports from the user
-SerialPort.requestList().then(ports => {
-  // Pick the first matching port
+//Request the list of ports from the user
+SerialPort.requestPorts().then(ports => {
+
+  //Pick the first matching port
   var serial,
-      kind = "Arduino"
-      arduinos = ports.filter(port =&gt; port.manufacturer.includes(kind));
+      kind = "Arduino",
+      key = "manufacturer",
+      //find the Arduinos!
+      arduinos = ports.filter(port =&gt; port.get(key).search(kind) &gt; -1);
 
   if (arduinos.length) {
      serial = new SerialPort(arduinos[0].path);
@@ -44,10 +47,17 @@ SerialPort.requestList().then(ports => {
 .catch(console.error);
 </pre>
 
+## Dependencies
+The <dfn>`ReadableStream`</dfn> and <dfn>`WritableStream`</dfn> interfaces are
+defined in [[!STREAMS]].
+
+The <dfn>`Promise`</dfn> and <dfn>`DOMException`</dfn> interfaces are defined
+in [[!DOM]].
+
 ## `SerialPort` interface
 <dl class="idl" title="[constructor(DOMString path, optional SerialOptions options)] interface SerialPort">
 	<dt>
-    static Promise requestList()
+    static Promise&lt; SerialPortInfo[] > requestPorts()
   </dt>
   <dt>
     readonly attribute ReadableStream in
@@ -56,43 +66,144 @@ SerialPort.requestList().then(ports => {
     readonly attribute WritableStream out
   </dt>
   <dt>
-    readonly attribute DOMString path
-  </dt>
-  <dt>
-    readonly attribute unsigned long bufferSize
+    SerialPortInfo getInfo()
   </dt>
 </dl>
 
-The <dfn>`ReadableStream`</dfn> and <dfn>`WritableStream`</dfn> interfaces are
-defined in [[!STREAMS]]. 
+### Constructing `SerialPort` objects
+When the constructor of the `SerialPort` interface is invoked, the user agent MUST run the following steps:
 
-## `SerialPortDetails` dictionary
-<dl class="idl" title="dictionary SerialPortDetails">
-  <dt>
-    DOMString comName
-  </dt>
-  <dt>
-    DOMString path
-  </dt>
-  <dt>
-    DOMString pnpId
-  </dt>
-  <dt>
-    DOMString manufacturer
-  </dt>
-  <dt>
-    DOMString locationID
-  </dt>
-  <dt>
-    DOMString vendorID
-  </dt>
-  <dt>
-    DOMString productId
-  </dt>
-  <dt>
-    DOMString serialNumber
-  </dt>
+1. ...To be written...
+1. Profit!
+1. Return <var>serial port</var>.
+
+### `requestPorts()` method
+
+The `requestPorts()` method requests access to the serial ports of the system
+(see <a>security considerations</a>).
+
+When the `requestPorts()` method is invoked, the user agent MUST perform the
+following steps:
+
+1. Let <var>promise</var> be a new <a>`Promise`</a> object and <var>resolver</var>
+   its associated resolver.
+1. Return `promise` and run the remaining steps asynchronously.
+1. Let <var>ports</var> be an empty `Array` object [[!ECMASCRIPT]].
+1. Request access to serial ports (see <a>security considerations</a>):
+  1. If the access request is rejected:
+    1. Let <var>error</var> be a new <a>`DOMException`</a> whose name is
+       `[AbortError](http://dom.spec.whatwg.org/#aborterror)`.
+    1. Run resolver's internal reject algorithm with <var>error</var> as value
+       and terminate this algorithm.
+1. Otherwise, for each <var>port</var> for which access was granted:
+  1. Let <var>info</var> be the result of running the <a>steps for getting
+       metadata of a serial port</a>.
+  1. Append <var>info</var> to <var>ports</var>.
+1. Run <var>resolver</var>'s internal fulfill algorithm with <var>ports</var>
+   as value.
+
+### `getInfo()` method
+
+The `getInfo()` method provides a means to get metadata corresponding to a
+`SerialPort` object.
+
+When the `getInfo()` method is invoked, the user agent MUST perform the
+<a>steps for getting metadata of a serial port</a>.
+
+
+## `SerialPortInfo` interface
+<dl class="idl" title="[MapClass(DOMString, (null or DOMString))] interface SerialPortInfo">
 </dl>
+
+
+## Serial port metadata
+
+The value of certain attributes is dependent on the method that the system used
+to establish the serial port (e.g., USB), and so might not always be available.
+
+### Recommended serial port metadata
+
+When available, it is RECOMMENDED that user agents populate a `SerialPortInfo`
+object with the following information. If the value of piece of metadata is
+unavailable(e.g., if the manufacturer is unknown), then it is RECOMMNEDED that
+that metadata be excluded from the `SerialPortInfo`. For interoperability,
+user agents SHOULD use the values provided in they "Key" column of the
+<a>table of recommended metadata</a>.
+
+<table border="1">
+  <caption><dfn>Table of recommended metadata</dfn></caption>
+  <tr>
+    <th>Name</th>
+    <th>Key</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>Product ID</td>
+    <td>`productId`</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Serial Number</td>
+    <td>`serialNumber`</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Manufacturer</td>
+    <td>`manufacturer`</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Location ID</td>
+    <td>`locationId`</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Vendor ID</td>
+    <td>`vendorId`</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Vendor</td>
+    <td>`vendor`</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Product ID</td>
+    <td>`productId`</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Product</td>
+    <td>`product`</td>
+    <td></td>
+  </tr>
+</table>
+
+
+### Getting serial port metadata
+
+The <dfn>steps for getting metadata of a serial port</dfn> for a <var>serial
+port</var> are as follows. The steps always return an instance of
+`SerialPortInfo`, which contains the related metadata.
+
+ 1. Let <var>info</var> be an object that implements the `SerialPortInfo`
+    interface.
+ 1. Let <var>path</var> be a `DOMString` that represents the path of the
+    serial <var>serial port</var>.
+ 1. Invoke <var>info</var>'s `set()` method using the string "`path`" as the
+    key, and <var>path</var> as the value.
+ 1. For each additional metadata item known about the <var>serial port</var>,
+    perform the following sub-steps. Please see the <a>table of recommended
+    metadata</a> for a list of recommended metadata items that SHOULD be
+    included.
+    1. Let <var>key</var> be a `DOMString` for the commonly used name for this
+       key.
+    1. Let <var>value</var> be a `DOMString` for the commonly used name for
+       this key, or `null` otherwise.
+    1. Invoke <var>info</var>'s `set()` method using the string "path" as the
+       key, and <var>path</var> as the value.
+ 1. Return <var>info</var>.
+
 
 ## `SerialOptions` dictionary
 <dl class="idl" title="dictionary SerialOptions">
@@ -157,58 +268,71 @@ defined in [[!STREAMS]].
   </dt>
 </dl>
 
-## Security Considerations
-User agents must not grant Web sites access to any serial ports without
-the express permission of the user. A conforming implementation of this
-specification must provide a means for user to control which serial
-ports the API can access, as well as a means for the end-user to be
-able to revoke all access to serial ports.
 
+## Security considerations
+
+This section defines the <dfn>Security considerations</dfn> for the <cite>
+Serial API</cite>.
+
+It is RECOMMENDED that an user interface be presented to the user to allow them
+to select the serial ports that the page can access. Such an interface would
+allow an end user to select zero ore more serial ports on the device - or to
+reject the request to access any ports.
+
+It is also RECOMMENDED that the user be shown all serial ports that are
+currently busy, either as a result of prior calls to `requestPorts()` or are in
+use by the system.
+
+It is also RECOMMENDED that user agents provide users with a means for the end-
+user to view which independently of any access request, and be given the
+ability to revoke individual or complete access to serial ports at any time
+either at the user agent level or per [origin](http://www.whatwg.org/specs/web-apps/current-work/#origin-0)
+[[!HTML]].
+
+<section class="informative">
 ## Use cases and requirements
 
 ### Hardware disconnection
 Some devices allow users to manually reset the connection between the user
-agent and the physical device (e.g., by pushing a button). One example 
+agent and the physical device (e.g., by pushing a button). One example
 device is the Arduino. Another example is the user abruptly disconnecting
-one device from another, thus severing the communication channel. 
+one device from another, thus severing the communication channel.
 
 As such, it is a requirement that the API gracefully handle abrupt
 disconnection caused by a reset or other event. When such disconnections
 occur, the API must make it possible for the developer to be notified of such
-disconnections. When possible, the API should provide details about the 
+disconnections. When possible, the API should provide details about the
 disconnection (e.g., reason, time, etc.).
 
 ### Baud rates
-Traditionally, serial devices have operated at 
+Traditionally, serial devices have operated at
 [baud rates](http://en.wikipedia.org/wiki/Baud)
-of between 50 and 115,200 bps. 
+of between 50 and 115,200 bps.
 
-However, modern USB serial devices are able to operate at significantly higher 
-baud rates than legacy hardware. For example, the 
+However, modern USB serial devices are able to operate at significantly higher
+baud rates than legacy hardware. For example, the
 [bioloid servos](http://support.robotis.com/en/techsupport_eng.htm#product/dynamixel/ax_series/dxl_ax_actuator.htm)
-operate at 1 Mbit (1,000,000 bps). Other USB-to-serial chips are able to 
+operate at 1 Mbit (1,000,000 bps). Other USB-to-serial chips are able to
  operate at 3 MBit (3,000,000bps).
 
 Additionally, other serial devices have standardized baud rates that
-are not in the commonly accepted value for baud rates. For example, 
+are not in the commonly accepted value for baud rates. For example,
 [MIDI](http://en.wikipedia.org/wiki/MIDI) uses a baud rate of 31,250 bps,
-while a [DMX512 controller](http://en.wikipedia.org/wiki/DMX512) 
+while a [DMX512 controller](http://en.wikipedia.org/wiki/DMX512)
 transmits data at 250kbps.
 
-As such, it is a requirement that the Serial API does not limit the 
-baud rates to a traditional range. Instead, the API must allow a 
+As such, it is a requirement that the Serial API does not limit the
+baud rates to a traditional range. Instead, the API must allow a
 developer to specify any rate so long as the value is an unsigned number.
 If there is a baud rate that is common for a large range of hardware that
-will make use of this API, the API should provide a default baud rate value. 
+will make use of this API, the API should provide a default baud rate value.
 
 Given the above requirement, it is possible to create software to wrap the
 Serial API to restrict the possible baud rates used for communicating with some
 particular hardware. For example, a JavaScript library that communicates with
 a MIDI device could automatically set the baud rate to 31,250 bps without
 needing to bother the developer to specify the value.
-
-
-
+</section>
 <section class='appendix'>
 ## Acknowledgements
 ... coming soon...
