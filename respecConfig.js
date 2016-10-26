@@ -68,7 +68,7 @@ var respecConfig = {
       },
       {
         value: "Commit History.",
-        href: "https://github.com/ResponsiveImagesCG/ri-usecases/commits/gh-pages"
+        href: "https://github.com/whatwg/serial/commits/gh-pages"
       }]
   }],
   localBiblio: {
