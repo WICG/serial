@@ -189,8 +189,8 @@ port</var> are as follows. The steps always return an instance of
  1. Let <var>info</var> be an object that implements the `SerialPortInfo`
     interface.
  1. Let <var>path</var> be a `DOMString` that represents the path of the
-    serial <var>serial port</var>.
- 1. Invoke <var>info</var>'s `set()` method using the string "`path`" as the
+    <var>serial port</var>.
+ 1. Invoke <var>info</var>'s `set()` method using the string `"path"` as the
     key, and <var>path</var> as the value.
  1. For each additional metadata item known about the <var>serial port</var>,
     perform the following sub-steps. Please see the <a>table of recommended
@@ -248,7 +248,7 @@ port</var> are as follows. The steps always return an instance of
     boolean xany = false
   </dt>
 </dl>
-   
+
 ## `ParityType` enum
 <dl class="idl" title="enum ParityType">
   <dt>
@@ -279,8 +279,9 @@ to select the serial ports that the page can access. Such an interface would
 allow an end user to select zero ore more serial ports on the device - or to
 reject the request to access any ports.
 
-It is also RECOMMENDED that the user be shown all serial ports that are
-currently busy, either as a result of prior calls to `requestPorts()` or are in
+A user agent SHOULD allow the user to select from all serial ports available
+on the machine, and be shown an indicator for serial ports that are currently
+busy, either as a result of prior calls to `requestPorts()` or are in
 use by the system.
 
 It is also RECOMMENDED that user agents provide users with a means for the end-
