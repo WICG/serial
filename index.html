@@ -54,21 +54,16 @@ defined in [[!STREAMS]].
 The <dfn>`Promise`</dfn> and <dfn>`DOMException`</dfn> interfaces are defined
 in [[!DOM]].
 
-## `SerialPort` interface
-<dl class="idl" title="[constructor(DOMString path, optional SerialOptions options)] interface SerialPort">
-	<dt>
-    static Promise&lt; SerialPortInfo[] > requestPorts()
-  </dt>
-  <dt>
-    readonly attribute ReadableStream in
-  </dt>
-  <dt>
-    readonly attribute WritableStream out
-  </dt>
-  <dt>
-    SerialPortInfo getInfo()
-  </dt>
-</dl>
+## <dfn>SerialPort</dfn> interface
+<pre class="idl">
+[constructor(DOMString path, optional SerialOptions options)]
+interface SerialPort {
+  static Promise&lt;SerialPortInfo[]> requestPorts();
+  readonly attribute ReadableStream in;
+  readonly attribute WritableStream out;
+  SerialPortInfo getInfo();
+};
+</pre>
 
 ### Constructing `SerialPort` objects
 When the constructor of the `SerialPort` interface is invoked, the user agent MUST run the following steps:
@@ -112,9 +107,11 @@ When the `getInfo()` method is invoked, the user agent MUST perform the
 
 
 ## `SerialPortInfo` interface
-<dl class="idl" title="[MapClass(DOMString, (null or DOMString))] interface SerialPortInfo">
-</dl>
-
+<pre class="idl">
+interface SerialPortInfo{
+  maplike&lt;DOMString, DOMString?>;
+};
+</pre>
 
 ## Serial port metadata
 
@@ -206,51 +203,73 @@ port</var> are as follows. The steps always return an instance of
 
 
 ## `SerialOptions` dictionary
-<dl class="idl" title="dictionary SerialOptions">
+<pre class="idl">
+  dictionary SerialOptions {
+    long baudrate = 9600;
+    octet databits = 8;
+    octet stopbits = 1;
+    ParityType parity = "none";
+    long buffersize = 255;
+    boolean rtscts = false;
+    boolean xon = false;
+    boolean xoff = false;
+    boolean xany = false;
+  };
+</pre>
+<dl data-dfn-for="SerialOptions">
   <dt>
-    long baudrate = 9600
+    <dfn>baudrate</dfn> member
   </dt>
   <dd>
     One of 115200, 57600, 38400, 19200, 9600, 4800, 2400, 1800, 1200,
     600, 300, 200, 150, 134, 110, 75, or 50.
   </dd>
   <dt>
-    octet databits = 8
+    <dfn>databits</dfn> member
   </dt>
   <dd>
     One of 8, 7, 6, or 5.
   </dd>
   <dt>
-    octet stopbits = 1
+    <dfn>stopbits</dfn> member
   </dt>
   <dd>
     One of 1 or 2.
   </dd>
   <dt>
-    ParityType parity = 'none'
+    <dfn>parity</dfn> member'
   </dt>
   <dd>
     The parity type.
   </dd>
   <dt>
-    long buffersize = 255
+    <dfn>buffersize</dfn> member
   </dt>
   <dt>
-    boolean rtscts = false
+    <dfn>rtscts</dfn> member
   </dt>
   <dt>
-    boolean xon = false
+    <dfn>xon</dfn> member
   </dt>
   <dt>
-    boolean xoff = false
+    <dfn>xoff</dfn> member
   </dt>
   <dt>
-    boolean xany = false
+    <dfn>xany</dfn> member
   </dt>
 </dl>
 
 ## `ParityType` enum
-<dl class="idl" title="enum ParityType">
+<pre class="idl">
+enum ParityType {
+  "none",
+  "even",
+  "mark",
+  "odd",
+  "space"
+};
+</pre>
+<dl data-dfn-for"ParityType">
   <dt>
     none
   </dt>
