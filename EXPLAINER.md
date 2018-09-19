@@ -18,7 +18,7 @@ try {
   let port = await navigator.serial.requestPort({filters: [filter]});
   await port.open();
   let reader = port.in.getReader();
-  while(let data = yield reader.read()) {
+  while(let data = await reader.read()) {
     console.log(data);
   }
 } catch (err) {
