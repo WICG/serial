@@ -1,6 +1,6 @@
 # Serial API
 
-[Serial ports API](http://whatwg.github.io/serial/) for the platform. 
+[Serial ports API](http://wicg.github.io/serial/) for the platform. 
 
 ### Code of conduct
 
