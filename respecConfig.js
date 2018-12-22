@@ -36,18 +36,18 @@ var respecConfig = {
   editors: [
     {
       name: "See contributors on GH",
-      url: "https://github.com/whatwg/serial/graphs/contributors"
-              },
-          ],
+      url: "https://github.com/wicg/serial/graphs/contributors"
+    },
+  ],
 
   // name of the WG
-  wg: "A Web of Sensors Community Group / WHATWG Joint",
+  wg: "Web Platform Incubator Community Group",
 
   // URI of the public WG page
-  wgURI: "http://www.w3.org/community/sensorweb/",
+  wgURI: "http://www.w3.org/community/wicg/",
 
   // name (without the @w3c.org) of the public mailing to which comments are due
-  wgPublicList: "public-sensorweb",
+  wgPublicList: "public-wicg",
 
   // URI of the patent status for this WG, for Rec-track documents
   // !!!! IMPORTANT !!!!
@@ -60,15 +60,15 @@ var respecConfig = {
     key: "Repository",
     data: [
       {
-        href: "https://github.com/whatwg/serial"
+        href: "https://github.com/wicg/serial"
       },
       {
         value: "issues",
-        href: "https://github.com/whatwg/serial/issues"
+        href: "https://github.com/wicg/serial/issues"
       },
       {
         value: "Commit History.",
-        href: "https://github.com/whatwg/serial/commits/gh-pages"
+        href: "https://github.com/wicg/serial/commits/gh-pages"
       }]
   }],
   localBiblio: {

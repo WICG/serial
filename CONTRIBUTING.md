@@ -1,6 +1,6 @@
 For significant contributions (i.e., non-editorial changes to the API), 
 we require you to become a member of the 
-[Web of Sensors CG](http://www.w3.org/community/sensorweb/). This helps 
+[Web Platform Incubator CG](http://www.w3.org/community/wicg/). This helps 
 keep the spec royalty free and gives us some patent protection! 
 
 This spec is written using [ReSpec](http://w3.org/respec/). For
