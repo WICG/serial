@@ -4,4 +4,4 @@
 
 ### Code of conduct
 
-We are committed to providing a friendly, safe and welcoming environment for all. Please read and respect the [WHATWG Code of Conduct](https://whatwg.org/code-of-conduct).
+We are committed to providing a friendly, safe and welcoming environment for all. Please read and respect the [W3C Code of Ethics and Professional Conduct](https://www.w3.org/Consortium/cepc/).
