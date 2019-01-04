@@ -30,7 +30,7 @@ const requestOptions = {
 };
 
 // Request an Arduino from the user.
-let port = await navigator.serial.requestPort(requestOptions);
+const port = await navigator.serial.requestPort(requestOptions);
 
 await port.open({ baudrate: 115800 });
 port.in.read(readData);
@@ -81,13 +81,13 @@ choice (see <a>security considerations</a>).
 When the <a>requestPort()</a> method is invoked, the user agent MUST perform the
 following steps:
 
- 1. Let <var>promise</var> be a new <a>`Promise`</a> object and
+ 1. Let <var>promise</var> be a newly created <a>`Promise`</a>.
     <var>resolver</var> its associated resolver.
  1. Return `promise` and run the remaining steps asynchronously.
  1. Request access to a serial port (see <a>security considerations</a>):
    1. If the access request is rejected:
      1. Let <var>error</var> be a new <a>`DOMException`</a> whose name is
-        `[AbortError](http://dom.spec.whatwg.org/#aborterror)`.
+        <a data-cite="webidl#aborterror">`AbortError`<a>.
      1. Run resolver's internal reject algorithm with <var>error</var> as value
         and terminate this algorithm.
    1. Otherwise, let <var>port</var> be the <a>`SerialPort`</a> for which access
