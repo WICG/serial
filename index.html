@@ -32,13 +32,13 @@ const requestOptions = {
 // Request an Arduino from the user.
 const port = await navigator.serial.requestPort(requestOptions);
 
-await port.open({ baudrate: 115800 });
-port.in.read(readData);
-
-function readData() {
-  while (let data = yield port.read()) {
-    console.log(data);
-  }
+// Open and begin reading.
+await port.open({ baudrate: 115200 });
+const reader = port.in.getReader();
+while (true) {
+  const {done, data} = await reader.read();
+  if (done) break;
+  console.log(data);
 }
 </pre>
 
@@ -49,20 +49,41 @@ defined in [[!STREAMS]].
 The <dfn>`Promise`</dfn> and <dfn>`DOMException`</dfn> interfaces are defined
 in [[!DOM]].
 
-<section data-dfn-for="Serial" data-link-for="Serial">
-<h2><dfn>Serial</dfn> interface</h2>
-
+<section data-dfn-for="Navigator" data-link-for="Navigator">
+<h2><dfn>Navigator</dfn> partial interface</h2>
 <pre class="idl">
 [Exposed=Window, SecureContext]
 partial interface Navigator {
-  readonly attribute Serial serial;
+  [SameObject] readonly attribute Serial serial;
 };
+</pre>
+<section>
+<h2><dfn>serial</dfn> attribute</h2>
 
+The <a>serial</a> attribute SHALL be an instance of the <a>Serial</a>
+interface.
+</section>
+</section>
+
+<section data-dfn-for="WorkerNavigator" data-link-for="WorkerNavigator">
+<h2><dfn>WorkerNavigator</dfn> partial interface</h2>
+<pre class="idl">
 [Exposed=DedicatedWorker, SecureContext]
 partial interface WorkerNavigator {
-  readonly attribute Serial serial;
+  [SameObject] readonly attribute Serial serial;
 };
+</pre>
+<section>
+<h2><dfn>serial</dfn> attribute</h2>
 
+The <a>serial</a> attribute SHALL be an instance of the <a>Serial</a>
+interface.
+</section>
+</section>
+
+<section data-dfn-for="Serial" data-link-for="Serial">
+<h2><dfn>Serial</dfn> interface</h2>
+<pre class="idl">
 [Exposed=(DedicatedWorker,Window), SecureContext]
 interface Serial : EventTarget {
   attribute EventHandler onconnect;
@@ -82,18 +103,15 @@ When the <a>requestPort()</a> method is invoked, the user agent MUST perform the
 following steps:
 
  1. Let <var>promise</var> be a newly created <a>`Promise`</a>.
-    <var>resolver</var> its associated resolver.
- 1. Return `promise` and run the remaining steps asynchronously.
+ 1. Return <var>promise</var> and run the remaining steps asynchronously.
  1. Request access to a serial port (see <a>security considerations</a>):
-   1. If the access request is rejected:
-     1. Let <var>error</var> be a new <a>`DOMException`</a> whose name is
-        <a data-cite="webidl#aborterror">`AbortError`<a>.
-     1. Run resolver's internal reject algorithm with <var>error</var> as value
-        and terminate this algorithm.
+   1. If the access request is rejected
+      <a data-cite="promises-guide#reject-promise">reject</a> <var>promise</var>
+      with <a data-cite="webidl#aborterror">`AbortError`</a> and terminate this
+      algorithm.
    1. Otherwise, let <var>port</var> be the <a>`SerialPort`</a> for which access
-      was granted:
- 1. Run <var>resolver</var>'s internal fulfill algorithm with <var>port</var> as
-    value.
+      was granted and <a data-cite="promises-guide#resolve-promise">resolve</a>
+      <var>promise</var> with <var>port</var>.
 </section>
 </section>
 
