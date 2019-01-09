@@ -20,31 +20,26 @@ welcome.
 </section>
 
 ## Usage example
-This example shows how to find the first "Arduino" device and set it up for use.
+This example shows how to request an Arduino device from the user and set it up
+for use.
 
 <pre class="example highlight">
-//Request the list of ports from the user
-SerialPort.requestPorts().then(ports => {
+const requestOptions = {
+  // Filter on devices with the Arduino USB vendor ID.
+  filters: [{ vendorId: 0x2341 }],
+};
 
-  //Pick the first matching port
-  var serial,
-      kind = "Arduino",
-      key = "manufacturer",
-      //find the Arduinos!
-      arduinos = ports.filter(port =&gt; port.get(key).search(kind) &gt; -1);
+// Request an Arduino from the user.
+const port = await navigator.serial.requestPort(requestOptions);
 
-  if (arduinos.length) {
-     serial = new SerialPort(arduinos[0].path);
-     serial.in.read(readData)
-  }
-
-  function readData(){
-    while(let data = yield serial.read()) {
-      console.log(data);
-    }
-  }
-})
-.catch(console.error);
+// Open and begin reading.
+await port.open({ baudrate: 115200 });
+const reader = port.in.getReader();
+while (true) {
+  const {done, data} = await reader.read();
+  if (done) break;
+  console.log(data);
+}
 </pre>
 
 ## Dependencies
@@ -54,59 +49,98 @@ defined in [[!STREAMS]].
 The <dfn>`Promise`</dfn> and <dfn>`DOMException`</dfn> interfaces are defined
 in [[!DOM]].
 
-## <dfn>SerialPort</dfn> interface
+<section data-dfn-for="Navigator" data-link-for="Navigator">
+<h2><dfn>Navigator</dfn> partial interface</h2>
 <pre class="idl">
-[constructor(DOMString path, optional SerialOptions options)]
+[Exposed=Window, SecureContext]
+partial interface Navigator {
+  [SameObject] readonly attribute Serial serial;
+};
+</pre>
+<section>
+<h2><dfn>serial</dfn> attribute</h2>
+
+When getting, the <a>serial</a> attribute always returns the same instance of
+the <a>Serial</a> object.
+</section>
+</section>
+
+<section data-dfn-for="WorkerNavigator" data-link-for="WorkerNavigator">
+<h2><dfn>WorkerNavigator</dfn> partial interface</h2>
+<pre class="idl">
+[Exposed=DedicatedWorker, SecureContext]
+partial interface WorkerNavigator {
+  [SameObject] readonly attribute Serial serial;
+};
+</pre>
+<section>
+<h2><dfn>serial</dfn> attribute</h2>
+
+When getting, the <a>serial</a> attribute always returns the same instance of
+the <a>Serial</a> object.
+</section>
+</section>
+
+<section data-dfn-for="Serial" data-link-for="Serial">
+<h2><dfn>Serial</dfn> interface</h2>
+<pre class="idl">
+[Exposed=(DedicatedWorker,Window), SecureContext]
+interface Serial : EventTarget {
+  attribute EventHandler onconnect;
+  attribute EventHandler ondisconnect;
+  Promise&lt;sequence&lt;SerialPort>> getPorts();
+  [Exposed=Window] Promise&lt;SerialPort> requestPort(SerialPortRequestOptions options);
+};
+</pre>
+
+<section>
+<h2><dfn>requestPort()</dfn> method</h2>
+
+The <a>requestPort()</a> method requests access to a serial port of the user's
+choice (see <a>security considerations</a>).
+
+When the <a>requestPort()</a> method is invoked, the user agent MUST perform the
+following steps:
+
+ 1. Let <var>promise</var> be a newly created <a>`Promise`</a>.
+ 1. Return <var>promise</var> and run the remaining steps asynchronously.
+ 1. Request access to a serial port (see <a>security considerations</a>):
+   1. If the access request is rejected
+      <a data-cite="promises-guide#reject-promise">reject</a> <var>promise</var>
+      with <a data-cite="webidl#aborterror">`AbortError`</a> and terminate this
+      algorithm.
+   1. Otherwise, let <var>port</var> be the <a>`SerialPort`</a> for which access
+      was granted and <a data-cite="promises-guide#resolve-promise">resolve</a>
+      <var>promise</var> with <var>port</var>.
+</section>
+</section>
+
+<section data-dfn-for="SerialPort" data-link-for="SerialPort">
+<h2><dfn>SerialPort</dfn> interface</h2>
+
+<pre class="idl">
+[Exposed=(DedicatedWorker,Window), SecureContext]
 interface SerialPort {
-  static Promise&lt;SerialPortInfo[]> requestPorts();
+  Promise&lt;void> open(optional SerialOptions options);
   readonly attribute ReadableStream in;
   readonly attribute WritableStream out;
   SerialPortInfo getInfo();
 };
 </pre>
 
-### Constructing `SerialPort` objects
-When the constructor of the `SerialPort` interface is invoked, the user agent MUST run the following steps:
+<section>
+<h2><dfn>getInfo()</dfn> method</h2>
 
-1. ...To be written...
-1. Profit!
-1. Return <var>serial port</var>.
+The <a>getInfo()</a> method provides a means to get metadata corresponding to a
+<a>SerialPort</a> object.
 
-### `requestPorts()` method
-
-The `requestPorts()` method requests access to the serial ports of the system
-(see <a>security considerations</a>).
-
-When the `requestPorts()` method is invoked, the user agent MUST perform the
-following steps:
-
-1. Let <var>promise</var> be a new <a>`Promise`</a> object and <var>resolver</var>
-   its associated resolver.
-1. Return `promise` and run the remaining steps asynchronously.
-1. Let <var>ports</var> be an empty `Array` object [[!ECMASCRIPT]].
-1. Request access to serial ports (see <a>security considerations</a>):
-  1. If the access request is rejected:
-    1. Let <var>error</var> be a new <a>`DOMException`</a> whose name is
-       `[AbortError](http://dom.spec.whatwg.org/#aborterror)`.
-    1. Run resolver's internal reject algorithm with <var>error</var> as value
-       and terminate this algorithm.
-1. Otherwise, for each <var>port</var> for which access was granted:
-  1. Let <var>info</var> be the result of running the <a>steps for getting
-       metadata of a serial port</a>.
-  1. Append <var>info</var> to <var>ports</var>.
-1. Run <var>resolver</var>'s internal fulfill algorithm with <var>ports</var>
-   as value.
-
-### `getInfo()` method
-
-The `getInfo()` method provides a means to get metadata corresponding to a
-`SerialPort` object.
-
-When the `getInfo()` method is invoked, the user agent MUST perform the
+When the <a>getInfo()</a> method is invoked, the user agent MUST perform the
 <a>steps for getting metadata of a serial port</a>.
+</section>
+</section>
 
-
-## `SerialPortInfo` interface
+<section data-dfn-for="SerialPortInfo" data-link-for="SerialPortInfo">
+<h2><dfn>SerialPortInfo</dfn> interface</h2>
 <pre class="idl">
 interface SerialPortInfo{
   maplike&lt;DOMString, DOMString?>;
@@ -200,9 +234,10 @@ port</var> are as follows. The steps always return an instance of
     1. Invoke <var>info</var>'s `set()` method using the string "path" as the
        key, and <var>path</var> as the value.
  1. Return <var>info</var>.
+</section>
 
-
-## `SerialOptions` dictionary
+<section data-dfn-for="SerialOptions" data-link-for="SerialOptions">
+<h2><dfn>SerialOptions</dfn> dictionary</h2>
 <pre class="idl">
   dictionary SerialOptions {
     long baudrate = 9600;
@@ -258,8 +293,10 @@ port</var> are as follows. The steps always return an instance of
     <dfn>xany</dfn> member
   </dt>
 </dl>
+</section>
 
-## `ParityType` enum
+<section data-dfn-for="ParityType" data-link-for="ParityType">
+<h2><dfn>ParityType</dfn> enum</h2>
 <pre class="idl">
 enum ParityType {
   "none",
@@ -286,7 +323,7 @@ enum ParityType {
     space
   </dt>
 </dl>
-
+</section>
 
 ## Security considerations
 
