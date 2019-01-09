@@ -301,27 +301,26 @@ port</var> are as follows. The steps always return an instance of
 enum ParityType {
   "none",
   "even",
-  "mark",
   "odd",
+  "mark",
   "space"
 };
 </pre>
 <dl data-dfn-for"ParityType">
-  <dt>
-    none
-  </dt>
-  <dt>
-    even
-  </dt>
-  <dt>
-    mark
-  </dt>
-  <dt>
-    odd
-  </dt>
-  <dt>
-    space
-  </dt>
+  <dt><dfn>none</dfn></dt>
+  <dd>No parity bit is sent for each data word.</dd>
+
+  <dt><dfn>even</dfn></dt>
+  <dd>Data word plus parity bit has even parity.</dd>
+
+  <dt><dfn>odd</dfn></dt>
+  <dd>Data word plus parity bit has odd parity.</dd>
+
+  <dt><dfn>mark</dfn></dt>
+  <dd>Parity bit has a mark symbol (logical one).</dd>
+
+  <dt><dfn>space</dfn></dt>
+  <dd>Parity bit has a space symbol (logical zero).</dd>
 </dl>
 </section>
 
