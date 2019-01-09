@@ -44,7 +44,7 @@ var respecConfig = {
   wg: "Web Platform Incubator Community Group",
 
   // URI of the public WG page
-  wgURI: "http://www.w3.org/community/wicg/",
+  wgURI: "https://www.w3.org/community/wicg/",
 
   // name (without the @w3c.org) of the public mailing to which comments are due
   wgPublicList: "public-wicg",
