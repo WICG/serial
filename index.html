@@ -329,21 +329,30 @@ enum ParityType {
 This section defines the <dfn>Security considerations</dfn> for the <cite>
 Serial API</cite>.
 
-It is RECOMMENDED that an user interface be presented to the user to allow them
-to select the serial ports that the page can access. Such an interface would
-allow an end user to select zero ore more serial ports on the device - or to
-reject the request to access any ports.
+It is RECOMMENDED that a user interface be presented to the user to allow them
+to select the serial ports that the page can access. Such an interface SHOULD
+allow an end user to select a serial port on the device or to reject the request
+to access any ports.
+
+The interface SHOULD represent serial ports in a way meaningful to the user.
+(For example, device serial numbers would not likely be meaningful, at least not
+on their own.) Standard names, like `COM1`, and device manufacturer names, are
+more likely to be meaningful.
 
 A user agent SHOULD allow the user to select from all serial ports available
-on the machine, and be shown an indicator for serial ports that are currently
-busy, either as a result of prior calls to `requestPorts()` or are in
-use by the system.
+on the machine. Additionally, the user agent SHOULD show an indicator for serial
+ports that are currently busy, either as a result of prior calls to
+`requestPort()` or are in use by the system.
 
-It is also RECOMMENDED that user agents provide users with a means for the end-
-user to view which independently of any access request, and be given the
-ability to revoke individual or complete access to serial ports at any time
-either at the user agent level or per [origin](http://www.whatwg.org/specs/web-apps/current-work/#origin-0)
-[[!HTML]].
+It is also RECOMMENDED that user agents provide users with a means for the
+end-user to view the serial ports that the page can access as a result of
+previous `requestPort()` calls, independently of any access request. The user
+agent SHOULD give the user the ability to revoke one or more
+<a data-cite="html#origin">origins'</a> access or any or all serial ports at any
+time.
+
+User agents MUST make this API available <em>only</em> to
+<a data-cite="secure-contexts">Secure Contexts</a>.
 
 <section class="informative">
 ## Use cases and requirements
