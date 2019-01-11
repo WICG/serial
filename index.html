@@ -339,10 +339,9 @@ For example, device serial numbers would unlikely be meaningful, at least not
 on their own. Standard names, like `COM1`, and device manufacturer names, are
 more likely to be meaningful.
 
-A user agent SHOULD allow the user to select from all serial ports available
-on the machine. Additionally, the user agent SHOULD show an indicator for serial
-ports that are currently busy, either as a result of prior calls to
-`requestPort()` or are in use by the system.
+Unless there is a known privacy or security risk, or platform restriction, a
+user agent SHOULD allow the user to select from all serial ports available
+on the machine.
 
 It is also RECOMMENDED that user agents provide users with a means for the
 end-user to view the serial ports that the page can access as a result of
@@ -350,9 +349,6 @@ previous `requestPort()` calls, independently of any access request. The user
 agent SHOULD give the user the ability to revoke one or more
 <a data-cite="html#origin">origins'</a> access or any or all serial ports at any
 time.
-
-User agents MUST make this API available <em>only</em> to
-<a data-cite="secure-contexts">Secure Contexts</a>.
 
 <section class="informative">
 ## Use cases and requirements
