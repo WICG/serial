@@ -7,9 +7,6 @@
   <link rel="stylesheet" href="styles/spec.css">
 </head>
 <body>
-
-<img alt="" width="100" height="100" id="speclogo" src="images/logo_serial.svg">
-
 <section id='abstract'>
 The <cite>Serial API</cite> provides a way for websites to read and write from
 a serial device through script. Such an API would bridge the web and the
@@ -26,7 +23,7 @@ welcome.
 This example shows how to request an Arduino device from the user and set it up
 for use.
 
-<pre class="example highlight">
+<pre class="example js">
 const requestOptions = {
   // Filter on devices with the Arduino USB vendor ID.
   filters: [{ vendorId: 0x2341 }],
@@ -45,22 +42,24 @@ while (true) {
 }
 </pre>
 
+
 ## Terminology and conventions
 
-The terms
-<code><dfn data-cite="!STREAMS#rs-model">ReadableStream</dfn></code> and
-<code><dfn data-cite="!STREAMS#ws-model">WritableStream</dfn></code>
-are defined in [[STREAMS]].
+The
+<code><dfn data-cite="STREAMS#rs-class">ReadableStream</dfn></code> and
+<code><dfn data-cite="STREAMS#ws-class">WritableStream</dfn></code>
+classes are defined in [[STREAMS]].
 
-The term
-<code><dfn data-cite="!ECMASCRIPT#sec-promise-objects">Promise</dfn></code>
+The object type
+<code><dfn data-cite="ECMASCRIPT#sec-promise-objects">Promise</dfn></code>
 is defined in [[ECMASCRIPT]].
 
-The term
-<code><dfn data-cite="!WEBIDL#idl-DOMException">DOMException</dfn></code>
-is defined in [[WEBIDL]].
+The
+<code><dfn data-cite="WEBIDL#idl-DOMString">DOMString</dfn></code> type and
+<code><dfn data-cite="WEBIDL#idl-DOMException">DOMException</dfn></code>
+interface are defined in [[WEBIDL]].
 
-The term <dfn data-cite="!HTML#eventhandler">EventHandler</dfn> is defined in [[HTML]]
+The term <dfn data-cite="HTML#eventhandler">EventHandler</dfn> is defined in [[HTML]]
 
 <section data-dfn-for="Navigator" data-link-for="Navigator">
 ### <dfn>Navigator</dfn> partial interface
@@ -125,14 +124,14 @@ choice (see <a>security considerations</a>).
 When the <a>requestPort()</a> method is invoked, the user agent MUST perform the
 following steps:
 
- 1. Let <var>promise</var> be a newly created <a>`Promise`</a>.
+ 1. Let <var>promise</var> be a newly created <a>Promise</a>.
  1. Return <var>promise</var> and run the remaining steps asynchronously.
  1. Request access to a serial port (see <a>security considerations</a>):
    1. If the access request is rejected
       <a data-cite="promises-guide#reject-promise">reject</a> <var>promise</var>
-      with <a data-cite="webidl#aborterror">`AbortError`</a> and terminate this
-      algorithm.
-   1. Otherwise, let <var>port</var> be the <a>`SerialPort`</a> for which access
+      with an "<a data-cite="webidl#aborterror">`AbortError`</a>" <a>DOMException</a>
+      and terminate this algorithm.
+   1. Otherwise, let <var>port</var> be the <a>SerialPort</a> for which access
       was granted and <a data-cite="promises-guide#resolve-promise">resolve</a>
       <var>promise</var> with <var>port</var>.
 </section>
@@ -186,10 +185,10 @@ to establish the serial port (e.g., USB), and so might not always be available.
 
 ### Recommended serial port metadata
 
-When available, it is RECOMMENDED that user agents populate a `SerialPortInfo`
+When available, it is RECOMMENDED that user agents populate a <a>SerialPortInfo</a>
 object with the following information. If the value of piece of metadata is
 unavailable(e.g., if the manufacturer is unknown), then it is RECOMMNEDED that
-that metadata be excluded from the `SerialPortInfo`. For interoperability,
+that metadata be excluded from the <a>SerialPortInfo</a>. For interoperability,
 user agents SHOULD use the values provided in they "Key" column of the
 <a>table of recommended metadata</a>.
 
@@ -247,23 +246,23 @@ user agents SHOULD use the values provided in they "Key" column of the
 
 The <dfn>steps for getting metadata of a serial port</dfn> for a <var>serial
 port</var> are as follows. The steps always return an instance of
-`SerialPortInfo`, which contains the related metadata.
+<a>SerialPortInfo</a>, which contains the related metadata.
 
- 1. Let <var>info</var> be an object that implements the `SerialPortInfo`
+ 1. Let <var>info</var> be an object that implements the <a>SerialPortInfo</a>
     interface.
- 1. Let <var>path</var> be a `DOMString` that represents the path of the
+ 1. Let <var>path</var> be a <a>DOMString</a> that represents the path of the
     <var>serial port</var>.
- 1. Invoke <var>info</var>'s `set()` method using the string `"path"` as the
+ 1. Add an entry to <var>info</var>'s with `"path"` as the
     key, and <var>path</var> as the value.
  1. For each additional metadata item known about the <var>serial port</var>,
     perform the following sub-steps. Please see the <a>table of recommended
     metadata</a> for a list of recommended metadata items that SHOULD be
     included.
-    1. Let <var>key</var> be a `DOMString` for the commonly used name for this
+    1. Let <var>key</var> be a <a>DOMString</a> for the commonly used name for this
        key.
-    1. Let <var>value</var> be a `DOMString` for the commonly used name for
+    1. Let <var>value</var> be a <a>DOMString</a> for the commonly used name for
        this key, or `null` otherwise.
-    1. Invoke <var>info</var>'s `set()` method using the string "path" as the
+    1. Add an entry to <var>info</var> using the string "path" as the
        key, and <var>path</var> as the value.
  1. Return <var>info</var>.
 </section>
@@ -424,10 +423,10 @@ a MIDI device could automatically set the baud rate to 31,250 bps without
 needing to bother the developer to specify the value.
 </section>
 
+<section id=conformance></section>
+
 <section class='appendix'>
 ## Acknowledgements
 ... coming soon...
 </section>
-
-<section id=conformance></section>
 </body>
