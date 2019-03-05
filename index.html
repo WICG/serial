@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<meta charset='utf-8'>
-<title>Serial API</title>
-<script class='remove' src='https://www.w3.org/Tools/respec/respec-w3c-common' async></script>
-<script class='remove' src="respecConfig.js"></script>
-<link rel="stylesheet" href="styles/spec.css">
+<head>
+  <meta charset='utf-8'>
+  <title>Serial API</title>
+  <script class='remove' src='https://www.w3.org/Tools/respec/respec-w3c-common' async></script>
+  <script class='remove' src="respecConfig.js"></script>
+  <link rel="stylesheet" href="styles/spec.css">
+</head>
+<body>
 
 <img alt="" width="100" height="100" id="speclogo" src="images/logo_serial.svg">
 
@@ -42,47 +45,58 @@ while (true) {
 }
 </pre>
 
-## Dependencies
-The <dfn>`ReadableStream`</dfn> and <dfn>`WritableStream`</dfn> interfaces are
-defined in [[!STREAMS]].
+## Terminology and conventions
 
-The <dfn>`Promise`</dfn> and <dfn>`DOMException`</dfn> interfaces are defined
-in [[!DOM]].
+The terms
+<code><dfn data-cite="!STREAMS#rs-model">ReadableStream</dfn></code> and
+<code><dfn data-cite="!STREAMS#ws-model">WritableStream</dfn></code>
+are defined in [[STREAMS]].
+
+The term
+<code><dfn data-cite="!ECMASCRIPT#sec-promise-objects">Promise</dfn></code>
+is defined in [[ECMASCRIPT]].
+
+The term
+<code><dfn data-cite="!WEBIDL#idl-DOMException">DOMException</dfn></code>
+is defined in [[WEBIDL]].
+
+The term <dfn data-cite="!HTML#eventhandler">EventHandler</dfn> is defined in [[HTML]]
 
 <section data-dfn-for="Navigator" data-link-for="Navigator">
-<h2><dfn>Navigator</dfn> partial interface</h2>
+### <dfn>Navigator</dfn> partial interface
+
 <pre class="idl">
 [Exposed=Window, SecureContext]
 partial interface Navigator {
   [SameObject] readonly attribute Serial serial;
 };
 </pre>
-<section>
-<h2><dfn>serial</dfn> attribute</h2>
+
+### <dfn>serial</dfn> attribute
 
 When getting, the <a>serial</a> attribute always returns the same instance of
 the <a>Serial</a> object.
 </section>
-</section>
 
 <section data-dfn-for="WorkerNavigator" data-link-for="WorkerNavigator">
-<h2><dfn>WorkerNavigator</dfn> partial interface</h2>
+### <dfn>WorkerNavigator</dfn> partial interface
+
 <pre class="idl">
 [Exposed=DedicatedWorker, SecureContext]
 partial interface WorkerNavigator {
   [SameObject] readonly attribute Serial serial;
 };
 </pre>
-<section>
-<h2><dfn>serial</dfn> attribute</h2>
+
+### <dfn>serial</dfn> attribute
 
 When getting, the <a>serial</a> attribute always returns the same instance of
 the <a>Serial</a> object.
 </section>
-</section>
 
 <section data-dfn-for="Serial" data-link-for="Serial">
-<h2><dfn>Serial</dfn> interface</h2>
+### <dfn>Serial</dfn> interface
+
 <pre class="idl">
 [Exposed=(DedicatedWorker,Window), SecureContext]
 interface Serial : EventTarget {
@@ -93,8 +107,17 @@ interface Serial : EventTarget {
 };
 </pre>
 
-<section>
-<h2><dfn>requestPort()</dfn> method</h2>
+The <dfn>onconnect</dfn> is an <a>EventHandler</a> which is called to notify
+when a connection is established.
+
+The <dfn>ondisconnect</dfn> is an <a>EventHandler</a> which is called to notify
+when a connection is lost.
+
+### The <dfn>getPorts()</dfn> method
+
+The <a>getPorts()</a> method returns all available ports.
+
+### <dfn>requestPort()</dfn> method
 
 The <a>requestPort()</a> method requests access to a serial port of the user's
 choice (see <a>security considerations</a>).
@@ -113,10 +136,9 @@ following steps:
       was granted and <a data-cite="promises-guide#resolve-promise">resolve</a>
       <var>promise</var> with <var>port</var>.
 </section>
-</section>
 
 <section data-dfn-for="SerialPort" data-link-for="SerialPort">
-<h2><dfn>SerialPort</dfn> interface</h2>
+### <dfn>SerialPort</dfn> interface
 
 <pre class="idl">
 [Exposed=(DedicatedWorker,Window), SecureContext]
@@ -128,21 +150,31 @@ interface SerialPort {
 };
 </pre>
 
-<section>
-<h2><dfn>getInfo()</dfn> method</h2>
+### The <dfn>open()</dfn> method
+
+The <a>open()</a> method allows for opening a connection to a serial port.
+
+### The <dfn>in</dfn> and <dfn>out</dfn> steams
+
+When a connection has been opened, you read data using the
+<a>in</a> <a>ReadableStream</a> and write data using the <a>out</a>
+<a>WritableStream</a>.
+
+### <dfn>getInfo()</dfn> method
 
 The <a>getInfo()</a> method provides a means to get metadata corresponding to a
 <a>SerialPort</a> object.
 
 When the <a>getInfo()</a> method is invoked, the user agent MUST perform the
 <a>steps for getting metadata of a serial port</a>.
-</section>
+
 </section>
 
 <section data-dfn-for="SerialPortInfo" data-link-for="SerialPortInfo">
-<h2><dfn>SerialPortInfo</dfn> interface</h2>
+### <dfn>SerialPortInfo</dfn> interface
+
 <pre class="idl">
-interface SerialPortInfo{
+interface SerialPortInfo {
   maplike&lt;DOMString, DOMString?>;
 };
 </pre>
@@ -170,42 +202,42 @@ user agents SHOULD use the values provided in they "Key" column of the
   </tr>
   <tr>
     <td>Product ID</td>
-    <td>`productId`</td>
+    <td><code>productId</code></td>
     <td></td>
   </tr>
   <tr>
     <td>Serial Number</td>
-    <td>`serialNumber`</td>
+    <td><code>serialNumber</code></td>
     <td></td>
   </tr>
   <tr>
     <td>Manufacturer</td>
-    <td>`manufacturer`</td>
+    <td><code>manufacturer</code></td>
     <td></td>
   </tr>
   <tr>
     <td>Location ID</td>
-    <td>`locationId`</td>
+    <td><code>locationId</code></td>
     <td></td>
   </tr>
   <tr>
     <td>Vendor ID</td>
-    <td>`vendorId`</td>
+    <td><code>vendorId</code></td>
     <td></td>
   </tr>
   <tr>
     <td>Vendor</td>
-    <td>`vendor`</td>
+    <td><code>vendor</code></td>
     <td></td>
   </tr>
   <tr>
     <td>Product ID</td>
-    <td>`productId`</td>
+    <td><code>productId</code></td>
     <td></td>
   </tr>
   <tr>
     <td>Product</td>
-    <td>`product`</td>
+    <td><code>product</code></td>
     <td></td>
   </tr>
 </table>
@@ -237,7 +269,8 @@ port</var> are as follows. The steps always return an instance of
 </section>
 
 <section data-dfn-for="SerialOptions" data-link-for="SerialOptions">
-<h2><dfn>SerialOptions</dfn> dictionary</h2>
+### <dfn>SerialOptions</dfn> dictionary
+
 <pre class="idl">
   dictionary SerialOptions {
     long baudrate = 9600;
@@ -296,7 +329,8 @@ port</var> are as follows. The steps always return an instance of
 </section>
 
 <section data-dfn-for="ParityType" data-link-for="ParityType">
-<h2><dfn>ParityType</dfn> enum</h2>
+### <dfn>ParityType</dfn> enum
+
 <pre class="idl">
 enum ParityType {
   "none",
@@ -306,7 +340,7 @@ enum ParityType {
   "space"
 };
 </pre>
-<dl data-dfn-for"ParityType">
+<dl data-dfn-for="ParityType">
   <dt><dfn>none</dfn></dt>
   <dd>No parity bit is sent for each data word.</dd>
 
@@ -343,7 +377,7 @@ It is also RECOMMENDED that user agents provide users with a means for the end-
 user to view which independently of any access request, and be given the
 ability to revoke individual or complete access to serial ports at any time
 either at the user agent level or per [origin](http://www.whatwg.org/specs/web-apps/current-work/#origin-0)
-[[!HTML]].
+[[HTML]].
 
 <section class="informative">
 ## Use cases and requirements
@@ -389,8 +423,11 @@ particular hardware. For example, a JavaScript library that communicates with
 a MIDI device could automatically set the baud rate to 31,250 bps without
 needing to bother the developer to specify the value.
 </section>
+
 <section class='appendix'>
 ## Acknowledgements
 ... coming soon...
 </section>
 
+<section id=conformance></section>
+</body>
