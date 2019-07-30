@@ -17,10 +17,14 @@ var filter = {
 try {
   let port = await navigator.serial.requestPort({filters: [filter]});
   await port.open();
-  let reader = port.in.getReader();
-  while(let data = await reader.read()) {
-    console.log(data);
+  let reader = port.readable.getReader();
+  while (true) {
+    const { value, done } = await reader.read();
+    console.log(value);
+    if (done)
+      break;
   }
+  port.close();
 } catch (err) {
   console.error(err);
 }
