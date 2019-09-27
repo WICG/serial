@@ -1,4 +1,5 @@
  {
     "group":      ["80485"]
-,   "contacts":   ["marcoscaceres","reillyeon"]
+,   "contacts":   ["marcoscaceres","reillyeon"],
+    "repo-type": "cg-report"
 }
