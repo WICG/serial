@@ -4,7 +4,7 @@ This document is an explainer for the Serial API, a proposed specification for a
 
 ## Motivation
 
-Users, especially in the educational, hobbyist and industrial sectors, connect peripheral devices to their computers that require custom software to control. For example, robotics are often used to each computer programming and electronics in schools. This requires software which can upload code to a robot and/or control it remotely. In an industrial or hobbyist setting a piece of equipment such as a mill, laser cutter or 3D printer is controlled by a program running on a connected computer. These devices are often controlled by small microcontrollers via a serial connection.
+Users, especially in the educational, hobbyist and industrial sectors, connect peripheral devices to their computers that require custom software to control. For example, robotics are often used to teach computer programming and electronics in schools. This requires software which can upload code to a robot and/or control it remotely. In an industrial or hobbyist setting a piece of equipment such as a mill, laser cutter or 3D printer is controlled by a program running on a connected computer. These devices are often controlled by small microcontrollers via a serial connection.
 
 There are many examples of this control software being built using web technology. For example,
 
