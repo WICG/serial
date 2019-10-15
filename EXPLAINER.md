@@ -112,6 +112,16 @@ partial interface WorkerNavigator {
   [SameObject] readonly attribute Serial serial;
 };
 
+dictionary SerialConnectionEventInit {
+  required SerialPort port;
+};
+
+[Exposed=(DedicatedWorker,Window), SecureContext]
+interface SerialConnectionEvent : Event {
+  constructor(DOMString type, SerialConnectionEventInit eventInitDict);
+  [SameObject] readonly attribute SerialPort port;
+};
+
 dictionary SerialPortFilter {
   unsigned short vendorId;
   unsigned short productId;
