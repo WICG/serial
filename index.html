@@ -90,12 +90,12 @@ for use.
   When the {{Serial/requestPort()}} method is invoked, the user agent MUST perform the
   following steps:
 
-  1. Let |promise| be [=a new promise=].
+  1. Let |promise:Promise| be [=a new promise=].
   1. Return |promise| and run the remaining steps asynchronously.
   1. Request access to a serial port (see [[[#security]]]):
     1. If the access request is rejected, [=reject=] |promise| with an
         {{"AbortError"}} {{DOMException}}.
-    1. Otherwise, let |port| be the {{SerialPort}} for which access
+    1. Otherwise, let |port:SerialPort| be the {{SerialPort}} for which access
         was granted.
     1. [=Resolve=] |promise| with |port|.
 
@@ -123,7 +123,7 @@ for use.
   <a>steps for getting metadata of a serial port</a>.
 </section>
 
-<section data-dfn-for="SerialPortInfo" data-link-for="SerialPortInfo">
+<section data-dfn-for="SerialPortInfo">
   ## <dfn>SerialPortInfo</dfn> interface
 
   <pre class="idl">
@@ -197,17 +197,17 @@ for use.
   port</var> are as follows. The steps always return an instance of
   {{SerialPortInfo}}, which contains the related metadata.
 
-  1. Let |info| be a newly created {{SerialPortInfo}} object.
-  1. Let |path| be a {{DOMString}} that represents the path of the |serial port|.
+  1. Let |info:SerialPortInfo| be a newly created {{SerialPortInfo}} object.
+  1. Let |path:DOMString| be a {{DOMString}} that represents the path of the |serial port|.
   1. Invoke |info|'s `set()` method using the string `"path"` as the
      key, and |path| as the value.
   1. For each additional metadata item known about the |serial port|,
       perform the following sub-steps. Please see the <a>table of recommended
       metadata</a> for a list of recommended metadata items that SHOULD be
       included.
-      1. Let |key| be a {{DOMString}} for the commonly used name for this
+      1. Let |key:DOMString| be a {{DOMString}} for the commonly used name for this
         key.
-      1. Let |value| be a {{DOMString}} for the commonly used name for
+      1. Let |value:DOMString| be a {{DOMString}} for the commonly used name for
         this key, or `null` otherwise.
       1. Invoke |info|'s `set()` method using the string "path" as the
         key, and |path| as the value.
@@ -258,25 +258,10 @@ for use.
     <dd>
       The parity type.
     </dd>
-    <dt>
-      <dfn>buffersize</dfn> member
-    </dt>
-    <dt>
-      <dfn>rtscts</dfn> member
-    </dt>
-    <dt>
-      <dfn>xon</dfn> member
-    </dt>
-    <dt>
-      <dfn>xoff</dfn> member
-    </dt>
-    <dt>
-      <dfn>xany</dfn> member
-    </dt>
   </dl>
 </section>
 
-<section data-dfn-for="ParityType" data-link-for="ParityType">
+<section data-dfn-for="ParityType">
   ## <dfn>ParityType</dfn> enum</h2>
 
   <pre class="idl">
