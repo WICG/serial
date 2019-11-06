@@ -50,7 +50,7 @@ for use.
   </pre>
 
   ### <dfn>serial</dfn> attribute</h2>
-  When getting, the <a>serial</a> attribute always returns the same instance of
+  When getting, the {{Navigator/serial}} attribute always returns the same instance of
   the {{Serial}} object.
 </section>
 
@@ -65,8 +65,8 @@ for use.
   </pre>
 
   ### <dfn>serial</dfn> attribute</h2>
-  When getting, the <a>serial</a> attribute always returns the same instance of
-  the <a>Serial</a> object.
+  When getting, the {{WorkerNavigator/serial}} attribute always returns the same instance of
+  the {{Serial}} object.
 </section>
 
 <section data-dfn-for="Serial">
@@ -85,14 +85,14 @@ for use.
   ### <dfn>requestPort()</dfn> method
 
   The {{Serial/requestPort()}} method requests access to a serial port of the user's
-  choice (see <a>security considerations</a>).
+  choice (see [[[#security]]]).
 
   When the {{Serial/requestPort()}} method is invoked, the user agent MUST perform the
   following steps:
 
   1. Let |promise| be [=a new promise=].
   1. Return |promise| and run the remaining steps asynchronously.
-  1. Request access to a serial port (see <a>security considerations</a>):
+  1. Request access to a serial port (see [[[#security]]]):
     1. If the access request is rejected, [=reject=] |promise| with an
         {{"AbortError"}} {{DOMException}}.
     1. Otherwise, let |port| be the {{SerialPort}} for which access
@@ -117,7 +117,7 @@ for use.
   ### <dfn>getInfo()</dfn> method
 
   The {{SerialPort/getInfo()}} method provides a means to get metadata corresponding to a
-  <a>SerialPort</a> object.
+  {{SerialPort}} object.
 
   When the {{SerialPort/getInfo()}} method is invoked, the user agent MUST perform the
   <a>steps for getting metadata of a serial port</a>.
@@ -306,25 +306,27 @@ for use.
   </dl>
 </section>
 
-## Security considerations
+<section id="security">
+  ## Security considerations
 
-This section defines the <dfn>Security considerations</dfn> for the <cite>
-Serial API</cite>.
+  This section defines the <dfn>Security considerations</dfn> for the <cite>
+  Serial API</cite>.
 
-It is RECOMMENDED that an user interface be presented to the user to allow them
-to select the serial ports that the page can access. Such an interface would
-allow an end user to select zero ore more serial ports on the device - or to
-reject the request to access any ports.
+  It is RECOMMENDED that an user interface be presented to the user to allow them
+  to select the serial ports that the page can access. Such an interface would
+  allow an end user to select zero ore more serial ports on the device - or to
+  reject the request to access any ports.
 
-A user agent SHOULD allow the user to select from all serial ports available
-on the machine, and be shown an indicator for serial ports that are currently
-busy, either as a result of prior calls to `requestPorts()` or are in
-use by the system.
+  A user agent SHOULD allow the user to select from all serial ports available
+  on the machine, and be shown an indicator for serial ports that are currently
+  busy, either as a result of prior calls to `requestPorts()` or are in
+  use by the system.
 
-It is also RECOMMENDED that user agents provide users with a means for the end-
-user to view which independently of any access request, and be given the
-ability to revoke individual or complete access to serial ports at any time
-either at the user agent level or per [=origin=].
+  It is also RECOMMENDED that user agents provide users with a means for the end-
+  user to view which independently of any access request, and be given the
+  ability to revoke individual or complete access to serial ports at any time
+  either at the user agent level or per [=origin=].
+</section>
 
 <section class="informative">
   ## Use cases and requirements
