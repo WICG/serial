@@ -4,319 +4,306 @@
 <script class='remove' src='https://www.w3.org/Tools/respec/respec-w3c-common' async></script>
 <script class='remove' src="respecConfig.js"></script>
 <link rel="stylesheet" href="styles/spec.css">
-
-<img alt="" width="100" height="100" id="speclogo" src="images/logo_serial.svg">
-
 <section id='abstract'>
-The <cite>Serial API</cite> provides a way for websites to read and write from
-a serial device through script. Such an API would bridge the web and the
-physical world, by allowing documents to communicate with devices such as
-microcontrollers, 3D printers, and other serial devices.
+  The <cite>Serial API</cite> provides a way for websites to read and write from
+  a serial device through script. Such an API would bridge the web and the
+  physical world, by allowing documents to communicate with devices such as
+  microcontrollers, 3D printers, and other serial devices.
 </section>
 
 <section id='sotd'>
-This is a work in progress. All [contributions](https://github.com/WICG/serial)
-welcome.
+  This is a work in progress. All [contributions](https://github.com/WICG/serial)
+  welcome.
 </section>
 
 ## Usage example
 This example shows how to request an Arduino device from the user and set it up
 for use.
 
-<pre class="example highlight">
-const requestOptions = {
-  // Filter on devices with the Arduino USB vendor ID.
-  filters: [{ vendorId: 0x2341 }],
-};
+<pre class="example js" title="Requesting an Arduino device">
+  const requestOptions = {
+    // Filter on devices with the Arduino USB vendor ID.
+    filters: [{ vendorId: 0x2341 }],
+  };
 
-// Request an Arduino from the user.
-const port = await navigator.serial.requestPort(requestOptions);
+  // Request an Arduino from the user.
+  const port = await navigator.serial.requestPort(requestOptions);
 
-// Open and begin reading.
-await port.open({ baudrate: 115200 });
-const reader = port.in.getReader();
-while (true) {
-  const {done, data} = await reader.read();
-  if (done) break;
-  console.log(data);
-}
+  // Open and begin reading.
+  await port.open({ baudrate: 115200 });
+  const reader = port.in.getReader();
+
+  for await (const { done, data } of reader.read()) {
+    if (done) break;
+    console.log(data);
+  }
 </pre>
 
-## Dependencies
-The <dfn>`ReadableStream`</dfn> and <dfn>`WritableStream`</dfn> interfaces are
-defined in [[!STREAMS]].
+<section data-dfn-for="Navigator">
+  ## Extensions to the `Navigator` interface
 
-The <dfn>`Promise`</dfn> and <dfn>`DOMException`</dfn> interfaces are defined
-in [[!DOM]].
+  <pre class="idl">
+    [Exposed=Window, SecureContext]
+    partial interface Navigator {
+      [SameObject] readonly attribute Serial serial;
+    };
+  </pre>
 
-<section data-dfn-for="Navigator" data-link-for="Navigator">
-<h2><dfn>Navigator</dfn> partial interface</h2>
-<pre class="idl">
-[Exposed=Window, SecureContext]
-partial interface Navigator {
-  [SameObject] readonly attribute Serial serial;
-};
-</pre>
-<section>
-<h2><dfn>serial</dfn> attribute</h2>
-
-When getting, the <a>serial</a> attribute always returns the same instance of
-the <a>Serial</a> object.
-</section>
+  ### <dfn>serial</dfn> attribute</h2>
+  When getting, the <a>serial</a> attribute always returns the same instance of
+  the {{Serial}} object.
 </section>
 
-<section data-dfn-for="WorkerNavigator" data-link-for="WorkerNavigator">
-<h2><dfn>WorkerNavigator</dfn> partial interface</h2>
-<pre class="idl">
-[Exposed=DedicatedWorker, SecureContext]
-partial interface WorkerNavigator {
-  [SameObject] readonly attribute Serial serial;
-};
-</pre>
-<section>
-<h2><dfn>serial</dfn> attribute</h2>
+<section data-dfn-for="WorkerNavigator">
+  ## Extensions to `WorkerNavigator` interface
 
-When getting, the <a>serial</a> attribute always returns the same instance of
-the <a>Serial</a> object.
-</section>
-</section>
+  <pre class="idl">
+    [Exposed=DedicatedWorker, SecureContext]
+    partial interface WorkerNavigator {
+      [SameObject] readonly attribute Serial serial;
+    };
+  </pre>
 
-<section data-dfn-for="Serial" data-link-for="Serial">
-<h2><dfn>Serial</dfn> interface</h2>
-<pre class="idl">
-[Exposed=(DedicatedWorker,Window), SecureContext]
-interface Serial : EventTarget {
-  attribute EventHandler onconnect;
-  attribute EventHandler ondisconnect;
-  Promise&lt;sequence&lt;SerialPort>> getPorts();
-  [Exposed=Window] Promise&lt;SerialPort> requestPort(SerialPortRequestOptions options);
-};
-</pre>
-
-<section>
-<h2><dfn>requestPort()</dfn> method</h2>
-
-The <a>requestPort()</a> method requests access to a serial port of the user's
-choice (see <a>security considerations</a>).
-
-When the <a>requestPort()</a> method is invoked, the user agent MUST perform the
-following steps:
-
- 1. Let <var>promise</var> be a newly created <a>`Promise`</a>.
- 1. Return <var>promise</var> and run the remaining steps asynchronously.
- 1. Request access to a serial port (see <a>security considerations</a>):
-   1. If the access request is rejected
-      <a data-cite="promises-guide#reject-promise">reject</a> <var>promise</var>
-      with <a data-cite="webidl#aborterror">`AbortError`</a> and terminate this
-      algorithm.
-   1. Otherwise, let <var>port</var> be the <a>`SerialPort`</a> for which access
-      was granted and <a data-cite="promises-guide#resolve-promise">resolve</a>
-      <var>promise</var> with <var>port</var>.
-</section>
+  ### <dfn>serial</dfn> attribute</h2>
+  When getting, the <a>serial</a> attribute always returns the same instance of
+  the <a>Serial</a> object.
 </section>
 
-<section data-dfn-for="SerialPort" data-link-for="SerialPort">
-<h2><dfn>SerialPort</dfn> interface</h2>
+<section data-dfn-for="Serial">
+  ## <dfn>Serial</dfn> interface
 
-<pre class="idl">
-[Exposed=(DedicatedWorker,Window), SecureContext]
-interface SerialPort {
-  Promise&lt;void> open(optional SerialOptions options);
-  readonly attribute ReadableStream in;
-  readonly attribute WritableStream out;
-  SerialPortInfo getInfo();
-};
-</pre>
+  <pre class="idl">
+    [Exposed=(DedicatedWorker, Window), SecureContext]
+    interface Serial : EventTarget {
+      attribute EventHandler onconnect;
+      attribute EventHandler ondisconnect;
+      Promise&lt;sequence&lt;SerialPort>> getPorts();
+      [Exposed=Window] Promise&lt;SerialPort> requestPort(optional SerialOptions options = {});
+    };
+  </pre>
 
-<section>
-<h2><dfn>getInfo()</dfn> method</h2>
+  ### <dfn>requestPort()</dfn> method
 
-The <a>getInfo()</a> method provides a means to get metadata corresponding to a
-<a>SerialPort</a> object.
+  The {{Serial/requestPort()}} method requests access to a serial port of the user's
+  choice (see <a>security considerations</a>).
 
-When the <a>getInfo()</a> method is invoked, the user agent MUST perform the
-<a>steps for getting metadata of a serial port</a>.
+  When the {{Serial/requestPort()}} method is invoked, the user agent MUST perform the
+  following steps:
+
+  1. Let |promise| be [=a new promise=].
+  1. Return |promise| and run the remaining steps asynchronously.
+  1. Request access to a serial port (see <a>security considerations</a>):
+    1. If the access request is rejected, [=reject=] |promise| with an
+        {{"AbortError"}} {{DOMException}}.
+    1. Otherwise, let |port| be the {{SerialPort}} for which access
+        was granted.
+    1. [=Resolve=] |promise| with |port|.
+
 </section>
+
+<section data-dfn-for="SerialPort">
+  ## <dfn>SerialPort</dfn> interface
+
+  <pre class="idl">
+  [Exposed=(DedicatedWorker,Window), SecureContext]
+  interface SerialPort {
+    Promise&lt;void> open(optional SerialOptions options = {});
+    readonly attribute ReadableStream in;
+    readonly attribute WritableStream out;
+    SerialPortInfo getInfo();
+  };
+  </pre>
+
+  ### <dfn>getInfo()</dfn> method
+
+  The {{SerialPort/getInfo()}} method provides a means to get metadata corresponding to a
+  <a>SerialPort</a> object.
+
+  When the {{SerialPort/getInfo()}} method is invoked, the user agent MUST perform the
+  <a>steps for getting metadata of a serial port</a>.
 </section>
 
 <section data-dfn-for="SerialPortInfo" data-link-for="SerialPortInfo">
-<h2><dfn>SerialPortInfo</dfn> interface</h2>
-<pre class="idl">
-interface SerialPortInfo{
-  maplike&lt;DOMString, DOMString?>;
-};
-</pre>
+  ## <dfn>SerialPortInfo</dfn> interface
 
-## Serial port metadata
+  <pre class="idl">
+    [Exposed=(DedicatedWorker,Window), SecureContext]
+    interface SerialPortInfo{
+      maplike&lt;DOMString, DOMString?>;
+    };
+  </pre>
 
-The value of certain attributes is dependent on the method that the system used
-to establish the serial port (e.g., USB), and so might not always be available.
+  ### Serial port metadata
 
-### Recommended serial port metadata
+  The value of certain attributes is dependent on the method that the system used
+  to establish the serial port (e.g., USB), and so might not always be available.
 
-When available, it is RECOMMENDED that user agents populate a `SerialPortInfo`
-object with the following information. If the value of piece of metadata is
-unavailable(e.g., if the manufacturer is unknown), then it is RECOMMNEDED that
-that metadata be excluded from the `SerialPortInfo`. For interoperability,
-user agents SHOULD use the values provided in they "Key" column of the
-<a>table of recommended metadata</a>.
+  ### Recommended serial port metadata
 
-<table border="1">
-  <caption><dfn>Table of recommended metadata</dfn></caption>
-  <tr>
-    <th>Name</th>
-    <th>Key</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>Serial Number</td>
-    <td>`serialNumber`</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Manufacturer</td>
-    <td>`manufacturer`</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Location ID</td>
-    <td>`locationId`</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Vendor ID</td>
-    <td>`vendorId`</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Vendor</td>
-    <td>`vendor`</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Product ID</td>
-    <td>`productId`</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Product</td>
-    <td>`product`</td>
-    <td></td>
-  </tr>
-</table>
+  When available, it is RECOMMENDED that user agents populate a {{SerialPortInfo}}
+  object with the following information. If the value of piece of metadata is
+  unavailable(e.g., if the manufacturer is unknown), then it is RECOMMENDED that
+  that metadata be excluded from the {{SerialPortInfo}}. For interoperability,
+  user agents SHOULD use the values provided in they "Key" column of the
+  <a>table of recommended metadata</a>.
 
+  <table class="simple">
+    <caption><dfn>Table of recommended metadata</dfn></caption>
+    <tr>
+      <th>Name</th>
+      <th>Key</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>Serial Number</td>
+      <td>`serialNumber`</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Manufacturer</td>
+      <td>`manufacturer`</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Location ID</td>
+      <td>`locationId`</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Vendor ID</td>
+      <td>`vendorId`</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Vendor</td>
+      <td>`vendor`</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Product ID</td>
+      <td>`productId`</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Product</td>
+      <td>`product`</td>
+      <td></td>
+    </tr>
+  </table>
 
-### Getting serial port metadata
+  ### Getting serial port metadata
 
-The <dfn>steps for getting metadata of a serial port</dfn> for a <var>serial
-port</var> are as follows. The steps always return an instance of
-`SerialPortInfo`, which contains the related metadata.
+  The <dfn>steps for getting metadata of a serial port</dfn> for a <var>serial
+  port</var> are as follows. The steps always return an instance of
+  {{SerialPortInfo}}, which contains the related metadata.
 
- 1. Let <var>info</var> be an object that implements the `SerialPortInfo`
-    interface.
- 1. Let <var>path</var> be a `DOMString` that represents the path of the
-    <var>serial port</var>.
- 1. Invoke <var>info</var>'s `set()` method using the string `"path"` as the
-    key, and <var>path</var> as the value.
- 1. For each additional metadata item known about the <var>serial port</var>,
-    perform the following sub-steps. Please see the <a>table of recommended
-    metadata</a> for a list of recommended metadata items that SHOULD be
-    included.
-    1. Let <var>key</var> be a `DOMString` for the commonly used name for this
-       key.
-    1. Let <var>value</var> be a `DOMString` for the commonly used name for
-       this key, or `null` otherwise.
-    1. Invoke <var>info</var>'s `set()` method using the string "path" as the
-       key, and <var>path</var> as the value.
- 1. Return <var>info</var>.
+  1. Let |info| be a newly created {{SerialPortInfo}} object.
+  1. Let |path| be a {{DOMString}} that represents the path of the |serial port|.
+  1. Invoke |info|'s `set()` method using the string `"path"` as the
+     key, and |path| as the value.
+  1. For each additional metadata item known about the |serial port|,
+      perform the following sub-steps. Please see the <a>table of recommended
+      metadata</a> for a list of recommended metadata items that SHOULD be
+      included.
+      1. Let |key| be a {{DOMString}} for the commonly used name for this
+        key.
+      1. Let |value| be a {{DOMString}} for the commonly used name for
+        this key, or `null` otherwise.
+      1. Invoke |info|'s `set()` method using the string "path" as the
+        key, and |path| as the value.
+  1. Return |info|.
+
 </section>
 
-<section data-dfn-for="SerialOptions" data-link-for="SerialOptions">
-<h2><dfn>SerialOptions</dfn> dictionary</h2>
-<pre class="idl">
-  dictionary SerialOptions {
-    long baudrate = 9600;
-    octet databits = 8;
-    octet stopbits = 1;
-    ParityType parity = "none";
-    long buffersize = 255;
-    boolean rtscts = false;
-    boolean xon = false;
-    boolean xoff = false;
-    boolean xany = false;
-  };
-</pre>
-<dl data-dfn-for="SerialOptions">
-  <dt>
-    <dfn>baudrate</dfn> member
-  </dt>
-  <dd>
-    One of 115200, 57600, 38400, 19200, 9600, 4800, 2400, 1800, 1200,
-    600, 300, 200, 150, 134, 110, 75, or 50.
-  </dd>
-  <dt>
-    <dfn>databits</dfn> member
-  </dt>
-  <dd>
-    One of 8, 7, 6, or 5.
-  </dd>
-  <dt>
-    <dfn>stopbits</dfn> member
-  </dt>
-  <dd>
-    One of 1 or 2.
-  </dd>
-  <dt>
-    <dfn>parity</dfn> member'
-  </dt>
-  <dd>
-    The parity type.
-  </dd>
-  <dt>
-    <dfn>buffersize</dfn> member
-  </dt>
-  <dt>
-    <dfn>rtscts</dfn> member
-  </dt>
-  <dt>
-    <dfn>xon</dfn> member
-  </dt>
-  <dt>
-    <dfn>xoff</dfn> member
-  </dt>
-  <dt>
-    <dfn>xany</dfn> member
-  </dt>
-</dl>
+<section data-dfn-for="SerialOptions">
+  ## <dfn>SerialOptions</dfn> dictionary
+
+  <pre class="idl">
+    dictionary SerialOptions {
+      long baudrate = 9600;
+      octet databits = 8;
+      octet stopbits = 1;
+      ParityType parity = "none";
+      long buffersize = 255;
+      boolean rtscts = false;
+      boolean xon = false;
+      boolean xoff = false;
+      boolean xany = false;
+    };
+  </pre>
+
+  <dl>
+    <dt>
+      <dfn>baudrate</dfn> member
+    </dt>
+    <dd>
+      One of 115200, 57600, 38400, 19200, 9600, 4800, 2400, 1800, 1200,
+      600, 300, 200, 150, 134, 110, 75, or 50.
+    </dd>
+    <dt>
+      <dfn>databits</dfn> member
+    </dt>
+    <dd>
+      One of 8, 7, 6, or 5.
+    </dd>
+    <dt>
+      <dfn>stopbits</dfn> member
+    </dt>
+    <dd>
+      One of 1 or 2.
+    </dd>
+    <dt>
+      <dfn>parity</dfn> member'
+    </dt>
+    <dd>
+      The parity type.
+    </dd>
+    <dt>
+      <dfn>buffersize</dfn> member
+    </dt>
+    <dt>
+      <dfn>rtscts</dfn> member
+    </dt>
+    <dt>
+      <dfn>xon</dfn> member
+    </dt>
+    <dt>
+      <dfn>xoff</dfn> member
+    </dt>
+    <dt>
+      <dfn>xany</dfn> member
+    </dt>
+  </dl>
 </section>
 
 <section data-dfn-for="ParityType" data-link-for="ParityType">
-<h2><dfn>ParityType</dfn> enum</h2>
-<pre class="idl">
-enum ParityType {
-  "none",
-  "even",
-  "odd",
-  "mark",
-  "space"
-};
-</pre>
-<dl data-dfn-for"ParityType">
-  <dt><dfn>none</dfn></dt>
-  <dd>No parity bit is sent for each data word.</dd>
+  ## <dfn>ParityType</dfn> enum</h2>
 
-  <dt><dfn>even</dfn></dt>
-  <dd>Data word plus parity bit has even parity.</dd>
+  <pre class="idl">
+  enum ParityType {
+    "none",
+    "even",
+    "odd",
+    "mark",
+    "space"
+  };
+  </pre>
+  <dl>
+    <dt><dfn>none</dfn></dt>
+    <dd>No parity bit is sent for each data word.</dd>
 
-  <dt><dfn>odd</dfn></dt>
-  <dd>Data word plus parity bit has odd parity.</dd>
+    <dt><dfn>even</dfn></dt>
+    <dd>Data word plus parity bit has even parity.</dd>
 
-  <dt><dfn>mark</dfn></dt>
-  <dd>Parity bit has a mark symbol (logical one).</dd>
+    <dt><dfn>odd</dfn></dt>
+    <dd>Data word plus parity bit has odd parity.</dd>
 
-  <dt><dfn>space</dfn></dt>
-  <dd>Parity bit has a space symbol (logical zero).</dd>
-</dl>
+    <dt><dfn>mark</dfn></dt>
+    <dd>Parity bit has a mark symbol (logical one).</dd>
+
+    <dt><dfn>space</dfn></dt>
+    <dd>Parity bit has a space symbol (logical zero).</dd>
+  </dl>
 </section>
 
 ## Security considerations
@@ -337,55 +324,56 @@ use by the system.
 It is also RECOMMENDED that user agents provide users with a means for the end-
 user to view which independently of any access request, and be given the
 ability to revoke individual or complete access to serial ports at any time
-either at the user agent level or per [origin](http://www.whatwg.org/specs/web-apps/current-work/#origin-0)
-[[!HTML]].
+either at the user agent level or per [=origin=].
 
 <section class="informative">
-## Use cases and requirements
+  ## Use cases and requirements
 
-### Hardware disconnection
-Some devices allow users to manually reset the connection between the user
-agent and the physical device (e.g., by pushing a button). One example
-device is the Arduino. Another example is the user abruptly disconnecting
-one device from another, thus severing the communication channel.
+  ### Hardware disconnection
+  Some devices allow users to manually reset the connection between the user
+  agent and the physical device (e.g., by pushing a button). One example
+  device is the Arduino. Another example is the user abruptly disconnecting
+  one device from another, thus severing the communication channel.
 
-As such, it is a requirement that the API gracefully handle abrupt
-disconnection caused by a reset or other event. When such disconnections
-occur, the API must make it possible for the developer to be notified of such
-disconnections. When possible, the API should provide details about the
-disconnection (e.g., reason, time, etc.).
+  As such, it is a requirement that the API gracefully handle abrupt
+  disconnection caused by a reset or other event. When such disconnections
+  occur, the API must make it possible for the developer to be notified of such
+  disconnections. When possible, the API should provide details about the
+  disconnection (e.g., reason, time, etc.).
 
-### Baud rates
-Traditionally, serial devices have operated at
-[baud rates](http://en.wikipedia.org/wiki/Baud)
-of between 50 and 115,200 bps.
+  ### Baud rates
+  Traditionally, serial devices have operated at
+  [baud rates](http://en.wikipedia.org/wiki/Baud)
+  of between 50 and 115,200 bps.
 
-However, modern USB serial devices are able to operate at significantly higher
-baud rates than legacy hardware. For example, the
-[bioloid servos](http://support.robotis.com/en/techsupport_eng.htm#product/dynamixel/ax_series/dxl_ax_actuator.htm)
-operate at 1 Mbit (1,000,000 bps). Other USB-to-serial chips are able to
- operate at 3 MBit (3,000,000bps).
+  However, modern USB serial devices are able to operate at significantly higher
+  baud rates than legacy hardware. For example, the
+  [bioloid servos](http://support.robotis.com/en/techsupport_eng.htm#product/dynamixel/ax_series/dxl_ax_actuator.htm)
+  operate at 1 Mbit (1,000,000 bps). Other USB-to-serial chips are able to
+  operate at 3 MBit (3,000,000bps).
 
-Additionally, other serial devices have standardized baud rates that
-are not in the commonly accepted value for baud rates. For example,
-[MIDI](http://en.wikipedia.org/wiki/MIDI) uses a baud rate of 31,250 bps,
-while a [DMX512 controller](http://en.wikipedia.org/wiki/DMX512)
-transmits data at 250kbps.
+  Additionally, other serial devices have standardized baud rates that
+  are not in the commonly accepted value for baud rates. For example,
+  [MIDI](http://en.wikipedia.org/wiki/MIDI) uses a baud rate of 31,250 bps,
+  while a [DMX512 controller](http://en.wikipedia.org/wiki/DMX512)
+  transmits data at 250kbps.
 
-As such, it is a requirement that the Serial API does not limit the
-baud rates to a traditional range. Instead, the API must allow a
-developer to specify any rate so long as the value is an unsigned number.
-If there is a baud rate that is common for a large range of hardware that
-will make use of this API, the API should provide a default baud rate value.
+  As such, it is a requirement that the Serial API does not limit the
+  baud rates to a traditional range. Instead, the API must allow a
+  developer to specify any rate so long as the value is an unsigned number.
+  If there is a baud rate that is common for a large range of hardware that
+  will make use of this API, the API should provide a default baud rate value.
 
-Given the above requirement, it is possible to create software to wrap the
-Serial API to restrict the possible baud rates used for communicating with some
-particular hardware. For example, a JavaScript library that communicates with
-a MIDI device could automatically set the baud rate to 31,250 bps without
-needing to bother the developer to specify the value.
+  Given the above requirement, it is possible to create software to wrap the
+  Serial API to restrict the possible baud rates used for communicating with some
+  particular hardware. For example, a JavaScript library that communicates with
+  a MIDI device could automatically set the baud rate to 31,250 bps without
+  needing to bother the developer to specify the value.
 </section>
+
 <section class='appendix'>
-## Acknowledgements
-... coming soon...
+  ## Acknowledgements
+  <p>The following people contributed to the development of this document.</p>
+  <ul id="gh-contributors"></ul>
 </section>
 
