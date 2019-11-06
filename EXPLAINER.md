@@ -131,7 +131,7 @@ console.log(value);
 // Expected output: OK
 ```
 
-When piping through a transform stream closing the port becomes more complicated. Closing `reader` or `writer` will cause an error to propagate through the transform streams to the underlying port but it is not immediatel. The new `writableStreamClosed` and `readableStreamClosed` promises are required to detect when `port.readable` and `port.writable` have been unlocked. Since canceling `reader` causes the stream to be aborted the resulting error must be caught and ignored,
+When piping through a transform stream closing the port becomes more complicated. Closing `reader` or `writer` will cause an error to propagate through the transform streams to the underlying port but it is not immediate. The new `writableStreamClosed` and `readableStreamClosed` promises are required to detect when `port.readable` and `port.writable` have been unlocked. Since canceling `reader` causes the stream to be aborted the resulting error must be caught and ignored,
 
 ```javascript
 writer.close();
