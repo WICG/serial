@@ -78,7 +78,7 @@ Access to this feature by third-party contexts is useful because it allows funct
 
 Implementations of this specification are expected to implement separate storage for device permissions between the "normal" and "incognito" modes. This mitigates passive leakage of information between sessions. Permissions granted during a private browsing session are expected to be cleared at the end of that session.
 
-As discussed above, communication with a device grants a site the ability to read potentially identifying information from the device. A privacy-sensitive user is expected to not grant a site access to a sensitive device in a private browsing session in the same way that they are expected not to log into that site with identifying credentials.
+As discussed above, communication with a device grants a site the ability to read potentially identifying information from the device. Implementations should frame a site's permission request in a way that brings the user's attention to the powerful nature of this request using words like "access" or "control". In an incognito context this message may be strengthened to highlight the potential for this action to "unmask" a user in the same way that entering personal credentials or uploading a file would.
 
 Since the default state before any permissions are granted is that the site has access to no devices it is not possible to detect an incognito session using this API.
 
