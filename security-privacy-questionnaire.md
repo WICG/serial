@@ -34,7 +34,7 @@ To protect the potentially sensitive data that can be read from the device the s
 
 ## Does this specification introduce new state for an origin that persists across browsing sessions?
 
-This specification introduces a new permission which associates a set of devices with an origin. If an implementation chooses to make these permissions persist across browsing sessions then the availability of a particular device consitutes a piece of state. Implementations should clear this state when the user indicates they would like to clear other site data such as cookies and local storage.
+This specification introduces a new permission which associates a set of devices with an origin. For frequently visited sites experience with other APIs such as Web Bluetooth shows that users prefer not to be asked to grant the same permission for every session. Implementations may therefore support persisting the user's choice between sessions. This permission is state that persists across browsing sessions. Implementations should clear this state when the user indicates they would like to clear other site data such as cookies and local storage. Implementations may also make remembering the user's choices optional, time limited or expire after a site has not been visited for some time.
 
 In addition it must be assumed that the device may support configuration and data storage that persists between sessions. This state is stored by the device itself and cannot be cleared by the user agent. The permission model is designed to treat access to a device the same way as access to a local file, since both represent state which is outside of the user agent's control.
 
