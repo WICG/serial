@@ -79,6 +79,7 @@ const reader = port.readable.getReader();
 while (true) {
   const { value, done } = await reader.read();
   if (done) {
+    // |reader| has been canceled.
     break;
   }
   // Do something with |value|...
@@ -98,16 +99,19 @@ A serial port may generate one of a number of non-fatal read errors for conditio
 ```javascript
 while (port.readable) {
   const reader = port.readable.getReader();
-  try {
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) {
-        break;
-      }
-      // Do something with |value|...
+  while (true) {
+    let value, done;
+    try {
+      ({ value, done } = await reader.read());
+    } catch (error) {
+      // Handle |error|...
+      break;
     }
-  } catch (error) {
-    // Handle the read |error|...
+    if (done) {
+      // |reader| has been canceled.
+      break;
+    }
+    // Do something with |value|...
   }
   reader.releaseLock();
 }
