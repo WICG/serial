@@ -1,6 +1,6 @@
 # Serial API Explainer
 
-This document is an explainer for the Serial API, a proposed specification for allowing a web page to communicate with a serial device.
+This document is an explainer for the [Serial API](http://wicg.github.io/serial/), a proposed specification for allowing a web page to communicate with a serial device.
 
 ## Motivation
 
