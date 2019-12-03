@@ -42,12 +42,12 @@ for use.
 <section data-dfn-for="Navigator">
   ## Extensions to the `Navigator` interface
 
-  <pre class="idl">
+  ```webidl
     [Exposed=Window, SecureContext]
     partial interface Navigator {
       [SameObject] readonly attribute Serial serial;
     };
-  </pre>
+  ```
 
   ### <dfn>serial</dfn> attribute</h2>
   When getting, the {{Navigator/serial}} attribute always returns the same instance of
@@ -57,12 +57,12 @@ for use.
 <section data-dfn-for="WorkerNavigator">
   ## Extensions to `WorkerNavigator` interface
 
-  <pre class="idl">
+  ```webidl
     [Exposed=DedicatedWorker, SecureContext]
     partial interface WorkerNavigator {
       [SameObject] readonly attribute Serial serial;
     };
-  </pre>
+  ```
 
   ### <dfn>serial</dfn> attribute</h2>
   When getting, the {{WorkerNavigator/serial}} attribute always returns the same instance of
@@ -72,7 +72,7 @@ for use.
 <section data-dfn-for="Serial">
   ## <dfn>Serial</dfn> interface
 
-  <pre class="idl">
+  ```webidl
     [Exposed=(DedicatedWorker, Window), SecureContext]
     interface Serial : EventTarget {
       attribute EventHandler onconnect;
@@ -80,7 +80,7 @@ for use.
       Promise&lt;sequence&lt;SerialPort>> getPorts();
       [Exposed=Window] Promise&lt;SerialPort> requestPort(optional SerialOptions options = {});
     };
-  </pre>
+  ```
 
   ### <dfn>requestPort()</dfn> method
 
@@ -104,7 +104,7 @@ for use.
 <section data-dfn-for="SerialPort">
   ## <dfn>SerialPort</dfn> interface
 
-  <pre class="idl">
+  ```webidl
   [Exposed=(DedicatedWorker,Window), SecureContext]
   interface SerialPort {
     Promise&lt;void> open(optional SerialOptions options = {});
@@ -112,7 +112,7 @@ for use.
     readonly attribute WritableStream out;
     SerialPortInfo getInfo();
   };
-  </pre>
+  ```
 
   ### <dfn>getInfo()</dfn> method
 
@@ -126,12 +126,12 @@ for use.
 <section data-dfn-for="SerialPortInfo">
   ## <dfn>SerialPortInfo</dfn> interface
 
-  <pre class="idl">
+  ```webidl
     [Exposed=(DedicatedWorker,Window), SecureContext]
     interface SerialPortInfo {
       maplike&lt;DOMString, DOMString?>;
     };
-  </pre>
+  ```
 
   ### Serial port metadata
 
@@ -218,7 +218,7 @@ for use.
 <section data-dfn-for="SerialOptions">
   ## <dfn>SerialOptions</dfn> dictionary
 
-  <pre class="idl">
+  ```webidl
     dictionary SerialOptions {
       long baudrate = 9600;
       octet databits = 8;
@@ -230,7 +230,7 @@ for use.
       boolean xoff = false;
       boolean xany = false;
     };
-  </pre>
+  ```
 
   <dl>
     <dt>
@@ -264,7 +264,7 @@ for use.
 <section data-dfn-for="ParityType">
   ## <dfn>ParityType</dfn> enum</h2>
 
-  <pre class="idl">
+  ```webidl
   enum ParityType {
     "none",
     "even",
@@ -272,7 +272,7 @@ for use.
     "mark",
     "space"
   };
-  </pre>
+  ```
   <dl>
     <dt><dfn>none</dfn></dt>
     <dd>No parity bit is sent for each data word.</dd>
