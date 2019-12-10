@@ -34,7 +34,7 @@ To protect the potentially sensitive data that can be read from the device the s
 
 ## Does this specification introduce new state for an origin that persists across browsing sessions?
 
-This specification introduces a new permission which associates a set of devices with an origin. If an implementation chooses to make these permissions persist across browsing sessions then the availability of a particular device consitutes a piece of state. Implementations should clear this state when the user indicates they would like to clear other site data such as cookies and local storage.
+This specification introduces a new permission which associates a set of devices with an origin. For frequently visited sites experience with other APIs such as Web Bluetooth shows that users prefer not to be asked to grant the same permission for every session. Implementations may therefore support persisting the user's choice between sessions. This permission is state that persists across browsing sessions. Implementations should clear this state when the user indicates they would like to clear other site data such as cookies and local storage. Implementations may also make remembering the user's choices optional, time limited or expire after a site has not been visited for some time.
 
 In addition it must be assumed that the device may support configuration and data storage that persists between sessions. This state is stored by the device itself and cannot be cleared by the user agent. The permission model is designed to treat access to a device the same way as access to a local file, since both represent state which is outside of the user agent's control.
 
@@ -78,7 +78,7 @@ Access to this feature by third-party contexts is useful because it allows funct
 
 Implementations of this specification are expected to implement separate storage for device permissions between the "normal" and "incognito" modes. This mitigates passive leakage of information between sessions. Permissions granted during a private browsing session are expected to be cleared at the end of that session.
 
-As discussed above, communication with a device grants a site the ability to read potentially identifying information from the device. A privacy-sensitive user is expected to not grant a site access to a sensitive device in a private browsing session in the same way that they are expected not to log into that site with identifying credentials.
+As discussed above, communication with a device grants a site the ability to read potentially identifying information from the device. Implementations should frame a site's permission request in a way that brings the user's attention to the powerful nature of this request using words like "access" or "control". In an incognito context this message may be strengthened to highlight the potential for this action to "unmask" a user in the same way that entering personal credentials or uploading a file would.
 
 Since the default state before any permissions are granted is that the site has access to no devices it is not possible to detect an incognito session using this API.
 

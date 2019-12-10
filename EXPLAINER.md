@@ -1,6 +1,6 @@
 # Serial API Explainer
 
-This document is an explainer for the Serial API, a proposed specification for allowing a web page to communicate with a serial device.
+This document is an explainer for the [Serial API](http://wicg.github.io/serial/), a proposed specification for allowing a web page to communicate with a serial device.
 
 ## Motivation
 
@@ -35,39 +35,113 @@ const filter = {
 };
 
 try {
-  let port = await navigator.serial.requestPort({filters: [filter]});
+  const port = await navigator.serial.requestPort({filters: [filter]});
   // Continue connecting to |port|.
 } catch (e) {
   // Permission to access a device was denied implicitly or explicitly by the user.
 }
 ```
 
-With access to a `SerialPort` instance the site may now open a connection to the port.
+With access to a `SerialPort` instance the site may now open a connection to the port. Most parameters to `open()` are optional however the baud rate is required as there is no sensible default. You as the developer must know the rate at which your device expects to communicate.
 
 ```javascript
-await port.open();
+await port.open({ baudrate: /* pick your baud rate */ });
 ```
 
 At this point the `readable` and `writable` attributes are populated with a [`ReadableStream`](https://streams.spec.whatwg.org/#rs-class) and [`WritableStream`](https://streams.spec.whatwg.org/#ws-class) that can be used to receive data from and send data to the connected device.
 
-In this example we assume a device implementing a protocol inspired by the [Hayes command set](https://en.wikipedia.org/wiki/Hayes_command_set). Since commands are encoded in ASCII a [`TextEncoderStream`](https://encoding.spec.whatwg.org/#interface-textencoderstream) and [`TextDecoderStream`](https://encoding.spec.whatwg.org/#interface-textdecoderstream) are attached to the port's streams in order to translate the `Uint8Array`s used by the `SerialPort`'s streams into strings.
+In this example we assume a device implementing a protocol inspired by the [Hayes command set](https://en.wikipedia.org/wiki/Hayes_command_set). Since commands are encoded in ASCII a [`TextEncoder`](https://encoding.spec.whatwg.org/#interface-textencoder) and [`TextDecoder`](https://encoding.spec.whatwg.org/#interface-textdecoder) are used to translate the `Uint8Array`s used by the `SerialPort`'s streams to and from strings.
 
 ```javascript
-let encoder = new TextEncoderStream();
-encoder.readable.pipeTo(port.writable);
-let writer = encoder.writable.getWriter();
+const encoder = new TextEncoder();
+const writer = encoder.writable.getWriter();
+writer.write(encoder.encode("AT"));
+
+const decoder = new TextDecoder();
+const reader = port.readable.getReader();
+const { value, done } = await reader.read();
+console.log(decoder.decode(value));
+// Expected output: OK
+```
+
+The readable and writable streams must be unlocked before the port can be closed.
+
+```javascript
+writer.releaseLock();
+reader.releaseLock();
+await port.close();
+```
+
+Rather than reading a single chunk from the stream code will often read continuously using a loop like this,
+
+```javascript
+const reader = port.readable.getReader();
+while (true) {
+  const { value, done } = await reader.read();
+  if (done) {
+    // |reader| has been canceled.
+    break;
+  }
+  // Do something with |value|...
+}
+reader.releaseLock();
+```
+
+In this case `port.readable` will not be unlocked until the stream encounters an error, so how do you close the port? Calling `cancel()` on `reader` will cause the `Promise` returned by `read()` to resolve immediately with `{ value: undefined, done: true }`. This will cause the code above to break out of the loop and unlock the stream so that the port can be closed,
+
+```javascript
+await reader.cancel();
+await port.close();
+```
+
+A serial port may generate one of a number of non-fatal read errors for conditions such as buffer overflow, framing or parity errors. These are thrown as exceptions from the `read()` method and cause the `ReadableStream` to become errored. If the error is non-fatal then `port.readable` is immediately replaced by a new `ReadableStream` that picks up right after the error. To expand the example above to handle these errors another loop is added,
+
+```javascript
+while (port.readable) {
+  const reader = port.readable.getReader();
+  while (true) {
+    let value, done;
+    try {
+      ({ value, done } = await reader.read());
+    } catch (error) {
+      // Handle |error|...
+      break;
+    }
+    if (done) {
+      // |reader| has been canceled.
+      break;
+    }
+    // Do something with |value|...
+  }
+  reader.releaseLock();
+}
+```
+
+If a fatal error occurs, such as a USB device being removed, then `port.readable` will be set to `null`.
+
+Revisiting the earlier example, for a device that always produces ASCII text the explicit calls to `encode()` and `decode()` can be removed through the use of [`TransformStream`](https://streams.spec.whatwg.org/#ts)s. In this example `writer` comes from a [`TextEncoderStream`](https://encoding.spec.whatwg.org/#interface-textencoderstream) and `reader` comes from a [`TextDecoderStream`](https://encoding.spec.whatwg.org/#interface-textdecoderstream). The `pipeTo()` method is used to connect these transforms to the port.
+
+```javascript
+const encoder = new TextEncoderStream();
+const writableStreamClosed = encoder.readable.pipeTo(port.writable);
+const writer = encoder.writable.getWriter();
 writer.write("AT");
 
-let reader = port.readable.pipeThrough(new TextDecoderStream()).getReader();
-let { value, done } = await reader.read();
+const decoder = new TextDecoderStream();
+const readableStreamClosed = port.readable.pipeTo(decoder.writable);
+const reader = decoder.readable.getReader();
+const { value, done } = await reader.read();
 console.log(value);
 // Expected output: OK
 ```
 
-The readable and writable streams must be unlocked before the port can be closed. If they have been piped through a [`TransformStream`](https://streams.spec.whatwg.org/#ts) then those must be closed first.
+When piping through a transform stream closing the port becomes more complicated. Closing `reader` or `writer` will cause an error to propagate through the transform streams to the underlying port. However, this propagation doesn't happen immediately. The new `writableStreamClosed` and `readableStreamClosed` promises are required to detect when `port.readable` and `port.writable` have been unlocked. Since canceling `reader` causes the stream to be aborted the resulting error must be caught and ignored,
 
 ```javascript
-await Promise.all([ writer.close(), reader.cancel() ]);
+writer.close();
+await writableStreamClosed;
+reader.cancel();
+await readableStreamClosed.catch(reason => {});
 await port.close();
 ```
 
