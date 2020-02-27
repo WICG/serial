@@ -31,7 +31,7 @@ Before a site can connect to a serial device it must request access. If a site o
 
 ```javascript
 const filter = {
-  vendorId: 0x2341 // Arduino SA
+  usbVendorId: 0x2341 // Arduino SA
 };
 
 try {
