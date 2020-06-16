@@ -54,7 +54,7 @@ In this example we assume a device implementing a protocol inspired by the [Haye
 
 ```javascript
 const encoder = new TextEncoder();
-const writer = encoder.writable.getWriter();
+const writer = port.writable.getWriter();
 writer.write(encoder.encode("AT"));
 
 const decoder = new TextDecoder();
