@@ -197,8 +197,8 @@ interface SerialConnectionEvent : Event {
 };
 
 dictionary SerialPortFilter {
-  unsigned short vendorId;
-  unsigned short productId;
+  unsigned short usbVendorId;
+  unsigned short usbProductId;
 };
 
 dictionary SerialPortRequestOptions {
@@ -214,8 +214,9 @@ interface Serial : EventTarget {
 };
 
 [Exposed=(DedicatedWorker,Window), SecureContext]
-interface SerialPortInfo {
-  maplike<DOMString, DOMString?>;
+dictionary SerialPortInfo {
+  unsigned short usbVendorId;
+  unsigned short usbProductId;
 };
 
 [Exposed=(DedicatedWorker,Window), SecureContext]
