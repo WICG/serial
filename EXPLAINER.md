@@ -45,7 +45,7 @@ try {
 With access to a `SerialPort` instance the site may now open a connection to the port. Most parameters to `open()` are optional however the baud rate is required as there is no sensible default. You as the developer must know the rate at which your device expects to communicate.
 
 ```javascript
-await port.open({ baudrate: /* pick your baud rate */ });
+await port.open({ baudRate: /* pick your baud rate */ });
 ```
 
 At this point the `readable` and `writable` attributes are populated with a [`ReadableStream`](https://streams.spec.whatwg.org/#rs-class) and [`WritableStream`](https://streams.spec.whatwg.org/#ws-class) that can be used to receive data from and send data to the connected device.
