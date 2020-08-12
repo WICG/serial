@@ -34,7 +34,7 @@ for use.
   const port = await navigator.serial.requestPort(requestOptions);
 
   // Open and begin reading.
-  await port.open({ baudrate: 115200 });
+  await port.open({ baudRate: 115200 });
   const reader = port.in.getReader();
 
   for await (const { done, data } of reader.read()) {
@@ -227,34 +227,31 @@ for use.
 
   ```webidl
     dictionary SerialOptions {
-      long baudrate = 9600;
-      octet databits = 8;
-      octet stopbits = 1;
+      long baudRate = 9600;
+      octet dataBits = 8;
+      octet stopBits = 1;
       ParityType parity = "none";
-      long buffersize = 255;
-      boolean rtscts = false;
-      boolean xon = false;
-      boolean xoff = false;
-      boolean xany = false;
+      long bufferSize = 255;
+      FlowControlType flowControl = "none";
     };
   ```
 
   <dl>
     <dt>
-      <dfn>baudrate</dfn> member
+      <dfn>baudRate</dfn> member
     </dt>
     <dd>
       One of 115200, 57600, 38400, 19200, 9600, 4800, 2400, 1800, 1200,
       600, 300, 200, 150, 134, 110, 75, or 50.
     </dd>
     <dt>
-      <dfn>databits</dfn> member
+      <dfn>dataBits</dfn> member
     </dt>
     <dd>
       One of 8, 7, 6, or 5.
     </dd>
     <dt>
-      <dfn>stopbits</dfn> member
+      <dfn>stopBits</dfn> member
     </dt>
     <dd>
       One of 1 or 2.
@@ -264,6 +261,12 @@ for use.
     </dt>
     <dd>
       The parity type.
+    </dd>
+    <dt>
+      <dfn>flowControl</dfn> member
+    </dt>
+    <dd>
+      The flow control mode.
     </dd>
   </dl>
 </section>
@@ -291,6 +294,23 @@ for use.
     <dd>Parity bit has a mark symbol (logical one).</dd>
     <dt><dfn>space</dfn></dt>
     <dd>Parity bit has a space symbol (logical zero).</dd>
+  </dl>
+</section>
+
+<section data-dfn-for="FlowControlType">
+  ## <dfn>FlowControlType</dfn> enum
+
+  ```webidl
+  enum FlowControlType {
+    "none",
+    "hardware"
+  };
+  ```
+  <dl>
+    <dt><dfn>none</dfn></dt>
+    <dd>No flow control is enabled.</dd>
+    <dt><dfn>hardware</dfn></dt>
+    <dd>Hardware flow control using the RTS and CTS signals is enabled.</dd>
   </dl>
 </section>
 
