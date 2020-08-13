@@ -148,9 +148,9 @@ await port.close();
 Serial ports include a number of additional signals for device detection and flow control which can be queried and set explicitly. As an example, some devices like the Arduino will enter a programming mode if the [Data Terminal Ready](https://en.wikipedia.org/wiki/Data_Terminal_Ready) (DTR) signal is toggled.
 
 ```javascript
-await port.setSignal({ dtr: false });
+await port.setSignal({ dataTerminalReady: false });
 await new Promise(resolve => setTimeout(200, resolve));
-await port.setSignal({ dtr: true });
+await port.setSignal({ dataTerminalReady: true });
 ```
 
 If a serial port is provided by a USB device then that device may be connected or disconnected from the system. Once a site has permission to access a port it can receive these events and query for the set of connected devices it currently has access to.
@@ -213,10 +213,22 @@ interface Serial : EventTarget {
   [Exposed=Window] Promise<SerialPort> requestPort(optional SerialPortRequestOptions options = {});
 };
 
-[Exposed=(DedicatedWorker,Window), SecureContext]
 dictionary SerialPortInfo {
   unsigned short usbVendorId;
   unsigned short usbProductId;
+};
+
+dictionary SerialOutputSignals {
+  boolean dataTerminalReady;
+  boolean requestToSend;
+  boolean break;
+};
+
+dictionary SerialInputSignals {
+  required boolean dataCarrierDetect;
+  required boolean clearToSend;
+  required boolean ringIndicator;
+  required boolean dataSetReady;
 };
 
 [Exposed=(DedicatedWorker,Window), SecureContext]
