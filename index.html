@@ -133,12 +133,13 @@ document.
         activation=], [=reject=] |promise| with a "{{SecurityError}}"
         {{DOMException}} and return |promise|.
       <li>
-        If |options|.{{SerialPortRequestOptions/filters}} is present, then for
-        each |filter:SerialPortFilter| in
-        |options|.{{SerialPortRequestOptions/filters}} run the following steps:
+        If |options|["{{SerialPortRequestOptions/filters}}"] is present, then
+        for each |filter:SerialPortFilter| in
+        |options|["{{SerialPortRequestOptions/filters}}"] run the following
+        steps:
         <ol>
           <li>
-            If |filter|.{{SerialPortFilter/usbVendorId}} is not present,
+            If |filter|["{{SerialPortFilter/usbVendorId}}"] is not present,
             [=reject=] |promise| with a {{TypeError}} and return |promise|.
 
             <div class="note">
@@ -153,7 +154,7 @@ document.
           <li>
             Prompt the user to grant the site access to a serial port by
             presenting them with a list of available ports that [=match any
-            filter=] in |options|.{{SerialPortRequestOptions/filters}} if
+            filter=] in |options|["{{SerialPortRequestOptions/filters}}"] if
             present and all available ports otherwise.
           <li>
             If the user does not choose a port, [=queue a task=] to [=reject=]
@@ -179,7 +180,7 @@ document.
       </pre>
 
       <dl>
-        <dt>{{SerialPortRequestOptions/filters}} member
+        <dt><dfn>filters</dfn> member
         <dd>Filters for serial ports
       </dl>
     </section>
@@ -207,18 +208,18 @@ document.
 
       <ol>
         <li>
-          If |filter|.{{SerialPortFilter/usbVendorId}} is not present, return
+          If |filter|["{{SerialPortFilter/usbVendorId}}"] is not present, return
           `true`.
         <li>If the serial port is not part of a USB device, return `false`.
         <li>
           If the USB device's vendor ID is not equal to
-          |filter|.{{SerialPortFilter/usbVendorId}}, return `false`.
+          |filter|["{{SerialPortFilter/usbVendorId}}"], return `false`.
         <li>
-          If |filter|.{{SerialPortFilter/usbProductId}} is not present, return
+          If |filter|["{{SerialPortFilter/usbProductId}}"] is not present, return
           `true`.
         <li>
           If the USB device's product ID is not equal to
-          |filter|.{{SerialPortFilter/usbProductId}}, return `false`.
+          |filter|["{{SerialPortFilter/usbProductId}}"], return `false`.
         <li>Otherwise, return `true`.
       </ol>
 
@@ -380,7 +381,7 @@ document.
       |eventInitDict|.
     <li>
       Set [=this=].{{[[port]]}} to
-      |eventInitDict|.{{SerialConnectionEventInit/port}}.
+      |eventInitDict|["{{SerialConnectionEventInit/port}}"].
   </ol>
 
   <section>
@@ -476,10 +477,10 @@ document.
     <li>If the port is part of a USB device, perform the following steps:
       <ol>
         <li>
-          Set |info|.{{SerialPortInfo/usbVendorId}} to the vendor ID of the
+          Set |info|["{{SerialPortInfo/usbVendorId}}"] to the vendor ID of the
           device.
         <li>
-          Set |info|.{{SerialPortInfo/usbProductId}} to the product ID of the
+          Set |info|["{{SerialPortInfo/usbProductId}}"] to the product ID of the
           device.
       </ol>
     <li>Return |info|.
@@ -536,13 +537,13 @@ document.
         If [=this=].{{[[state]]}} is not `"closed"`, reject |promise| with an
         "{{InvalidStateError}}" {{DOMException}} and return |promise|.
       <li>
-        If |options|.{{SerialOptions/dataBits}} is not 7 or 8, reject |promise| with
-        {{TypeError}} and return |promise|.
+        If |options|["{{SerialOptions/dataBits}}"] is not 7 or 8, reject
+        |promise| with {{TypeError}} and return |promise|.
       <li>
-        If |options|.{{SerialOptions/stopBits}} is not 1 or 2, reject |promise| with
-        {{TypeError}} and return |promise|.
+        If |options|["{{SerialOptions/stopBits}}"] is not 1 or 2, reject
+        |promise| with {{TypeError}} and return |promise|.
       <li>
-        If |options|.{{SerialOptions/bufferSize}} is 0, reject |promise| with
+        If |options|["{{SerialOptions/bufferSize}}"] is 0, reject |promise| with
         {{TypeError}} and return |promise|.
 
         <div class="note">
@@ -633,7 +634,7 @@ document.
       </section>
 
       <section data-dfn-for="FlowControlType">
-        <h5>{{FlowControlType}} enum</h5>
+        <h5><dfn>FlowControlType</dfn> enum</h5>
 
         <pre class="idl">
           enum FlowControlType {
@@ -1014,17 +1015,17 @@ document.
       <li>Perform the following steps [=in parallel=]:
         <ol>
           <li>
-            If |signals|.{{SerialOutputSignals/dataTerminalReady}} is present,
-            invoke the operating system to either assert (if `true`) or deassert
-            (if `false`) the "data terminal ready" or "DTR" signal on the serial
-            port.
+            If |signals|["{{SerialOutputSignals/dataTerminalReady}}"] is
+            present, invoke the operating system to either assert (if `true`) or
+            deassert (if `false`) the "data terminal ready" or "DTR" signal on
+            the serial port.
           <li>
-            If |signals|.{{SerialOutputSignals/requestToSend}} is present,
+            If |signals|["{{SerialOutputSignals/requestToSend}}"] is present,
             invoke the operating system to either assert (if `true`) or deassert
             (if `false`) the "request to send" or "RTS" signal on the serial
             port.
           <li>
-            If |signals|.{{SerialOutputSignals/break}} is present, invoke the
+            If |signals|["{{SerialOutputSignals/break}}"] is present, invoke the
             operating system to either assert (if `true`) or deassert (if
             `false`) the "break" signal on the serial port.
 
@@ -1045,11 +1046,14 @@ document.
     </ol>
 
     <section data-dfn-for="SerialOutputSignals">
-      <h4>{{SerialOutputSignals}} dictionary</h4>
+      <h4><dfn>SerialOutputSignals</dfn> dictionary</h4>
 
       <pre class="idl">
-        dictionary SerialOutputSignals {boolean dataTerminalReady; boolean
-        requestToSend; boolean break;};
+        dictionary SerialOutputSignals {
+          boolean dataTerminalReady;
+          boolean requestToSend;
+          boolean break;
+        };
       </pre>
 
       <dl>
@@ -1069,7 +1073,7 @@ document.
     The {{SerialPort/getSignals()}} method steps are:
 
     <ol>
-      <li>Let |p:Promise| be [=a new promise=].
+      <li>Let |promise:Promise| be [=a new promise=].
       <li>
         If [=this=].{{[[state]]}} is not `"opened"`, reject |promise| with an
         "{{InvalidStateError}}" {{DOMException}} and return |promise|.
@@ -1087,20 +1091,20 @@ document.
             Let |signals:SerialInputSignals| be a [=new=]
             {{SerialInputSignals}}.
           <li>
-            Set |signals|.{{SerialInputSignals/dataCarrierDetect}} to `true` if
-            the "data carrier detect" or "DCD" signal has been asserted by the
-            device, and `false` otherwise.
+            Set |signals|["{{SerialInputSignals/dataCarrierDetect}}"] to `true`
+            if the "data carrier detect" or "DCD" signal has been asserted by
+            the device, and `false` otherwise.
           <li>
-            Set |signals|.{{SerialInputSignals/clearToSend}} to `true` if the
+            Set |signals|["{{SerialInputSignals/clearToSend}}"] to `true` if the
             "clear to send" or "CTS" signal has been asserted by the device, and
             `false` otherwise.
           <li>
-            Set |signals|.{{SerialInputSignals/dataCarrierDetect}} to `true` if
-            the "ring indicator" or "RI" signal has been asserted by the device,
-            and `false` otherwise.
+            Set |signals|["{{SerialInputSignals/dataCarrierDetect}}"] to `true`
+            if the "ring indicator" or "RI" signal has been asserted by the
+            device, and `false` otherwise.
           <li>
-            Set |signals|.{{SerialInputSignals/dataCarrierDetect}} to `true` if
-            the "data set ready" or "DSR" signal has been asserted by the
+            Set |signals|["{{SerialInputSignals/dataCarrierDetect}}"] to `true`
+            if the "data set ready" or "DSR" signal has been asserted by the
             device, and `false` otherwise.
           <li>
             [=Queue a task=] to resolve |promise| with |signals| on the [=serial port
@@ -1110,12 +1114,15 @@ document.
     </ol>
 
     <section data-dfn-for="SerialInputSignals">
-    <h4>{{SerialInputSignals}} dictionary</h4>
+    <h4><dfn>SerialInputSignals</dfn> dictionary</h4>
 
     <pre class="idl">
-      dictionary SerialInputSignals {required boolean dataCarrierDetect;
-      required boolean clearToSend; required boolean ringIndicator; required
-      boolean dataSetReady;};
+      dictionary SerialInputSignals {
+        required boolean dataCarrierDetect;
+        required boolean clearToSend;
+        required boolean ringIndicator;
+        required boolean dataSetReady;
+      };
     </pre>
 
     <dl>
