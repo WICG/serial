@@ -126,11 +126,12 @@ document.
       <li>
         If the [=relevant global object=]'s [=associated Document=] is not
         [=allowed to use=] the [=policy-controlled feature=] named `"serial"`,
-        [=reject=] |promise| with a {{SecurityError}} and return |promise|.
+        [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and
+        return |promise|.
       <li>
         If the [=relevant global object=] of [=this=] does not have [=transient
-        activation=], [=reject=] |promise| with a {{SecurityError}} and return
-        |promise|.
+        activation=], [=reject=] |promise| with a "{{SecurityError}}"
+        {{DOMException}} and return |promise|.
       <li>
         If |options|.{{SerialPortRequestOptions/filters}} is present, then for
         each |filter:SerialPortFilter| in
@@ -269,7 +270,8 @@ document.
       <li>
         If the [=relevant global object=]'s [=associated Document=] is not
         [=allowed to use=] the [=policy-controlled feature=] named `"serial"`,
-        [=reject=] |promise| with a {{SecurityError}} and return |promise|.
+        [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and
+        return |promise|.
       <li>
         Run the following steps [=in parallel=]:
         <ol>
