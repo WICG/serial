@@ -124,10 +124,10 @@ document.
     <ol>
       <li>Let |promise:Promise| be [=a new promise=].
       <li>
-        If the [=relevant global object=]'s [=associated Document=] is not
-        [=allowed to use=] the [=policy-controlled feature=] named `"serial"`,
-        [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and
-        return |promise|.
+        If [=this=]'s [=relevant global object=]'s [=associated Document=] is
+        not [=allowed to use=] the [=policy-controlled feature=] named
+        `"serial"`, [=reject=] |promise| with a "{{SecurityError}}"
+        {{DOMException}} and return |promise|.
       <li>
         If the [=relevant global object=] of [=this=] does not have [=transient
         activation=], [=reject=] |promise| with a "{{SecurityError}}"
@@ -268,10 +268,10 @@ document.
     <ol>
       <li>Let |promise:Promise| be [=a new promise=].
       <li>
-        If the [=relevant global object=]'s [=associated Document=] is not
-        [=allowed to use=] the [=policy-controlled feature=] named `"serial"`,
-        [=reject=] |promise| with a "{{SecurityError}}" {{DOMException}} and
-        return |promise|.
+        If [=this=]'s [=relevant global object=]'s [=associated Document=] is
+        not [=allowed to use=] the [=policy-controlled feature=] named
+        `"serial"`, [=reject=] |promise| with a "{{SecurityError}}"
+        {{DOMException}} and return |promise|.
       <li>
         Run the following steps [=in parallel=]:
         <ol>
