@@ -1147,12 +1147,13 @@ document.
 
       <p>
       Calling `port.`{{SerialPort/close()}} implicitly invokes
-      {{SerialPort/readable}}`.`{{ReadableStream/cancel()}} and
-      {{SerialPort/writable}}`.`{{WritableStream/abort()}} in order to clear any
-      buffered data. If the application has called
-      {{ReadableStream/getReader()}} or {{WritableStream/getWriter()}} the
-      stream is locked and the port cannot be closed. This forces the developer
-      to decide how to handle any read or write operations that are in progress.
+      `port.`{{SerialPort/readable}}`.`{{ReadableStream/cancel()}} and
+      `port.`{{SerialPort/writable}}`.`{{WritableStream/abort()}} in order to
+      clear any buffered data. If the application has called
+      `port.`{{SerialPort/readable}}`.`{{ReadableStream/getReader()}} or
+      `port.`{{SerialPort/writable}}`.`{{WritableStream/getWriter()}} the stream
+      is locked and the port cannot be closed. This forces the developer to
+      decide how to handle any read or write operations that are in progress.
 
       For example, to ensure that all buffered data has been transmitted before
       the port is closed the application must await the {{Promise}} returned by
@@ -1170,8 +1171,8 @@ document.
       `writer.`{{WritableStreamDefaultWriter/abort()}}.
 
       <p>
-      If a {{TransformStream}} is being piped to {{SerialPort/writable}} then
-      waiting for the {{Promise}} returned by
+      If a {{TransformStream}} is being piped to `port`.{{SerialPort/writable}}
+      then waiting for the {{Promise}} returned by
       `writer.`{{WritableStreamDefaultWriter/close()}} to resolve is
       insufficient. The application must wait for the pipe chain to close by
       waiting for the {{Promise}} returned by {{ReadableStream/pipeTo()}} to
@@ -1225,11 +1226,11 @@ document.
       </pre>
 
       Calling `reader.`{{ReadableStreamGenericReader/cancel()}} causes the call
-      to {{ReadableStreamDefaultReader/read()}} to return immediately, exiting
-      the inner loop and calling {{ReadableStreamDefaultReader/releaseLock()}}.
-      The outer loop then exits because `keepReading` has been set to `false`
-      and with the stream unlocked `port.`{{SerialPort/close()}} can complete
-      successfully.
+      to `reader.`{{ReadableStreamDefaultReader/read()}} to return immediately,
+      exiting the inner loop and calling
+      `reader.`{{ReadableStreamDefaultReader/releaseLock()}}. The outer loop
+      then exits because `keepReading` has been set to `false` and with the
+      stream unlocked `port.`{{SerialPort/close()}} can complete successfully.
     </aside>
 
     The {{SerialPort/close()}} method steps are:
