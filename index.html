@@ -881,7 +881,7 @@ document.
       <li>If [=this=].{{[[state]]}} is not `"opened"`, return `null`.
       <li>If [=this=].{{[[writeFatal]]}} is `true`, return `null`.
       <li>Let |stream:WritableStream| be a [=new=] {{WritableStream}}.
-      <li>Let |writeAlgorithm| be the following steps:
+      <li>Let |writeAlgorithm| be the following steps, given |chunk|:
         <ol>
           <li>Let |promise:Promise| be [=a new promise=].
           <li>
