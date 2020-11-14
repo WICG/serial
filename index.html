@@ -297,7 +297,7 @@ document.
   <section>
     <h3><dfn>onconnect</dfn> attribute</h3>
 
-    {{Serial/onconnect}} is an [=Event handler IDL attribute=] for the
+    {{Serial/onconnect}} is an [=event handler IDL attribute=] for the
     <dfn>connect</dfn> event type.
 
     <p>
@@ -308,18 +308,16 @@ document.
     <ol>
       <li>Let |port:SerialPort| be a {{SerialPort}} representing the port.
       <li>
-        Let |event:SerialConnectionEvent| be a [=new=] {{SerialConnectionEvent}}
-        constructed with `"connect"` and `{ port }`.
-      <li>
         [=Fire an event=] named {{connect}} at {{Navigator/serial}}, using
-        |event| as the event object.
+        {{SerialConnectionEvent}}, with its {{SerialConnectionEvent/port}}
+        attribute initialized to |port|.
     </ol>
   </section>
 
   <section>
     <h3><dfn>ondisconnect</dfn> attribute</h3>
 
-    {{Serial/ondisconnect}} is an [=Event handler IDL attribute=] for the
+    {{Serial/ondisconnect}} is an [=event handler IDL attribute=] for the
     <dfn>disconnect</dfn> event type.
 
     <p>
@@ -330,11 +328,10 @@ document.
       <ol>
         <li>Let |port:SerialPort| be a {{SerialPort}} representing the port.
         <li>
-          Let |event:SerialConnectionEvent| be a [=new=] {{SerialConnectionEvent}}
-          constructed with `"disconnect"` and `{ port }`.
         <li>
           [=Fire an event=] named {{disconnect}} at {{Navigator/serial}}, using
-          |event| as the event object.
+          {{SerialConnectionEvent}}, with its {{SerialConnectionEvent/port}}
+          attribute initialized to |port|.
       </ol>
   </section>
 </section>
