@@ -572,11 +572,11 @@ document.
 
       <pre class="idl">
         dictionary SerialOptions {
-          required unsigned long baudRate;
-          octet dataBits = 8;
-          octet stopBits = 1;
+          required [EnforceRange] unsigned long baudRate;
+          [EnforceRange] octet dataBits = 8;
+          [EnforceRange] octet stopBits = 1;
           ParityType parity = "none";
-          unsigned long bufferSize = 255;
+          [EnforceRange] unsigned long bufferSize = 255;
           FlowControlType flowControl = "none";
         };
       </pre>
