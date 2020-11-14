@@ -736,10 +736,8 @@ document.
         Let |pullAlgorithm| be the following steps, given
         |controller:ReadableStreamDefaultController|:
         <ol>
-          <li>Let |promise:Promise| be [=a new promise=].
-          <li>[=Resolve=] |promise| with `undefined`.
           <li>
-            Return |promise| and run the following steps [=in parallel=]:
+            Run the following steps [=in parallel=]:
             <ol>
               <li>
                 Let |desiredSize| be
@@ -794,6 +792,7 @@ document.
                 [=this=].{{[[readFatal]]}} to `true`, and invoke the steps to
                 [=handle closing the readable stream=].
             </ol>
+          <li>Return [=a promise resolved with=] `undefined`.
         </ol>
 
       <p class="note">
