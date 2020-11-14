@@ -545,12 +545,10 @@ document.
       <li>
         If |options|["{{SerialOptions/bufferSize}}"] is 0, reject |promise| with
         {{TypeError}} and return |promise|.
-
-        <div class="note">
-          Implementations may also enforce a maximum value for
-          {{SerialOptions/bufferSize}} based on available system memory or other
-          architectural constraints.
-        </div>
+      <li>
+        Optionally, if |options|["{{SerialOptions/bufferSize}}"] is larger than
+        the implementation is able to support, reject |promise| with a
+        {{TypeError}} and return |promise|.
       <li>Set [=this=].{{[[state]]}} to `"opening"`.
       <li>Perform the following steps [=in parallel=].
         <ol>
