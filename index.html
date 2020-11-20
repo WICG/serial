@@ -299,19 +299,6 @@ document.
 
     {{Serial/onconnect}} is an [=event handler IDL attribute=] for the
     <dfn>connect</dfn> event type.
-
-    <p>
-    When a serial port becomes available on the system that the user has allowed
-    the site to access as the result of a previous call to
-    {{Serial/requestPort()}}, run the following steps:
-
-    <ol>
-      <li>Let |port:SerialPort| be a {{SerialPort}} representing the port.
-      <li>
-        [=Fire an event=] named {{connect}} at {{Navigator/serial}}, using
-        {{SerialConnectionEvent}}, with its {{SerialConnectionEvent/port}}
-        attribute initialized to |port|.
-    </ol>
   </section>
 
   <section>
@@ -319,90 +306,6 @@ document.
 
     {{Serial/ondisconnect}} is an [=event handler IDL attribute=] for the
     <dfn>disconnect</dfn> event type.
-
-    <p>
-      When a serial port becomes unavailable on the system that the user has
-      allowed the site to access as the result of a previous call to
-      {{Serial/requestPort()}}, run the following steps:
-
-      <ol>
-        <li>Let |port:SerialPort| be a {{SerialPort}} representing the port.
-        <li>
-        <li>
-          [=Fire an event=] named {{disconnect}} at {{Navigator/serial}}, using
-          {{SerialConnectionEvent}}, with its {{SerialConnectionEvent/port}}
-          attribute initialized to |port|.
-      </ol>
-  </section>
-</section>
-
-<section data-dfn-for="SerialConnectionEvent">
-  <h2><dfn>SerialConnectionEvent</dfn> interface</h2>
-
-  <div class="issue">
-    The {{SerialConnectionEvent}} interface would not be necessary if a
-    {{SerialPort}} were used as the target of a {{connect}} or {{disconnect}}
-    event and that event were specified to bubble from the {{SerialPort}} to
-    {{Window/navigator}}.{{Navigator/serial}}.
-  </div>
-
-  <pre class="idl">
-    [Exposed=(DedicatedWorker, Window), SecureContext]
-    interface SerialConnectionEvent : Event {
-      constructor(DOMString type, SerialConnectionEventInit eventInitDict);
-      [SameObject] readonly attribute SerialPort port;
-    };
-  </pre>
-
-  <p>
-  Instances of {{SerialConnectionEvent}} are created with the internal slots
-  described in the following table:
-
-  <table class="simple" dfn-for=SerialPort dfn-type=attribute>
-    <tr>
-      <th>Internal slot
-      <th>Initial value
-      <th>Description (non-normative)
-    <tr>
-      <td><dfn>[[\port]]</dfn>
-      <td>`undefined`
-      <td>The {{SerialPort}} that has been connected or disconnected
-  </table>
-
-  <p>
-  The `new SerialConnectionEvent(type, eventInitDict)` constructor steps are:
-
-  <ol>
-    <li>
-      Invoke the constructor steps for {{Event}} with |type| and
-      |eventInitDict|.
-    <li>
-      Set [=this=].{{[[port]]}} to
-      |eventInitDict|["{{SerialConnectionEventInit/port}}"].
-  </ol>
-
-  <section>
-    <h3><dfn>port</dfn> attribute</h3>
-
-    The {{SerialConnectionEvent/port}} getter steps are:
-
-    <ol>
-      <li>
-        Return [=this=].{{[[port]]}}.
-  </section>
-
-  <section data-dfn-for="SerialConnectionEventInit">
-    <h3><dfn>SerialConnectionEventInit</dfn> dictionary</h3>
-
-    <pre class="idl">
-      dictionary SerialConnectionEventInit : EventInit {
-        required SerialPort port;
-      };
-    </pre>
-
-    <dl>
-      <dt><dfn>port</dfn> member
-      <dd>The {{SerialPort}} that was connected or disconnected
   </section>
 </section>
 
@@ -411,7 +314,9 @@ document.
 
   <pre class="idl">
     [Exposed=(DedicatedWorker,Window), SecureContext]
-    interface SerialPort {
+    interface SerialPort : EventTarget {
+      attribute EventHandler onconnect;
+      attribute EventHandler ondisconnect;
       readonly attribute ReadableStream readable;
       readonly attribute WritableStream writable;
 
@@ -426,6 +331,9 @@ document.
 
   Methods on this interface typically complete asynchronously, queuing work on
   the <dfn>serial port task source</dfn>.
+
+  <p>
+  The [=get the parent=] algorithm for {{SerialPort}} returns {{Navigator/serial}}.
 
   <p>
   Instances of {{SerialPort}} are created with the internal slots described in
@@ -463,6 +371,44 @@ document.
         A {{Promise}} used to wait for {{SerialPort/readable}} and
         {{SerialPort/writable}} to close
   </table>
+
+  <section>
+    <h3><dfn>onconnect</dfn> attribute</h3>
+
+    {{SerialPort/onconnect}} is an [=event handler IDL attribute=] for the
+    {{connect}} event type.
+
+    <p>
+    When a serial port becomes available on the system that the user has allowed
+    the site to access as the result of a previous call to
+    {{Serial/requestPort()}}, run the following steps:
+
+    <ol>
+      <li>Let |port:SerialPort| be a {{SerialPort}} representing the port.
+      <li>
+        [=Fire an event=] named {{connect}} at |port| with its {{Event/bubbles}}
+        attribute initialized to `true`.
+    </ol>
+  </section>
+
+  <section>
+    <h3><dfn>ondisconnect</dfn> attribute</h3>
+
+    {{SerialPort/ondisconnect}} is an [=event handler IDL attribute=] for the
+    {{disconnect}} event type.
+
+    <p>
+      When a serial port becomes unavailable on the system that the user has
+      allowed the site to access as the result of a previous call to
+      {{Serial/requestPort()}}, run the following steps:
+
+      <ol>
+        <li>Let |port:SerialPort| be a {{SerialPort}} representing the port.
+        <li>
+          [=Fire an event=] named {{disconnect}} at |port| with its
+          {{Event/bubbles}} attribute initialized to `true`.
+      </ol>
+  </section>
 
   <section>
   <h3><dfn>getInfo()</dfn> method</h3>
