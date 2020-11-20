@@ -164,14 +164,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 navigator.serial.addEventListener('connect', e => {
-  // Add |e.port| to the UI or automatically connect.
+  // Add |e.target| to the UI or automatically connect.
 });
 
 navigator.serial.addEventListener('disconnect', e => {
-  // Remove |e.port| from the UI. If the device was open the disconnection can
+  // Remove |e.target| from the UI. If the device was open the disconnection can
   // also be observed as a stream error.
 });
 ```
+
+**Note:** Prior to Chrome 89 the `connect` and `disconnect` events fired a custom `SerialConnectionEvent` object at `navigator.serial` with the affected `SerialPort` interface available as the `port` attribute. In Chrome 89 and above a generic `Event` object is fired at the `SerialPort` interface itself. An event listener can still register an event listener on `navigator.serial` as these events bubble from the `SerialPort` interface to the `Serial` interface. For compatibility with the earlier version the expression "`e.port || e.target`" can be used to get either the `port` attribute (if present) or the `target` attribute (if not).
 
 ### WebIDL
 
@@ -184,16 +186,6 @@ partial interface Navigator {
 [Exposed=DedicatedWorker, SecureContext]
 partial interface WorkerNavigator {
   [SameObject] readonly attribute Serial serial;
-};
-
-dictionary SerialConnectionEventInit {
-  required SerialPort port;
-};
-
-[Exposed=(DedicatedWorker,Window), SecureContext]
-interface SerialConnectionEvent : Event {
-  constructor(DOMString type, SerialConnectionEventInit eventInitDict);
-  [SameObject] readonly attribute SerialPort port;
 };
 
 dictionary SerialPortFilter {
