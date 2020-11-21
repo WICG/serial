@@ -286,12 +286,9 @@ document.
             Let |ports| be the sequence of the {{SerialPort}}s representing the
             ports in |availablePorts|.
           <li>
-            Let |frozenPorts| be the result of [=creating a frozen array=] from
-            |availablePorts|.
-          <li>
             [=Queue a global task=] on the [=relevant global object=] of
             [=this=] using the [=serial port task source=] to [=resolve=]
-            |promise| with |frozenPorts|.
+            |promise| with |ports|.
         </ol>
       <li>Return |promise|.
     </ol>
