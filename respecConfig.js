@@ -17,5 +17,5 @@ var respecConfig = {
   }],
   group: "wicg",
   github: "https://github.com/wicg/serial",
-  xref: ["DOM", "HTML", "PERMISSIONS-POLICY", "STREAMS", "WebIDL"]
+  xref: ["DOM", "HTML", "Infra", "PERMISSIONS-POLICY", "STREAMS", "WebIDL"]
 };

@@ -349,6 +349,10 @@ document.
       <td>`"closed"`
       <td>Tracks the active state of the {{SerialPort}}
     <tr>
+      <td><dfn>[[\bufferSize]]</dfn>
+      <td>undefined
+      <td>The amount of data to buffer for transmit and receive
+    <tr>
       <td><dfn>[[\readable]]</dfn>
       <td>`null`
       <td>A {{ReadableStream}} that receives data from the port
@@ -504,6 +508,9 @@ document.
             source=] to [=reject=] |promise| with a "{{NetworkError}}"
             {{DOMException}} and abort these steps.
           <li>Set [=this=].{{[[state]]}} to `"opened"`.
+          <li>
+            Set [=this=].{{[[bufferSize]]}} to
+            |options|["{{SerialOptions/bufferSize}}"].
           <li>
             [=Queue a global task=] on the [=relevant global object=] of
             [=this=] using the [=serial port task source=] to [=resolve=]
@@ -689,70 +696,66 @@ document.
             of [=this=].{{[[readable]]}}'s
             <a href="https://streams.spec.whatwg.org/#internal-queues">internal queue</a>.
           <li>
-            Let |buffer| be a newly created {{ArrayBuffer}} of |desiredSize|
-            bytes.
-          <li>
             Run the following steps [=in parallel=]:
             <ol>
               <li>
                 Invoke the operating system to read up to |desiredSize| bytes
-                from the port into |buffer|.
+                from the port, putting the result in the [=byte sequence=]
+                |bytes|.
               <li>
-                If no errors were encountered run the following steps:
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to run the
+                following steps:
                 <ol>
                   <li>
-                    Let |bytesRead| be the number of bytes written to |buffer|.
+                    If no errors were encountered run the following steps:
+                    <ol>
+                      <li>
+                        Let |buffer| be a [=new=] {{ArrayBuffer}} created from |bytes|.
+                      <li>
+                        Let |chunk| be a [=new=] {{Uint8Array}} view over |buffer|,
+                        who's length is the length of |bytes|.
+                      <li>
+                        Invoke [=ReadableStream/enqueue=] on
+                        [=this=].{{[[readable]]}} with |chunk|.
+                    </ol>
                   <li>
-                    Let |chunk| be a newly created {{Uint8Array}} over the slice
-                    of |buffer| from `0` to |bytesRead|.
+                    If a buffer overrun condition was encountered, invoke
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    <dfn>`BufferOverrunError`</dfn> and invoke the steps to [=handle
+                    closing the readable stream=].
                   <li>
-                    [=Queue a global task=] on the [=relevant global object=] of
-                    [=this=] using the [=serial port task source=] to invoke
-                    [=ReadableStream/enqueue=] on [=this=].{{[[readable]]}} with
-                    |chunk|.
+                    If a break condition was encountered, invoke
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    <dfn>`BreakError`</dfn> and invoke the steps to [=handle closing
+                    the readable stream=].
+                  <li>
+                    If a framing error was encountered, invoke
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    <dfn>`FramingError`</dfn> and invoke the steps to [=handle
+                    closing the readable stream=].
+                  <li>
+                    If a parity error was encountered, invoke
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    <dfn>`ParityError`</dfn> and invoke the steps to [=handle
+                    closing the readable stream=].
+                  <li>
+                    If an operating system error was encountered, invoke
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    <dfn>`UnknownError`</dfn> and invoke the steps to [=handle
+                    closing the readable stream=].
+                  <li>
+                    If the port was disconnected, run the following steps:
+                    <ol>
+                      <li>Set [=this=].{{[[readFatal]]}} to `true`,
+                      <li>
+                        Invoke [=ReadableStream/error=] on
+                        [=this=].{{[[readable]]}} with a {{NetworkError}}.
+                      <li>
+                        Invoke the steps to [=handle closing the readable
+                        stream=].
+                    </ol>
                 </ol>
-              <li>
-                If a buffer overrun condition was encountered, [=queue a global
-                task=] on the [=relevant global object=] of [=this=] using the
-                [=serial port task source=] to invoke [=ReadableStream/error=]
-                on [=this=].{{[[readable]]}} with a
-                <dfn>`BufferOverrunError`</dfn> and invoke the steps to [=handle
-                closing the readable stream=].
-              <li>
-                If a break condition was encountered, [=queue a global task=] on
-                the [=relevant global object=] of [=this=] using the [=serial
-                port task source=] to invoke [=ReadableStream/error=] on
-                [=this=].{{[[readable]]}} with a
-                <dfn>`BreakError`</dfn> and invoke the steps to [=handle closing
-                the readable stream=].
-              <li>
-                If a framing error was encountered, [=queue a global task=] on
-                the [=relevant global object=] of [=this=] using the [=serial
-                port task source=] to invoke [=ReadableStream/error=] on
-                [=this=].{{[[readable]]}} with a
-                <dfn>`FramingError`</dfn> and invoke the steps to [=handle
-                closing the readable stream=].
-              <li>
-                If a parity error was encountered, [=queue a global task=] on
-                the [=relevant global object=] of [=this=] using the [=serial
-                port task source=] to invoke [=ReadableStream/error=] on
-                [=this=].{{[[readable]]}} with a
-                <dfn>`ParityError`</dfn> and invoke the steps to [=handle
-                closing the readable stream=].
-              <li>
-                If an operating system error was encountered, [=queue a global
-                task=] on the [=relevant global object=] of [=this=] using the
-                [=serial port task source=] to invoke [=ReadableStream/error=]
-                on [=this=].{{[[readable]]}} with a
-                <dfn>`UnknownError`</dfn> and invoke the steps to [=handle
-                closing the readable stream=].
-              <li>
-                If the port was disconnected, [=queue a global task=] on the
-                [=relevant global object=] of [=this=] using the [=serial port
-                task source=] to invoke [=ReadableStream/error=] on
-                [=this=].{{[[readable]]}} with a {{NetworkError}}, set
-                [=this=].{{[[readFatal]]}} to `true`, and invoke the steps to
-                [=handle closing the readable stream=].
             </ol>
           <li>Return [=a promise resolved with=] `undefined`.
         </ol>
@@ -770,23 +773,32 @@ document.
           <li>
             Run the following steps [=in parallel=].
             <ol>
-              <li>Invoke the operating system to discard the contents of all
-              software and hardware receive buffers for the port.
-              <li>Invoke the steps to [=handle closing the readable stream=].
+              <li>
+                Invoke the operating system to discard the contents of all
+                software and hardware receive buffers for the port.
               <li>
                 [=Queue a global task=] on the [=relevant global object=] of
-                [=this=] using the [=serial port task source=] to resolve
-                |promise| with `undefined`.
+                [=this=] using the [=serial port task source=] to run the
+                following steps:
+                <ol>
+                  <li>
+                    Invoke the steps to [=handle closing the readable stream=].
+                  <li>[=Resolve=] |promise| with `undefined`.
+                </ol>
             </ol>
           <li>Return |promise|.
         </ol>
 
       <li>
         [=ReadableStream/Set up=] |stream| with
-        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-pullalgorithm">pullAlgorithm</a> set
-        to |pullAlgorithm| and
-        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-cancelalgorithm">cancelAlgorithm</a> set
-        to |cancelAlgorithm|.
+        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-pullalgorithm">pullAlgorithm</a>
+        set to |pullAlgorithm|,
+        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-cancelalgorithm">cancelAlgorithm</a>
+        set to |cancelAlgorithm|,
+        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-highwatermark">highWaterMark</a>
+        set to [=this=].{{[[bufferSize]]}}, and
+        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-sizealgorithm">sizeAlgorithm</a>
+        set to a byte-counting size algorithm.
       <li>Set [=this=].{{[[readable]]}} to |stream|.
       <li>Return |stream|.
     </ol>
@@ -798,10 +810,8 @@ document.
       <li>Set [=this=].{{[[readable]]}} to `null`.
       <li>
         If [=this=].{{[[writable]]}} is `null` and
-        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=queue a global
-        task=] on the [=relevant global object=] of [=this=] using the [=serial
-        port task source=] to [=resolve=] [=this=].{{[[pendingClosePromise]]}}
-        with `undefined`.
+        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=resolve=]
+        [=this=].{{[[pendingClosePromise]]}} with `undefined`.
     </ol>
 
   </section>
@@ -849,18 +859,28 @@ document.
             <ol>
               <li>Invoke the operating system to write |chunk| to the port.
               <li>
-                If the chunk was successfully written [=queue a global task=] on
-                the [=relevant global object=] of [=this=] using the [=serial
-                port task source=] to [=resolve=] |promise| with `undefined`.
-              <li>
-                If an operating system error was encountered, [=reject=]
-                |promise| with an "{{UnknownError}}" {{DOMException}}.
-              <li>
-                If the port was disconnected, [=queue a global task=] on the
-                [=relevant global object=] of [=this=] using the [=serial port
-                task source=] to [=reject=] |promise| with a "{{NetworkError}}"
-                {{DOMException}}, set [=this=].{{[[writeFatal]]}} to `true`, and
-                invoke the steps to [=handle closing the writable stream=].
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to run the
+                following steps:
+                <ol>
+                  <li>
+                    If the chunk was successfully written [=resolve=] |promise|
+                    with `undefined`.
+                  <li>
+                    If an operating system error was encountered, [=reject=]
+                    |promise| with an "{{UnknownError}}" {{DOMException}}.
+                  <li>
+                    If the port was disconnected, run the following steps:
+                    <ol>
+                      <li>Set [=this=].{{[[writeFatal]]}} to `true`.
+                      <li>
+                        [=Reject=] |promise| with a "{{NetworkError}}"
+                        {{DOMException}}.
+                      <li>
+                        Invoke the steps to [=handle closing the writable
+                        stream=].
+                    </ol>
+                </ol>
             </ol>
           <li>Return |promise|.
         </ol>
@@ -887,11 +907,15 @@ document.
               <li>
                 Invoke the operating system to discard the contents of all
                 software and hardware transmit buffers for the port.
-              <li>Invoke the steps to [=handle closing the writable stream=].
               <li>
                 [=Queue a global task=] on the [=relevant global object=] of
-                [=this=] using the [=serial port task source=] to resolve
-                |promise| with `undefined`.
+                [=this=] using the [=serial port task source=] to run the
+                following steps:
+                <ol>
+                  <li>
+                    Invoke the steps to [=handle closing the writable stream=].
+                  <li>[=Resolve=] |promise| with `undefined`.
+                </ol>
             </ol>
           <li>Return |promise|.
         </ol>
@@ -913,11 +937,15 @@ document.
               <li>
                 Invoke the operating system to flush the contents of all
                 software and hardware transmit buffers for the port.
-              <li>Invoke the steps to [=handle closing the writable stream=].
               <li>
                 [=Queue a global task=] on the [=relevant global object=] of
-                [=this=] using the [=serial port task source=] to resolve
-                |promise| with `undefined`.
+                [=this=] using the [=serial port task source=] to run the
+                following steps:
+                <ol>
+                  <li>
+                    Invoke the steps to [=handle closing the writable stream=].
+                  <li>[=Resolve=] |promise| with `undefined`.
+                </ol>
             </ol>
           <li>Return |promise|.
         </ol>
@@ -941,10 +969,8 @@ document.
       <li>Set [=this=].{{[[writable]]}} to `null`.
       <li>
         If [=this=].{{[[readable]]}} is `null` and
-        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=queue a global
-        task=] on the [=relevant global object=] of [=this=] using the [=serial
-        port task source=] to [=resolve=] [=this=].{{[[pendingClosePromise]]}}
-        with `undefined`.
+        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=resolve=]
+        [=this=].{{[[pendingClosePromise]]}} with `undefined`.
     </ol>
   </section>
 
@@ -1003,8 +1029,8 @@ document.
             reject |promise| with a "{{NetworkError}}" {{DOMException}}.
           <li>
             [=Queue a global task=] on the [=relevant global object=] of
-            [=this=] using the [=serial port task source=] to resolve |promise|
-            with `undefined`.
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with `undefined`.
         </ol>
       <li>Return |promise|.
     </ol>
@@ -1073,8 +1099,8 @@ document.
             device, and `false` otherwise.
           <li>
             [=Queue a global task=] on the [=relevant global object=] of
-            [=this=] using the [=serial port task source=] to resolve |promise|
-            with |signals|.
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with |signals|.
         </ol>
       <li>Return |promise|.
     </ol>
