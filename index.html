@@ -157,15 +157,17 @@ document.
             filter=] in |options|["{{SerialPortRequestOptions/filters}}"] if
             present and all available ports otherwise.
           <li>
-            If the user does not choose a port, [=queue a task=] to [=reject=]
-            |promise| with an {{"AbortError"}} {{DOMException}} on the [=serial
-            port task source=] and abort these steps.
+            If the user does not choose a port, [=queue a global task=] on the
+            [=relevant global object=] of [=this=] using the [=serial port task
+            source=] to [=reject=] |promise| with an {{"AbortError"}}
+            {{DOMException}} and abort these steps.
           <li>
             Let |port:SerialPort| be a {{SerialPort}} representing the port
             chosen by the user.
           <li>
-            [=Queue a task=] to [=resolve=] |promise| with |port| on the
-            [=serial port task source=].
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with |port|.
         </ol>
       <li>Return |promise|.
     </ol>
@@ -287,8 +289,9 @@ document.
             Let |frozenPorts| be the result of [=creating a frozen array=] from
             |availablePorts|.
           <li>
-            [=Queue a task=] to [=resolve=] |promise| with |frozenPorts| on the
-            [=serial port task source=].
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with |frozenPorts|.
         </ol>
       <li>Return |promise|.
     </ol>
@@ -499,13 +502,15 @@ document.
             Invoke the operating system to open the serial port using the
             connection parameters (or their defaults) specified in |options|.
           <li>
-            If this fails for any reason, [=queue a task=] to [=reject=] |promise| with
-            a "{{NetworkError}}" {{DOMException}} on the [=serial port task
-            source=] and abort these steps.
+            If this fails for any reason, [=queue a global task=] on the
+            [=relevant global object=] of [=this=] using the [=serial port task
+            source=] to [=reject=] |promise| with a "{{NetworkError}}"
+            {{DOMException}} and abort these steps.
           <li>Set [=this=].{{[[state]]}} to `"opened"`.
           <li>
-            [=Queue a task=] to [=resolve=] |promise| with `undefined` on the
-            [=serial port task source=].
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with `undefined`.
         </ol>
       <li>Return |promise|.
     </ol>
@@ -697,46 +702,59 @@ document.
               <li>
                 If no errors were encountered run the following steps:
                 <ol>
-                  <li>Let |bytesRead| be the number of bytes written to
-                  |buffer|.
-                  <li>Let |chunk| be a newly created {{Uint8Array}} over the
-                  slice of |buffer| from `0` to |bytesRead|.
-                  <li>[=Queue a task=] to invoke
-                  |controller|.{{ReadableStreamDefaultController/enqueue()}}
-                  with |chunk| on the [=serial port task source=].
+                  <li>
+                    Let |bytesRead| be the number of bytes written to |buffer|.
+                  <li>
+                    Let |chunk| be a newly created {{Uint8Array}} over the slice
+                    of |buffer| from `0` to |bytesRead|.
+                  <li>
+                    [=Queue a global task=] on the [=relevant global object=] of
+                    [=this=] using the [=serial port task source=] to invoke
+                    |controller|.{{ReadableStreamDefaultController/enqueue()}}
+                    with |chunk|.
                 </ol>
               <li>
-                If a buffer overrun condition was encountered, [=queue a task=] to invoke
+                If a buffer overrun condition was encountered, [=queue a global
+                task=] on the [=relevant global object=] of [=this=] using the
+                [=serial port task source=] to invoke
                 |controller|.{{ReadableStreamDefaultController/error()}} with a
-                <dfn>`BufferOverrunError`</dfn> on the [=serial port task
-                source=] and invoke the steps to [=handle closing the readable
-                stream=].
+                <dfn>`BufferOverrunError`</dfn> and invoke the steps to [=handle
+                closing the readable stream=].
               <li>
-                If a break condition was encountered, [=queue a task=] to  invoke
+                If a break condition was encountered, [=queue a global task=] on
+                the [=relevant global object=] of [=this=] using the [=serial
+                port task source=] to  invoke
                 |controller|.{{ReadableStreamDefaultController/error()}} with a
-                <dfn>`BreakError`</dfn> on the [=serial port task source=] and
+                <dfn>`BreakError`</dfn> and invoke the steps to [=handle closing
+                the readable stream=].
+              <li>
+                If a framing error was encountered, [=queue a global task=] on
+                the [=relevant global object=] of [=this=] using the [=serial
+                port task source=] to invoke
+                |controller|.{{ReadableStreamDefaultController/error()}} with a
+                <dfn>`FramingError`</dfn> and invoke the steps to [=handle
+                closing the readable stream=].
+              <li>
+                If a parity error was encountered, [=queue a global task=] on
+                the [=relevant global object=] of [=this=] using the [=serial
+                port task source=] to invoke
+                |controller|.{{ReadableStreamDefaultController/error()}} with a
+                <dfn>`ParityError`</dfn> and invoke the steps to [=handle
+                closing the readable stream=].
+              <li>
+                If an operating system error was encountered, [=queue a global
+                task=] on the [=relevant global object=] of [=this=] using the
+                [=serial port task source=] to invoke
+                |controller|.{{ReadableStreamDefaultController/error()}} with a
+                <dfn>`UnknownError`</dfn> and invoke the steps to [=handle
+                closing the readable stream=].
+              <li>
+                If the port was disconnected, [=queue a global task=] on the
+                [=relevant global object=] of [=this=] using the [=serial port
+                task source=] to invoke
+                |controller|.{{ReadableStreamDefaultController/error()}} with a
+                {{NetworkError}}, set [=this=].{{[[readFatal]]}} to `true`, and
                 invoke the steps to [=handle closing the readable stream=].
-              <li>
-                If a framing error was encountered, [=queue a task=] to invoke
-                |controller|.{{ReadableStreamDefaultController/error()}} with a
-                <dfn>`FramingError`</dfn> on the [=serial port task source=] and
-                invoke the steps to [=handle closing the readable stream=].
-              <li>
-                If a parity error was encountered, [=queue a task=] to invoke
-                |controller|.{{ReadableStreamDefaultController/error()}} with a
-                <dfn>`ParityError`</dfn> on the [=serial port task source=] and
-                invoke the steps to [=handle closing the readable stream=].
-              <li>
-                If an operating system error was encountered, [=queue a task=] to invoke
-                |controller|.{{ReadableStreamDefaultController/error()}} with a
-                <dfn>`UnknownError`</dfn> on the [=serial port task source=] and
-                invoke the steps to [=handle closing the readable stream=].
-              <li>
-                If the port was disconnected, [=queue a task=] to invoke
-                |controller|.{{ReadableStreamDefaultController/error()}} with a
-                {{NetworkError}} on the [=serial port task source=], set
-                [=this=].{{[[readFatal]]}} to `true`, and invoke the steps to
-                [=handle closing the readable stream=].
             </ol>
           <li>Return [=a promise resolved with=] `undefined`.
         </ol>
@@ -758,8 +776,9 @@ document.
               software and hardware receive buffers for the port.
               <li>Invoke the steps to [=handle closing the readable stream=].
               <li>
-                [=Queue a task=] to resolve |promise| on the [=serial port task
-                source=].
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to resolve
+                |promise| with `undefined`.
             </ol>
           <li>Return |promise|.
         </ol>
@@ -781,9 +800,10 @@ document.
       <li>Set [=this=].{{[[readable]]}} to `null`.
       <li>
         If [=this=].{{[[writable]]}} is `null` and
-        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=queue a task=] to
-        [=resolve=] [=this=].{{[[pendingClosePromise]]}} with `undefined` on the
-        [=serial port task source=].
+        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=queue a global
+        task=] on the [=relevant global object=] of [=this=] using the [=serial
+        port task source=] to [=resolve=] [=this=].{{[[pendingClosePromise]]}}
+        with `undefined`.
     </ol>
 
   </section>
@@ -831,17 +851,18 @@ document.
             <ol>
               <li>Invoke the operating system to write |chunk| to the port.
               <li>
-                If the chunk was successfully written [=queue a task=] to
-                [=resolve=] |promise| with `undefined` on the [=serial port task
-                source=].
+                If the chunk was successfully written [=queue a global task=] on
+                the [=relevant global object=] of [=this=] using the [=serial
+                port task source=] to [=resolve=] |promise| with `undefined`.
               <li>
                 If an operating system error was encountered, [=reject=]
-                |promise| with an {{UnknownError}}.
+                |promise| with an "{{UnknownError}}" {{DOMException}}.
               <li>
-                If the port was disconnected, [=queue a task=] to [=reject=]
-                |promise| with a {{NetworkError}} on the [=serial port task
-                source=], set [=this=].{{[[writeFatal]]}} to `true`, and invoke
-                the steps to [=handle closing the writable stream=].
+                If the port was disconnected, [=queue a global task=] on the
+                [=relevant global object=] of [=this=] using the [=serial port
+                task source=] to [=reject=] |promise| with a "{{NetworkError}}"
+                {{DOMException}}, set [=this=].{{[[writeFatal]]}} to `true`, and
+                invoke the steps to [=handle closing the writable stream=].
             </ol>
           <li>Return |promise|.
         </ol>
@@ -870,8 +891,9 @@ document.
                 software and hardware transmit buffers for the port.
               <li>Invoke the steps to [=handle closing the writable stream=].
               <li>
-                [=Queue a task=] to resolve |promise| on the [=serial port task
-                source=].
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to resolve
+                |promise| with `undefined`.
             </ol>
           <li>Return |promise|.
         </ol>
@@ -895,8 +917,9 @@ document.
                 software and hardware transmit buffers for the port.
               <li>Invoke the steps to [=handle closing the writable stream=].
               <li>
-                [=Queue a task=] to resolve |promise| on the [=serial port task
-                source=].
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to resolve
+                |promise| with `undefined`.
             </ol>
           <li>Return |promise|.
         </ol>
@@ -920,9 +943,10 @@ document.
       <li>Set [=this=].{{[[writable]]}} to `null`.
       <li>
         If [=this=].{{[[readable]]}} is `null` and
-        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=queue a task=] to
-        [=resolve=] [=this=].{{[[pendingClosePromise]]}} with `undefined` on the
-        [=serial port task source=].
+        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=queue a global
+        task=] on the [=relevant global object=] of [=this=] using the [=serial
+        port task source=] to [=resolve=] [=this=].{{[[pendingClosePromise]]}}
+        with `undefined`.
     </ol>
   </section>
 
@@ -976,11 +1000,13 @@ document.
             </div>
           <li>
             If the operating system fails to change the state of any of these
-            signals for any reason, [=queue a task=] to reject |promise| with a
-            "{{NetworkError}}" {{DOMException}} on the [=serial port task
-            source=] and abort these steps.
+            signals for any reason, [=queue a global task=] on the [=relevant
+            global object=] of [=this=] using the [=serial port task source=] to
+            reject |promise| with a "{{NetworkError}}" {{DOMException}}.
           <li>
-            [=Queue a task=] to resolve |promise| on the [=serial port task source=].
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to resolve |promise|
+            with `undefined`.
         </ol>
       <li>Return |promise|.
     </ol>
@@ -1024,9 +1050,10 @@ document.
             that may be asserted by the device connected to the serial port.
           <li>
             If the operating system fails to determine the status of these
-            signals for any reason, [=queue a task=] to reject |promise| with a
-            "{{NetworkError}}" {{DOMException}} on the [=serial port task
-            source=] and abort these steps.
+            signals for any reason, [=queue a global task=] on the [=relevant
+            global object=] of [=this=] using the [=serial port task source=] to
+            reject |promise| with a "{{NetworkError}}" {{DOMException}} and
+            abort these steps.
           <li>
             Let |signals:SerialInputSignals| be a [=new=]
             {{SerialInputSignals}}.
@@ -1047,8 +1074,9 @@ document.
             if the "data set ready" or "DSR" signal has been asserted by the
             device, and `false` otherwise.
           <li>
-            [=Queue a task=] to resolve |promise| with |signals| on the [=serial port
-            task source=].
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to resolve |promise|
+            with |signals|.
         </ol>
       <li>Return |promise|.
     </ol>
@@ -1213,8 +1241,9 @@ document.
                     [=this=].{{[[writeFatal]]}} to `false`.
                   <li>Set [=this=].{{[[pendingClosePromise]]}} to `null`.
                   <li>
-                    [=Queue a task=] to [=resolve=] |promise| with `undefined`
-                    on the [=serial port task source=].
+                    [=Queue a global task=] on the [=relevant global object=] of
+                    [=this=] using the [=serial port task source=] to
+                    [=resolve=] |promise| with `undefined`.
                 </ol>
             </ol>
           <li>
@@ -1222,8 +1251,9 @@ document.
             <ol>
               <li>Set [=this=].{{[[pendingClosePromise]]}} to `null`.
               <li>
-                [=Queue a task=] to [=reject=] |promise| with |r| on the
-                [=serial port task source=].
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to [=reject=]
+                |promise| with |r|.
             </ol>
         </ul>
       <li>Return |promise|.
