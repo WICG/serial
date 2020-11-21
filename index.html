@@ -684,18 +684,19 @@ document.
       <li>If [=this=].{{[[readFatal]]}} is `true`, return `null`.
       <li>Let |stream| be a [=new=] {{ReadableStream}}.
       <li>
-        Let |pullAlgorithm| be the following steps, given
-        |controller:ReadableStreamDefaultController|:
+        Let |pullAlgorithm| be the following steps:
         <ol>
+          <li>
+            Let |desiredSize| be the
+            <a href="https://streams.spec.whatwg.org/#desired-size-to-fill-a-streams-internal-queue">desired size</a>
+            of [=this=].{{[[readable]]}}'s
+            <a href="https://streams.spec.whatwg.org/#internal-queues">internal queue</a>.
+          <li>
+            Let |buffer| be a newly created {{ArrayBuffer}} of |desiredSize|
+            bytes.
           <li>
             Run the following steps [=in parallel=]:
             <ol>
-              <li>
-                Let |desiredSize| be
-                |controller|.{{ReadableStreamDefaultController/desiredSize}}
-              <li>
-                Let |buffer| be a newly created {{ArrayBuffer}} of |desiredSize|
-                bytes.
               <li>
                 Invoke the operating system to read up to |desiredSize| bytes
                 from the port into |buffer|.
@@ -710,51 +711,51 @@ document.
                   <li>
                     [=Queue a global task=] on the [=relevant global object=] of
                     [=this=] using the [=serial port task source=] to invoke
-                    |controller|.{{ReadableStreamDefaultController/enqueue()}}
-                    with |chunk|.
+                    [=ReadableStream/enqueue=] on [=this=].{{[[readable]]}} with
+                    |chunk|.
                 </ol>
               <li>
                 If a buffer overrun condition was encountered, [=queue a global
                 task=] on the [=relevant global object=] of [=this=] using the
-                [=serial port task source=] to invoke
-                |controller|.{{ReadableStreamDefaultController/error()}} with a
+                [=serial port task source=] to invoke [=ReadableStream/error=]
+                on [=this=].{{[[readable]]}} with a
                 <dfn>`BufferOverrunError`</dfn> and invoke the steps to [=handle
                 closing the readable stream=].
               <li>
                 If a break condition was encountered, [=queue a global task=] on
                 the [=relevant global object=] of [=this=] using the [=serial
-                port task source=] to  invoke
-                |controller|.{{ReadableStreamDefaultController/error()}} with a
+                port task source=] to invoke [=ReadableStream/error=] on
+                [=this=].{{[[readable]]}} with a
                 <dfn>`BreakError`</dfn> and invoke the steps to [=handle closing
                 the readable stream=].
               <li>
                 If a framing error was encountered, [=queue a global task=] on
                 the [=relevant global object=] of [=this=] using the [=serial
-                port task source=] to invoke
-                |controller|.{{ReadableStreamDefaultController/error()}} with a
+                port task source=] to invoke [=ReadableStream/error=] on
+                [=this=].{{[[readable]]}} with a
                 <dfn>`FramingError`</dfn> and invoke the steps to [=handle
                 closing the readable stream=].
               <li>
                 If a parity error was encountered, [=queue a global task=] on
                 the [=relevant global object=] of [=this=] using the [=serial
-                port task source=] to invoke
-                |controller|.{{ReadableStreamDefaultController/error()}} with a
+                port task source=] to invoke [=ReadableStream/error=] on
+                [=this=].{{[[readable]]}} with a
                 <dfn>`ParityError`</dfn> and invoke the steps to [=handle
                 closing the readable stream=].
               <li>
                 If an operating system error was encountered, [=queue a global
                 task=] on the [=relevant global object=] of [=this=] using the
-                [=serial port task source=] to invoke
-                |controller|.{{ReadableStreamDefaultController/error()}} with a
+                [=serial port task source=] to invoke [=ReadableStream/error=]
+                on [=this=].{{[[readable]]}} with a
                 <dfn>`UnknownError`</dfn> and invoke the steps to [=handle
                 closing the readable stream=].
               <li>
                 If the port was disconnected, [=queue a global task=] on the
                 [=relevant global object=] of [=this=] using the [=serial port
-                task source=] to invoke
-                |controller|.{{ReadableStreamDefaultController/error()}} with a
-                {{NetworkError}}, set [=this=].{{[[readFatal]]}} to `true`, and
-                invoke the steps to [=handle closing the readable stream=].
+                task source=] to invoke [=ReadableStream/error=] on
+                [=this=].{{[[readable]]}} with a {{NetworkError}}, set
+                [=this=].{{[[readFatal]]}} to `true`, and invoke the steps to
+                [=handle closing the readable stream=].
             </ol>
           <li>Return [=a promise resolved with=] `undefined`.
         </ol>
@@ -1207,11 +1208,11 @@ document.
       <li>Let |promise| be [=a new promise=].
       <li>
         Let |cancelPromise:Promise| be the result of invoking
-        [=this=].{{[[readable]]}}.{{ReadableStream/cancel()}} or [=a promise
+        [=ReadableStream/cancel=] on [=this=].{{[[readable]]}} or [=a promise
         resolved with=] `undefined` if [=this=].{{[[readable]]}} is `null`.
       <li>
         Let |abortPromise:Promise| be the result of invoking
-        [=this=].{{[[writable]]}}.{{WritableStream/abort()}} or [=a promise
+        [=WritableStream/abort=] on [=this=].{{[[writable]]}} or [=a promise
         resolved with=] `undefined` if [=this=].{{[[writable]]}} is `null`.
       <li>Let |pendingClosePromise| be [=a new promise=].
       <li>
