@@ -855,9 +855,22 @@ document.
         <ol>
           <li>Let |promise:Promise| be [=a new promise=].
           <li>
+            If |chunk| cannot be [=converted to an IDL value=] of type
+            {{BufferSource}}, reject |promise| with a {{TypeError}} and return
+            |promise|. Otherwise, save the result in |source:BufferSource|.
+          <li>
+            [=Get a copy of the buffer source=] |source| and save the result in
+            |bytes|.
+          <li>
             [=In parallel=], run the following steps:
             <ol>
-              <li>Invoke the operating system to write |chunk| to the port.
+              <li>
+                Invoke the operating system to write |bytes| to the port.
+                <div class="note">
+                  The operating system may return from this operation once
+                  |bytes| has been queued for transmission rather than after it
+                  has been transmitted.
+                </div>
               <li>
                 [=Queue a global task=] on the [=relevant global object=] of
                 [=this=] using the [=serial port task source=] to run the
@@ -888,14 +901,9 @@ document.
         <div class="note">
           [[STREAMS]] specifies that |writeAlgorithm| will only be invoked after
           the {{Promise}} returned by a previous invocation of this algorithm
-          has resolved. This is not ideal as it prevents implementations from
-          coalescing multiple chunks waiting in the {{WritableStream}}'s
-          internal queue into a single request to the operating system.
-
-          <p>
-          An alternative specification of this algorithm would define a software
-          buffer in which bytes are explicitly queued for transmission so that
-          multiple requests can be coalesced.
+          has resolved. For efficiency an implementation MAY coalesce multiple
+          chunks waiting in the {{WritableStream}}'s internal queue into a
+          single request to the operating system.
         </div>
 
       <li>
@@ -920,13 +928,17 @@ document.
           <li>Return |promise|.
         </ol>
 
-        <p class="note">
+        <div class="note">
           [[STREAMS]] specifies that |abortAlgorithm| will only be invoked after
           the {{Promise}} returned by a previous invocation of |writeAlgorithm|
           (if any) has resolved. This blocks abort on completion of the most
           recent write operation. This could be fixed by passing an
           {{AbortSignal}} to |writeAlgorithm|.
-        </p>
+
+          <p>
+          This enhancement is tracked in
+          <a href="https://github.com/whatwg/streams/issues/1015">whatwg/streams#1015</a>.
+        </div>
 
       <li>
         Let |closeAlgorithm| be the following steps:
@@ -953,11 +965,15 @@ document.
       <li>
         [=WritableStream/Set up=] |stream| with
         <a href="https://streams.spec.whatwg.org/#writablestream-set-up-writealgorithm">writeAlgorithm</a>
-        set to |writeAlgorithm| and
+        set to |writeAlgorithm|,
         <a href="https://streams.spec.whatwg.org/#writablestream-set-up-abortalgorithm">abortAlgorithm</a>
-        set to |abortAlgorithm| and
+        set to |abortAlgorithm|,
         <a href="https://streams.spec.whatwg.org/#writablestream-set-up-closealgorithm">closeAlgorithm</a>
-        set to |closeAlgorithm|.
+        set to |closeAlgorithm|,
+        <a href="https://streams.spec.whatwg.org/#writablestream-set-up-highwatermark">highWaterMark</a>
+        set to [=this=].{{[[bufferSize]]}}, and
+        <a href="https://streams.spec.whatwg.org/#writablestream-set-up-sizealgorithm">sizeAlgorithm</a>
+        set to a byte-counting size algorithm.
       <li>Set [=this=].{{[[writable]]}} to |stream|.
       <li>Return |stream|.
     </ol>
