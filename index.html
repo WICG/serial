@@ -114,7 +114,7 @@ for use.
   ```webidl
   [Exposed=(DedicatedWorker,Window), SecureContext]
   interface SerialPort {
-    Promise&lt;void> open(optional SerialOptions options = {});
+    Promise&lt;undefined> open(optional SerialOptions options = {});
     readonly attribute ReadableStream in;
     readonly attribute WritableStream out;
     SerialPortInfo getInfo();
