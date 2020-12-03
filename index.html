@@ -722,35 +722,36 @@ document.
                   <li>
                     If a buffer overrun condition was encountered, invoke
                     [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
-                    <dfn>`BufferOverrunError`</dfn> and invoke the steps to [=handle
-                    closing the readable stream=].
+                    "<code>BufferOverrunError</code>" {{DOMException}} and
+                    invoke the steps to [=handle closing the readable stream=].
                   <li>
                     If a break condition was encountered, invoke
                     [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
-                    <dfn>`BreakError`</dfn> and invoke the steps to [=handle closing
-                    the readable stream=].
+                    "<code>BreakError</code>" {{DOMException}} and invoke the
+                    steps to [=handle closing the readable stream=].
                   <li>
                     If a framing error was encountered, invoke
                     [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
-                    <dfn>`FramingError`</dfn> and invoke the steps to [=handle
-                    closing the readable stream=].
+                    "<code>FramingError</code>" {{DOMException}} and invoke the
+                    steps to [=handle closing the readable stream=].
                   <li>
                     If a parity error was encountered, invoke
                     [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
-                    <dfn>`ParityError`</dfn> and invoke the steps to [=handle
-                    closing the readable stream=].
+                    "<code>ParityError</code>" {{DOMException}} and invoke the
+                    steps to [=handle closing the readable stream=].
                   <li>
                     If an operating system error was encountered, invoke
-                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
-                    <dfn>`UnknownError`</dfn> and invoke the steps to [=handle
-                    closing the readable stream=].
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with
+                    an "{{UnknownError}}" {{DOMException}} and invoke the steps
+                    to [=handle closing the readable stream=].
                   <li>
                     If the port was disconnected, run the following steps:
                     <ol>
                       <li>Set [=this=].{{[[readFatal]]}} to `true`,
                       <li>
                         Invoke [=ReadableStream/error=] on
-                        [=this=].{{[[readable]]}} with a {{NetworkError}}.
+                        [=this=].{{[[readable]]}} with a "{{NetworkError}}"
+                        {{DOMException}}.
                       <li>
                         Invoke the steps to [=handle closing the readable
                         stream=].
