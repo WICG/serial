@@ -175,67 +175,6 @@ navigator.serial.addEventListener('disconnect', e => {
 
 **Note:** Prior to Chrome 89 the `connect` and `disconnect` events fired a custom `SerialConnectionEvent` object at `navigator.serial` with the affected `SerialPort` interface available as the `port` attribute. In Chrome 89 and above a generic `Event` object is fired at the `SerialPort` interface itself. An event listener can still register an event listener on `navigator.serial` as these events bubble from the `SerialPort` interface to the `Serial` interface. For compatibility with the earlier version the expression "`e.port || e.target`" can be used to get either the `port` attribute (if present) or the `target` attribute (if not).
 
-### WebIDL
-
-```javascript
-[Exposed=Window, SecureContext]
-partial interface Navigator {
-  [SameObject] readonly attribute Serial serial;
-};
-
-[Exposed=DedicatedWorker, SecureContext]
-partial interface WorkerNavigator {
-  [SameObject] readonly attribute Serial serial;
-};
-
-dictionary SerialPortFilter {
-  unsigned short usbVendorId;
-  unsigned short usbProductId;
-};
-
-dictionary SerialPortRequestOptions {
-  sequence<SerialPortFilter> filters;
-};
-
-[Exposed=(DedicatedWorker,Window), SecureContext]
-interface Serial : EventTarget {
-  attribute EventHandler onconnect;
-  attribute EventHandler ondisconnect;
-  Promise<sequence<SerialPort>> getPorts();
-  [Exposed=Window] Promise<SerialPort> requestPort(optional SerialPortRequestOptions options = {});
-};
-
-dictionary SerialPortInfo {
-  unsigned short usbVendorId;
-  unsigned short usbProductId;
-};
-
-dictionary SerialOutputSignals {
-  boolean dataTerminalReady;
-  boolean requestToSend;
-  boolean break;
-};
-
-dictionary SerialInputSignals {
-  required boolean dataCarrierDetect;
-  required boolean clearToSend;
-  required boolean ringIndicator;
-  required boolean dataSetReady;
-};
-
-[Exposed=(DedicatedWorker,Window), SecureContext]
-interface SerialPort {
-  readonly attribute ReadableStream readable;
-  readonly attribute WritableStream writable;
-
-  SerialPortInfo getInfo();
-  Promise<void> open(SerialOptions options);
-  Promise<void> setSignals(SerialOutputSignals signals);
-  Promise<SerialInputSignals> getSignals();
-  void close();
-};
-```
-
 ## Security considerations
 
 This API poses similar a security risk to the Web Bluetooth and WebUSB APIs and so lessons from those are applicable here. The primary threats are:
