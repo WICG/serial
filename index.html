@@ -858,7 +858,8 @@ document.
           <li>
             If |chunk| cannot be [=converted to an IDL value=] of type
             {{BufferSource}}, reject |promise| with a {{TypeError}} and return
-            |promise|. Otherwise, save the result in |source:BufferSource|.
+            |promise|. Otherwise, save the result of the conversion in
+            |source:BufferSource|.
           <li>
             [=Get a copy of the buffer source=] |source| and save the result in
             |bytes|.
@@ -867,6 +868,8 @@ document.
             <ol>
               <li>
                 Invoke the operating system to write |bytes| to the port.
+                Alternately, store the chunk for future coalescing.
+
                 <div class="note">
                   The operating system may return from this operation once
                   |bytes| has been queued for transmission rather than after it
@@ -878,8 +881,18 @@ document.
                 following steps:
                 <ol>
                   <li>
-                    If the chunk was successfully written [=resolve=] |promise|
-                    with `undefined`.
+                    If the chunk was successfully written, or was stored for
+                    future coalescing, [=resolve=] |promise| with `undefined`.
+
+                    <div class="note">
+                      [[STREAMS]] specifies that |writeAlgorithm| will only be
+                      invoked after the {{Promise}} returned by a previous
+                      invocation of this algorithm has resolved. For efficiency
+                      an implementation is allowed to resolve this {{Promise}}
+                      early in order to coalesce multiple chunks waiting in the
+                      {{WritableStream}}'s internal queue into a single request
+                      to the operating system.
+                    </div>
                   <li>
                     If an operating system error was encountered, [=reject=]
                     |promise| with an "{{UnknownError}}" {{DOMException}}.
@@ -898,15 +911,6 @@ document.
             </ol>
           <li>Return |promise|.
         </ol>
-
-        <div class="note">
-          [[STREAMS]] specifies that |writeAlgorithm| will only be invoked after
-          the {{Promise}} returned by a previous invocation of this algorithm
-          has resolved. For efficiency an implementation MAY coalesce multiple
-          chunks waiting in the {{WritableStream}}'s internal queue into a
-          single request to the operating system.
-        </div>
-
       <li>
         Let |abortAlgorithm| be the following steps:
         <ol>
