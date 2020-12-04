@@ -1,5 +1,4 @@
 var respecConfig = {
-  format: "markdown",
   specStatus: "CG-DRAFT",
   shortName: "serial",
   subtitle: "Living document",
@@ -18,5 +17,5 @@ var respecConfig = {
   }],
   group: "wicg",
   github: "https://github.com/wicg/serial",
-  xref: ["STREAMS", "DOM", "WebIDL", "HTML"]
+  xref: ["DOM", "HTML", "Infra", "PERMISSIONS-POLICY", "STREAMS", "WebIDL"]
 };

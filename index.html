@@ -1,390 +1,1478 @@
 <!DOCTYPE html>
 <meta charset='utf-8'>
-<title>Serial API</title>
+<title>Web Serial API</title>
 <script class='remove' src='https://www.w3.org/Tools/respec/respec-w3c' async></script>
 <script class='remove' src="respecConfig.js"></script>
 <link rel="stylesheet" href="styles/spec.css">
 <section id='abstract'>
-The <cite>Serial API</cite> provides a way for websites to read and write from
-a serial device through script. Such an API would bridge the web and the
-physical world, by allowing documents to communicate with devices such as
+The <cite>Serial API</cite> provides a way for websites to read and write from a
+serial device through script. Such an API would bridge the web and the physical
+world, by allowing documents to communicate with devices such as
 microcontrollers, 3D printers, and other serial devices.
   
 There is also a companion <a
-href="https://github.com/WICG/serial/blob/gh-pages/EXPLAINER.md">explainer</a> document.
+href="https://github.com/WICG/serial/blob/gh-pages/EXPLAINER.md">explainer</a>
+document.
 </section>
 
 <section id='sotd'>
-  This is a work in progress. All [contributions](https://github.com/WICG/serial)
-  welcome.
+  This is a work in progress. All <a
+  href="https://github.com/WICG/serial">contributions</a> welcome.
 </section>
 
-## Usage example
-
-This example shows how to request an Arduino device from the user and set it up
-for use.
-
-<pre class="example js" title="Requesting an Arduino device">
-  const requestOptions = {
-    // Filter on devices with the Arduino USB vendor ID.
-    filters: [{ vendorId: 0x2341 }],
-  };
-
-  // Request an Arduino from the user.
-  const port = await navigator.serial.requestPort(requestOptions);
-
-  // Open and begin reading.
-  await port.open({ baudRate: 115200 });
-  const reader = port.in.getReader();
-
-  for await (const { done, data } of reader.read()) {
-    if (done) break;
-    console.log(data);
-  }
-</pre>
-
 <section data-dfn-for="Navigator">
-  ## Extensions to the `Navigator` interface
+  <h2>Extensions to the {{Navigator}} interface</h2>
 
-  ```webidl
+  <pre class="idl">
     [Exposed=Window, SecureContext]
     partial interface Navigator {
       [SameObject] readonly attribute Serial serial;
     };
-  ```
+  </pre>
 
-  ### <dfn>serial</dfn> attribute
+  <h3><dfn>serial</dfn> attribute</h3>
 
-  When getting, the {{Navigator/serial}} attribute always returns the same instance of
-  the {{Serial}} object.
-
+  When getting, the {{Navigator/serial}} attribute always returns the same
+  instance of the {{Serial}} object.
 </section>
 
 <section data-dfn-for="WorkerNavigator">
-  ## Extensions to `WorkerNavigator` interface
+  <h2>Extensions to the {{WorkerNavigator}} interface</h2>
 
-  ```webidl
+  <pre class="idl">
     [Exposed=DedicatedWorker, SecureContext]
     partial interface WorkerNavigator {
       [SameObject] readonly attribute Serial serial;
     };
-  ```
+  </pre>
 
-  ### <dfn>serial</dfn> attribute</h2>
+  <h3><dfn>serial</dfn> attribute</h3>
 
-  When getting, the {{WorkerNavigator/serial}} attribute always returns the same instance of
+  When getting, the {{WorkerNavigator/serial}} attribute always returns the same
+  instance of
   the {{Serial}} object.
 </section>
 
 <section data-dfn-for="Serial">
-  ## <dfn>Serial</dfn> interface
+  <h2>{{Serial}} interface</h2>
 
-  ```webidl
+  <pre class="idl">
     [Exposed=(DedicatedWorker, Window), SecureContext]
     interface Serial : EventTarget {
       attribute EventHandler onconnect;
       attribute EventHandler ondisconnect;
       Promise&lt;sequence&lt;SerialPort>> getPorts();
-      [Exposed=Window] Promise&lt;SerialPort> requestPort(optional SerialOptions options = {});
+      [Exposed=Window] Promise&lt;SerialPort> requestPort(optional SerialPortRequestOptions options = {});
     };
-  ```
+  </pre>
 
-  ### <dfn>requestPort()</dfn> method
+  <section>
+    <h3><dfn>requestPort()</dfn> method</h3>
 
-  The {{Serial/requestPort()}} method requests access to a serial port of the user's
-  choice (see [[[#security]]]).
+    <aside class="example">
+      When the user first visits a site it will not have permission to access
+      any serial devices. A site must first call {{Serial/requestPort()}}. This
+      call gives the browser the opportunity to prompt the user for which device
+      the site should be allowed to control. If the site is designed to work
+      with a particular device which is always connected via USB the site can
+      provide a filter restricting the devices the user can select to only those
+      that would be compatible. For example, a site which programs
+      Arduino-powered robots could specify a like the following to limit the set
+      of selectable ports to only USB devices with Arduino's USB vendor ID,
 
-  When the {{Serial/requestPort()}} method is invoked, the user agent MUST perform the
-  following steps:
+      <pre class="js">
+        const filter = { usbVendorId: 0x2341 };
+        const port = await navigator.serial.requestPort({ filters: [filter] });
+      </pre>
 
-  1. Let |promise:Promise| be [=a new promise=].
-  1. Return |promise| and run the remaining steps asynchronously.
-  1. Request access to a serial port (see [[[#security]]]):
-    1. If the access request is rejected, [=reject=] |promise| with an
-        {{"AbortError"}} {{DOMException}}.
-    1. Otherwise, let |port:SerialPort| be the {{SerialPort}} for which access
-        was granted.
-    1. [=Resolve=] |promise| with |port|.
+      If on the other hand the site expects to be used with a wide variety of
+      devices or devices connected through a USB to serial converter it may
+      specify no filter at all and rely on the user to select the appropriate
+      device,
 
+      <pre class="js">
+        const port = await navigator.serial.requestPort();
+      </pre>
+
+      Asking the user to choose a port requires showing a prompt to the user and
+      so the site must have [=transient activation=] from something like the
+      user clicking a button.
+
+      <pre class="html">
+        &lt;button id="connect">Connect&lt;/button>
+      </pre>
+
+      <pre class="js">
+        const connectButton = document.getElementById("connect");
+        connectButton.addEventListener('click', () => {
+          try {
+            const port = await navigator.serial.requestPort();
+            // Continue connecting to the device attached to |port|.
+          } catch (e) {
+            // The prompt has been dismissed without selecting a device.
+          }
+        });
+      </pre>
+
+      The user may choose not to select a device, in which case the {{Promise}}
+      will be rejected with a "{{NotFoundError}}" {{DOMException}} that the site
+      must handle.
+    </aside>
+
+    The {{Serial/requestPort()}} method steps are:
+
+    <ol>
+      <li>Let |promise:Promise| be [=a new promise=].
+      <li>
+        If [=this=]'s [=relevant global object=]'s [=associated Document=] is
+        not [=allowed to use=] the [=policy-controlled feature=] named
+        `"serial"`, [=reject=] |promise| with a "{{SecurityError}}"
+        {{DOMException}} and return |promise|.
+      <li>
+        If the [=relevant global object=] of [=this=] does not have [=transient
+        activation=], [=reject=] |promise| with a "{{SecurityError}}"
+        {{DOMException}} and return |promise|.
+      <li>
+        If |options|["{{SerialPortRequestOptions/filters}}"] is present, then
+        for each |filter:SerialPortFilter| in
+        |options|["{{SerialPortRequestOptions/filters}}"] run the following
+        steps:
+        <ol>
+          <li>
+            If |filter|["{{SerialPortFilter/usbVendorId}}"] is not present,
+            [=reject=] |promise| with a {{TypeError}} and return |promise|.
+
+            <div class="note">
+              This check implements the combined rule that a
+              {{SerialPortFilter}} cannot be empty and if
+              {{SerialPortFilter/usbProductId}} is specified then
+              {{SerialPortFilter/usbVendorId}} must also be specified.
+            </div>
+        </ol>
+      <li>Run the following steps [=in parallel=]:
+        <ol>
+          <li>
+            Prompt the user to grant the site access to a serial port by
+            presenting them with a list of available ports that [=match any
+            filter=] in |options|["{{SerialPortRequestOptions/filters}}"] if
+            present and all available ports otherwise.
+          <li>
+            If the user does not choose a port, [=queue a global task=] on the
+            [=relevant global object=] of [=this=] using the [=serial port task
+            source=] to [=reject=] |promise| with an {{"AbortError"}}
+            {{DOMException}} and abort these steps.
+          <li>
+            Let |port:SerialPort| be a {{SerialPort}} representing the port
+            chosen by the user.
+          <li>
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with |port|.
+        </ol>
+      <li>Return |promise|.
+    </ol>
+
+    <section data-dfn-for="SerialPortRequestOptions">
+      <h4><dfn>SerialPortRequestOptions</dfn> dictionary</h4>
+
+      <pre class="idl">
+        dictionary SerialPortRequestOptions {
+          sequence&lt;SerialPortFilter> filters;
+        };
+      </pre>
+
+      <dl>
+        <dt><dfn>filters</dfn> member
+        <dd>Filters for serial ports
+      </dl>
+    </section>
+
+    <section data-dfn-for="SerialPortFilter">
+      <h4><dfn>SerialPortFilter</dfn> dictionary</h4>
+
+      <pre class="idl">
+        dictionary SerialPortFilter {
+          unsigned short usbVendorId;
+          unsigned short usbProductId;
+        };
+      </pre>
+
+      <dl>
+        <dt><dfn>usbVendorId</dfn> member
+        <dd>USB Vendor ID
+        <dt><dfn>usbProductId</dfn> member
+        <dd>USB Product ID
+      </dl>
+
+      <p>
+      A serial port <dfn data-lt="match the filter">matches the filter</dfn>
+      |filter:SerialPortFilter| if these steps return `true`:
+
+      <ol>
+        <li>
+          If |filter|["{{SerialPortFilter/usbVendorId}}"] is not present, return
+          `true`.
+        <li>If the serial port is not part of a USB device, return `false`.
+        <li>
+          If the USB device's vendor ID is not equal to
+          |filter|["{{SerialPortFilter/usbVendorId}}"], return `false`.
+        <li>
+          If |filter|["{{SerialPortFilter/usbProductId}}"] is not present, return
+          `true`.
+        <li>
+          If the USB device's product ID is not equal to
+          |filter|["{{SerialPortFilter/usbProductId}}"], return `false`.
+        <li>Otherwise, return `true`.
+      </ol>
+
+      <p>
+      A serial port <dfn data-lt="match any filter">matches any filter</dfn> in
+      a sequence of {{SerialPortFilter}} if these steps return `true`:
+
+      <ol>
+        <li>For each |filter| in the sequence, run these sub-steps:
+          <ol>
+            <li>If the serial port does not [=match the filter=] |filter|, return false.
+          </ol>
+        <li>Return true.
+    </section>
+  </section>
+
+  <section>
+    <h3><dfn>getPorts()</dfn> method</h3>
+
+    <aside class="example">
+      If a serial port is provided by a USB device then that device may be
+      connected or disconnected from the system. Once a site has permission to
+      access a port it can receive these events and query for the set of
+      connected devices it currently has access to.
+
+      <pre class="js">
+        // Check to see what ports are available when the page loads.
+        document.addEventListener('DOMContentLoaded', async () => {
+          let ports = await navigator.serial.getPorts();
+          // Populate the UI with options for the user to select or
+          // automatically connect to devices.
+        });
+
+        navigator.serial.addEventListener('connect', e => {
+          // Add |e.port| to the UI or automatically connect.
+        });
+
+        navigator.serial.addEventListener('disconnect', e => {
+          // Remove |e.port| from the UI. If the device was open the
+          // disconnection can also be observed as a stream error.
+        });
+      </pre>
+    </aside>
+
+    The {{Serial/getPorts()}} method steps are:
+
+    <ol>
+      <li>Let |promise:Promise| be [=a new promise=].
+      <li>
+        If [=this=]'s [=relevant global object=]'s [=associated Document=] is
+        not [=allowed to use=] the [=policy-controlled feature=] named
+        `"serial"`, [=reject=] |promise| with a "{{SecurityError}}"
+        {{DOMException}} and return |promise|.
+      <li>
+        Run the following steps [=in parallel=]:
+        <ol>
+          <li>
+            Let |availablePorts| be the sequence of available serial ports on
+            the system which the user has allowed the site to access as the
+            result of a previous call to {{Serial/requestPort()}}.
+          <li>
+            Let |ports| be the sequence of the {{SerialPort}}s representing the
+            ports in |availablePorts|.
+          <li>
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with |ports|.
+        </ol>
+      <li>Return |promise|.
+    </ol>
+  </section>
+
+  <section>
+    <h3><dfn>onconnect</dfn> attribute</h3>
+
+    {{Serial/onconnect}} is an [=event handler IDL attribute=] for the
+    <dfn>connect</dfn> event type.
+  </section>
+
+  <section>
+    <h3><dfn>ondisconnect</dfn> attribute</h3>
+
+    {{Serial/ondisconnect}} is an [=event handler IDL attribute=] for the
+    <dfn>disconnect</dfn> event type.
+  </section>
 </section>
 
 <section data-dfn-for="SerialPort">
-  ## <dfn>SerialPort</dfn> interface
+  <h2><dfn>SerialPort</dfn> interface</h2>
 
-  ```webidl
-  [Exposed=(DedicatedWorker,Window), SecureContext]
-  interface SerialPort {
-    Promise&lt;undefined> open(optional SerialOptions options = {});
-    readonly attribute ReadableStream in;
-    readonly attribute WritableStream out;
-    SerialPortInfo getInfo();
-  };
-  ```
-
-  ### <dfn>getInfo()</dfn> method
-
-  The {{SerialPort/getInfo()}} method provides a means to get metadata corresponding to a
-  {{SerialPort}} object.
-
-  When the {{SerialPort/getInfo()}} method is invoked, the user agent MUST perform the
-  <a>steps for getting metadata of a serial port</a>.
-</section>
-
-<section data-dfn-for="SerialPortInfo">
-  ## <dfn>SerialPortInfo</dfn> interface
-
-  ```webidl
+  <pre class="idl">
     [Exposed=(DedicatedWorker,Window), SecureContext]
-    interface SerialPortInfo {
-      maplike&lt;DOMString, DOMString?>;
+    interface SerialPort : EventTarget {
+      attribute EventHandler onconnect;
+      attribute EventHandler ondisconnect;
+      readonly attribute ReadableStream readable;
+      readonly attribute WritableStream writable;
+
+      SerialPortInfo getInfo();
+
+      Promise&lt;undefined> open(SerialOptions options);
+      Promise&lt;undefined> setSignals(optional SerialOutputSignals signals = {});
+      Promise&lt;SerialInputSignals> getSignals();
+      Promise&lt;undefined> close();
     };
-  ```
+  </pre>
 
-  ### Serial port metadata
+  Methods on this interface typically complete asynchronously, queuing work on
+  the <dfn>serial port task source</dfn>.
 
-  The value of certain attributes is dependent on the method that the system used
-  to establish the serial port (e.g., USB), and so might not always be available.
+  <p>
+  The [=get the parent=] algorithm for {{SerialPort}} returns the same
+  {{Serial}} instance that is returned by the {{SerialPort}}'s [=relevant global
+  object=]'s {{Navigator}} object's {{Navigator/serial}} getter.
 
-  ### Recommended serial port metadata
+  <p>
+  Instances of {{SerialPort}} are created with the internal slots described in
+  the following table:
 
-  When available, it is RECOMMENDED that user agents populate a {{SerialPortInfo}}
-  object with the following information. If the value of piece of metadata is
-  unavailable(e.g., if the manufacturer is unknown), then it is RECOMMENDED that
-  that metadata be excluded from the {{SerialPortInfo}}. For interoperability,
-  user agents SHOULD use the values provided in they "Key" column of the
-  <a>table of recommended metadata</a>.
-
-  <table class="simple">
-    <caption><dfn>Table of recommended metadata</dfn></caption>
+  <table class="simple" dfn-for=SerialPort dfn-type=attribute>
     <tr>
-      <th>Name</th>
-      <th>Key</th>
-      <th>Description</th>
-    </tr>
+      <th>Internal slot
+      <th>Initial value
+      <th>Description (non-normative)
     <tr>
-      <td>Serial Number</td>
-      <td>`serialNumber`</td>
-      <td></td>
-    </tr>
+      <td><dfn>[[\state]]</dfn>
+      <td>`"closed"`
+      <td>Tracks the active state of the {{SerialPort}}
     <tr>
-      <td>Manufacturer</td>
-      <td>`manufacturer`</td>
-      <td></td>
-    </tr>
+      <td><dfn>[[\bufferSize]]</dfn>
+      <td>undefined
+      <td>The amount of data to buffer for transmit and receive
     <tr>
-      <td>Location ID</td>
-      <td>`locationId`</td>
-      <td></td>
-    </tr>
+      <td><dfn>[[\readable]]</dfn>
+      <td>`null`
+      <td>A {{ReadableStream}} that receives data from the port
     <tr>
-      <td>Vendor ID</td>
-      <td>`vendorId`</td>
-      <td></td>
-    </tr>
+      <td><dfn>[[\readFatal]]
+      <td>`false`
+      <td>A flag indicating that the port has encountered a fatal read error
     <tr>
-      <td>Vendor</td>
-      <td>`vendor`</td>
-      <td></td>
-    </tr>
+      <td><dfn>[[\writable]]</dfn>
+      <td>`null`
+      <td>A {{WritableStream}} that transmits data to the port
     <tr>
-      <td>Product ID</td>
-      <td>`productId`</td>
-      <td></td>
-    </tr>
+      <td><dfn>[[\writeFatal]]
+      <td>`false`
+      <td>A flag indicating that the port has encountered a fatal write error
     <tr>
-      <td>Product</td>
-      <td>`product`</td>
-      <td></td>
-    </tr>
+      <td><dfn>[[\pendingClosePromise]]</dfn>
+      <td>`null`
+      <td>
+        A {{Promise}} used to wait for {{SerialPort/readable}} and
+        {{SerialPort/writable}} to close
   </table>
 
-  ### Getting serial port metadata
+  <section>
+    <h3><dfn>onconnect</dfn> attribute</h3>
 
-  The <dfn>steps for getting metadata of a serial port</dfn> for a |serial
-  port| are as follows. The steps always return an instance of
-  {{SerialPortInfo}}, which contains the related metadata.
+    {{SerialPort/onconnect}} is an [=event handler IDL attribute=] for the
+    {{connect}} event type.
 
-  1. Let |info:SerialPortInfo| be a newly created {{SerialPortInfo}} object.
-  1. Let |path:DOMString| be a {{DOMString}} that represents the path of the |serial port|.
-  1. Invoke |info|'s `set()` method using the string `"path"` as the
-     key, and |path| as the value.
-  1. For each additional metadata item known about the |serial port|,
-      perform the following sub-steps. Please see the <a>table of recommended
-      metadata</a> for a list of recommended metadata items that SHOULD be
-      included.
-      1. Let |key:DOMString| be a {{DOMString}} for the commonly used name for this
-        key.
-      1. Let |value:DOMString| be a {{DOMString}} for the commonly used name for
-        this key, or `null` otherwise.
-      1. Invoke |info|'s `set()` method using the string "path" as the
-        key, and |path| as the value.
-  1. Return |info|.
+    <p>
+    When a serial port becomes available on the system that the user has allowed
+    the site to access as the result of a previous call to
+    {{Serial/requestPort()}}, run the following steps:
 
+    <ol>
+      <li>Let |port:SerialPort| be a {{SerialPort}} representing the port.
+      <li>
+        [=Fire an event=] named {{connect}} at |port| with its {{Event/bubbles}}
+        attribute initialized to `true`.
+    </ol>
+  </section>
+
+  <section>
+    <h3><dfn>ondisconnect</dfn> attribute</h3>
+
+    {{SerialPort/ondisconnect}} is an [=event handler IDL attribute=] for the
+    {{disconnect}} event type.
+
+    <p>
+      When a serial port becomes unavailable on the system that the user has
+      allowed the site to access as the result of a previous call to
+      {{Serial/requestPort()}}, run the following steps:
+
+      <ol>
+        <li>Let |port:SerialPort| be a {{SerialPort}} representing the port.
+        <li>
+          [=Fire an event=] named {{disconnect}} at |port| with its
+          {{Event/bubbles}} attribute initialized to `true`.
+      </ol>
+  </section>
+
+  <section>
+  <h3><dfn>getInfo()</dfn> method</h3>
+
+  The {{SerialPort/getInfo()}} method steps are:
+
+  <ol>
+    <li>Let |info:SerialPortInfo| be a [=new=] {{SerialPortInfo}} dictionary.
+    <li>If the port is part of a USB device, perform the following steps:
+      <ol>
+        <li>
+          Set |info|["{{SerialPortInfo/usbVendorId}}"] to the vendor ID of the
+          device.
+        <li>
+          Set |info|["{{SerialPortInfo/usbProductId}}"] to the product ID of the
+          device.
+      </ol>
+    <li>Return |info|.
+  </ol>
+
+  <section data-dfn-for="SerialPortInfo">
+    <h4><dfn>SerialPortInfo</dfn> dictionary</h4>
+
+    <pre class="idl">
+      dictionary SerialPortInfo {
+        unsigned short usbVendorId;
+        unsigned short usbProductId;
+      };
+    </pre>
+
+    <dl>
+      <dt><dfn>usbVendorId</dfn> member
+      <dd>
+        If the port is part of a USB device this member will be the 16-bit vendor
+        ID of that device. Otherwise it will be `undefined`.
+      <dt><dfn>usbProductId</dfn> member
+      <dd>
+        If the port is part of a USB device this member will be the 16-bit product
+        ID of that device. Otherwise it will be `undefined`.
+    </dl>
+  </section>
+
+  </section>
+
+  <section>
+    <h3><dfn>open()</dfn> method</h3>
+
+    <aside class="example">
+      Before communicating on a serial port it must be opened. Opening the port
+      allows the site to specify the necessary parameters which control how data
+      is transmitted and received. Developers should check the documentation for
+      the device they are connecting to for the appropriate parameters.
+
+      <pre class="js">
+        await port.open({ baudRate: /* pick your baud rate */ });
+      </pre>
+
+      Once {{SerialPort/open()}} has resolved the {{SerialPort/readable}} and
+      {{SerialPort/writable}} attributes can be accessed to get the
+      {{ReadableStream}} and {{WritableStream}} instances for receiving data
+      from and sending data to the connected device.
+    </aside>
+
+    The {{SerialPort/open()}} method steps are:
+
+    <ol>
+      <li>Let |promise| be [=a new promise=].
+      <li>
+        If [=this=].{{[[state]]}} is not `"closed"`, reject |promise| with an
+        "{{InvalidStateError}}" {{DOMException}} and return |promise|.
+      <li>
+        If |options|["{{SerialOptions/dataBits}}"] is not 7 or 8, reject
+        |promise| with {{TypeError}} and return |promise|.
+      <li>
+        If |options|["{{SerialOptions/stopBits}}"] is not 1 or 2, reject
+        |promise| with {{TypeError}} and return |promise|.
+      <li>
+        If |options|["{{SerialOptions/bufferSize}}"] is 0, reject |promise| with
+        {{TypeError}} and return |promise|.
+      <li>
+        Optionally, if |options|["{{SerialOptions/bufferSize}}"] is larger than
+        the implementation is able to support, reject |promise| with a
+        {{TypeError}} and return |promise|.
+      <li>Set [=this=].{{[[state]]}} to `"opening"`.
+      <li>Perform the following steps [=in parallel=].
+        <ol>
+          <li>
+            Invoke the operating system to open the serial port using the
+            connection parameters (or their defaults) specified in |options|.
+          <li>
+            If this fails for any reason, [=queue a global task=] on the
+            [=relevant global object=] of [=this=] using the [=serial port task
+            source=] to [=reject=] |promise| with a "{{NetworkError}}"
+            {{DOMException}} and abort these steps.
+          <li>Set [=this=].{{[[state]]}} to `"opened"`.
+          <li>
+            Set [=this=].{{[[bufferSize]]}} to
+            |options|["{{SerialOptions/bufferSize}}"].
+          <li>
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with `undefined`.
+        </ol>
+      <li>Return |promise|.
+    </ol>
+
+    <section data-dfn-for="SerialOptions">
+      <h4><dfn>SerialOptions</dfn> dictionary</h4>
+
+      <pre class="idl">
+        dictionary SerialOptions {
+          required [EnforceRange] unsigned long baudRate;
+          [EnforceRange] octet dataBits = 8;
+          [EnforceRange] octet stopBits = 1;
+          ParityType parity = "none";
+          [EnforceRange] unsigned long bufferSize = 255;
+          FlowControlType flowControl = "none";
+        };
+      </pre>
+
+      <dl>
+        <dt><dfn>baudRate</dfn> member
+        <dd>
+          A positive, non-zero value indicating the baud rate at which serial
+          communication should be established.
+
+          <div class="note">
+            {{SerialOptions/baudRate}} is the only required member of this
+            dictionary. While there are common default for other connection
+            parameters it is important for developers to consider and consult with
+            the documentation for devices they intend to connect to determine the
+            correct values. While some values are common there is no standard baud
+            rate. Requiring this parameter reduces the potential for confusion if an
+            arbitrary default were chosen by this specification.
+          </div>
+        <dt><dfn>dataBits</dfn> member
+        <dd>The number of data bits per frame. Either 7 or 8.
+        <dt><dfn>stopBits</dfn> member
+        <dd>The number of stop bits at the end of a frame. Either 1 or 2.
+        <dt><dfn>parity</dfn> member
+        <dd>The parity mode.
+        <dt><dfn>bufferSize</dfn> member
+        <dd>
+          A positive, non-zero value indicating the size of the read and write
+          buffers that should be created.
+        <dt><dfn>flowControl</dfn> member
+        <dd>The flow control mode.
+      </dl>
+
+      <section data-dfn-for="ParityType">
+        <h5><dfn>ParityType</dfn> enum</h5>
+
+        <pre class="idl">
+          enum ParityType {
+            "none",
+            "even",
+            "odd"
+          };
+        </pre>
+
+        <dl>
+          <dt><dfn>none</dfn>
+          <dd>No parity bit is sent for each data word.
+          <dt><dfn>even</dfn>
+          <dd>Data word plus parity bit has even parity.
+          <dt><dfn>odd</dfn>
+          <dd>Data word plus parity bit has odd parity.
+        </dl>
+      </section>
+
+      <section data-dfn-for="FlowControlType">
+        <h5><dfn>FlowControlType</dfn> enum</h5>
+
+        <pre class="idl">
+          enum FlowControlType {
+            "none",
+            "hardware"
+          };
+        </pre>
+
+        <dl>
+          <dt><dfn>none</dfn>
+          <dd>No flow control is enabled.
+          <dt><dfn>hardware</dfn>
+          <dd>Hardware flow control using the RTS and CTS signals is enabled.
+        </dl>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <h2><dfn>readable</dfn> attribute</h2>
+
+    <aside class="example" id="readable-example">
+      An application receiving data from a serial port will typically use a
+      nested pair of loops like this,
+
+      <pre class="js">
+        while (port.readable) {
+          const reader = port.readable.getReader();
+          try {
+            while (true) {
+              const { value, done } = await reader.read();
+              if (done) {
+                // |reader| has been canceled.
+                break;
+              }
+              // Do something with |value|...
+            }
+          } catch (error) {
+            // Handle |error|...
+          } finally {
+            reader.releaseLock();
+          }
+        }
+      </pre>
+
+      The inner loop will read chunks of data from the port until an error is
+      encountered, at which point the code in the "catch" block will be
+      executed. The outer loop handles recoverable errors such as parity check
+      failures by opening a new reader. Fatal errors will cause
+      {{SerialPort/readable}} to become `null` and the loop to end.
+
+      <p>
+      As long as the serial port is open it can continue to produce data and the
+      amount of data in each of the chunks returned by
+      {{ReadableStreamDefaultReader/read()}} will be essentially arbitrary based
+      on the timing of when it is called. It is up to the device and the code
+      communicating with it to decide what constitutes a complete message. For
+      example, a device might communicate with the host using ASCII-formatted
+      text where each message ends with a newline (or the sequence `"\r\n"`). A
+      pipeline of {{TransformStream}}s can be used to automatically convert the
+      {{Uint8Array}} chunks provided by {{SerialPort/readable}} into
+      {{DOMString}}s containing an entire line of text each.
+
+      <pre class="js">
+        class LineBreakTransformer {
+          constructor() {
+            this.container = '';
+          }
+
+          transform(chunk, controller) {
+            this.container += chunk;
+            const lines = this.container.split('\r\n');
+            this.container = lines.pop();
+            lines.forEach(line => controller.enqueue(line));
+          }
+
+          flush(controller) {
+            controller.enqueue(this.container);
+          }
+        }
+
+        const lineReader = port.readable
+            .pipeThrough(new TextDecoderStream())
+            .pipeThrough(new TransformStream(new LineBreakTransformer()))
+            .getReader();
+      </pre>
+
+      Some other ways of encoding message boundaries are to prefix each message
+      with its length or to wait a defined length of time before transmitting
+      the next message. Implementing a {{TransformStream}} for these types of
+      message boundaries is left as an exercise for the reader.
+    </aside>
+
+    The {{SerialPort/readable}} getter steps are:
+
+    <ol>
+      <li>
+        If [=this=].{{[[readable]]}} is not `null`, return
+        [=this=].{{[[readable]]}}.
+      <li>If [=this=].{{[[state]]}} is not `"opened"`, return `null`.
+      <li>If [=this=].{{[[readFatal]]}} is `true`, return `null`.
+      <li>Let |stream| be a [=new=] {{ReadableStream}}.
+      <li>
+        Let |pullAlgorithm| be the following steps:
+        <ol>
+          <li>
+            Let |desiredSize| be the
+            <a href="https://streams.spec.whatwg.org/#desired-size-to-fill-a-streams-internal-queue">desired size</a>
+            of [=this=].{{[[readable]]}}'s
+            <a href="https://streams.spec.whatwg.org/#internal-queues">internal queue</a>.
+          <li>
+            Run the following steps [=in parallel=]:
+            <ol>
+              <li>
+                Invoke the operating system to read up to |desiredSize| bytes
+                from the port, putting the result in the [=byte sequence=]
+                |bytes|.
+              <li>
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to run the
+                following steps:
+                <ol>
+                  <li>
+                    If no errors were encountered run the following steps:
+                    <ol>
+                      <li>
+                        Let |buffer| be a [=new=] {{ArrayBuffer}} created from |bytes|.
+                      <li>
+                        Let |chunk| be a [=new=] {{Uint8Array}} view over |buffer|,
+                        who's length is the length of |bytes|.
+                      <li>
+                        Invoke [=ReadableStream/enqueue=] on
+                        [=this=].{{[[readable]]}} with |chunk|.
+                    </ol>
+                  <li>
+                    If a buffer overrun condition was encountered, invoke
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    "<code>BufferOverrunError</code>" {{DOMException}} and
+                    invoke the steps to [=handle closing the readable stream=].
+                  <li>
+                    If a break condition was encountered, invoke
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    "<code>BreakError</code>" {{DOMException}} and invoke the
+                    steps to [=handle closing the readable stream=].
+                  <li>
+                    If a framing error was encountered, invoke
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    "<code>FramingError</code>" {{DOMException}} and invoke the
+                    steps to [=handle closing the readable stream=].
+                  <li>
+                    If a parity error was encountered, invoke
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    "<code>ParityError</code>" {{DOMException}} and invoke the
+                    steps to [=handle closing the readable stream=].
+                  <li>
+                    If an operating system error was encountered, invoke
+                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with
+                    an "{{UnknownError}}" {{DOMException}} and invoke the steps
+                    to [=handle closing the readable stream=].
+                  <li>
+                    If the port was disconnected, run the following steps:
+                    <ol>
+                      <li>Set [=this=].{{[[readFatal]]}} to `true`,
+                      <li>
+                        Invoke [=ReadableStream/error=] on
+                        [=this=].{{[[readable]]}} with a "{{NetworkError}}"
+                        {{DOMException}}.
+                      <li>
+                        Invoke the steps to [=handle closing the readable
+                        stream=].
+                    </ol>
+                </ol>
+            </ol>
+          <li>Return [=a promise resolved with=] `undefined`.
+        </ol>
+
+      <p class="note">
+        The {{Promise}} returned by this algorithm is immediately resolved so
+        that it does not block canceling the stream. [[STREAMS]] specifies that
+        this algorithm will not be invoked again until a chunk is enqueued.
+      </p>
+
+      <li>
+        Let |cancelAlgorithm| be the following steps:
+        <ol>
+          <li>Let |promise| be [=a new promise=].
+          <li>
+            Run the following steps [=in parallel=].
+            <ol>
+              <li>
+                Invoke the operating system to discard the contents of all
+                software and hardware receive buffers for the port.
+              <li>
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to run the
+                following steps:
+                <ol>
+                  <li>
+                    Invoke the steps to [=handle closing the readable stream=].
+                  <li>[=Resolve=] |promise| with `undefined`.
+                </ol>
+            </ol>
+          <li>Return |promise|.
+        </ol>
+
+      <li>
+        [=ReadableStream/Set up=] |stream| with
+        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-pullalgorithm">pullAlgorithm</a>
+        set to |pullAlgorithm|,
+        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-cancelalgorithm">cancelAlgorithm</a>
+        set to |cancelAlgorithm|,
+        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-highwatermark">highWaterMark</a>
+        set to [=this=].{{[[bufferSize]]}}, and
+        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-sizealgorithm">sizeAlgorithm</a>
+        set to a byte-counting size algorithm.
+      <li>Set [=this=].{{[[readable]]}} to |stream|.
+      <li>Return |stream|.
+    </ol>
+
+    To <dfn>handle closing the readable stream</dfn> perform the following
+    steps:
+
+    <ol>
+      <li>Set [=this=].{{[[readable]]}} to `null`.
+      <li>
+        If [=this=].{{[[writable]]}} is `null` and
+        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=resolve=]
+        [=this=].{{[[pendingClosePromise]]}} with `undefined`.
+    </ol>
+
+  </section>
+
+  <section>
+    <h3><dfn>writable</dfn> attribute</h3>
+
+    <aside class="example">
+      To write individual chunks of data to the port a
+      {{WritableStreamDefaultWriter}} can be created and released as necessary.
+      This example uses a `TextEncoder` to encode a {{DOMString}} as the
+      necessary {{Uint8Array}} for transmission.
+
+      <pre class="js">
+        const encoder = new TextEncoder();
+        const writer = port.writable.getWriter();
+        await writer.write(encoder.encode("PING"));
+        writer.releaseLock();
+      </pre>
+
+      When writing larger chunks it can be important to allow the port to apply
+      back pressure so that the serial transmitter does not get too far behind
+      sending data generated by the application. The
+      {{WritableStreamDefaultWriter/write()}} method returns a {{Promise}} which
+      resolves when data has been written. While having some data available in
+      the transmit buffer is important to maintain good throughput awaiting this
+      {{Promise}} before generating too many chunks of data is a good practice
+      to avoid excessive buffering.
+    </aside>
+
+    The {{SerialPort/writable}} getter steps are:
+
+    <ol>
+      <li>
+        If [=this=].{{[[writable]]}} is not `null`, return
+        [=this=].{{[[writable]]}}.
+      <li>If [=this=].{{[[state]]}} is not `"opened"`, return `null`.
+      <li>If [=this=].{{[[writeFatal]]}} is `true`, return `null`.
+      <li>Let |stream:WritableStream| be a [=new=] {{WritableStream}}.
+      <li>Let |writeAlgorithm| be the following steps, given |chunk|:
+        <ol>
+          <li>Let |promise:Promise| be [=a new promise=].
+          <li>
+            If |chunk| cannot be [=converted to an IDL value=] of type
+            {{BufferSource}}, reject |promise| with a {{TypeError}} and return
+            |promise|. Otherwise, save the result of the conversion in
+            |source:BufferSource|.
+          <li>
+            [=Get a copy of the buffer source=] |source| and save the result in
+            |bytes|.
+          <li>
+            [=In parallel=], run the following steps:
+            <ol>
+              <li>
+                Invoke the operating system to write |bytes| to the port.
+                Alternately, store the chunk for future coalescing.
+
+                <div class="note">
+                  The operating system may return from this operation once
+                  |bytes| has been queued for transmission rather than after it
+                  has been transmitted.
+                </div>
+              <li>
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to run the
+                following steps:
+                <ol>
+                  <li>
+                    If the chunk was successfully written, or was stored for
+                    future coalescing, [=resolve=] |promise| with `undefined`.
+
+                    <div class="note">
+                      [[STREAMS]] specifies that |writeAlgorithm| will only be
+                      invoked after the {{Promise}} returned by a previous
+                      invocation of this algorithm has resolved. For efficiency
+                      an implementation is allowed to resolve this {{Promise}}
+                      early in order to coalesce multiple chunks waiting in the
+                      {{WritableStream}}'s internal queue into a single request
+                      to the operating system.
+                    </div>
+                  <li>
+                    If an operating system error was encountered, [=reject=]
+                    |promise| with an "{{UnknownError}}" {{DOMException}}.
+                  <li>
+                    If the port was disconnected, run the following steps:
+                    <ol>
+                      <li>Set [=this=].{{[[writeFatal]]}} to `true`.
+                      <li>
+                        [=Reject=] |promise| with a "{{NetworkError}}"
+                        {{DOMException}}.
+                      <li>
+                        Invoke the steps to [=handle closing the writable
+                        stream=].
+                    </ol>
+                </ol>
+            </ol>
+          <li>Return |promise|.
+        </ol>
+      <li>
+        Let |abortAlgorithm| be the following steps:
+        <ol>
+          <li>Let |promise| be [=a new promise=].
+          <li>Run the following steps [=in parallel=].
+            <ol>
+              <li>
+                Invoke the operating system to discard the contents of all
+                software and hardware transmit buffers for the port.
+              <li>
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to run the
+                following steps:
+                <ol>
+                  <li>
+                    Invoke the steps to [=handle closing the writable stream=].
+                  <li>[=Resolve=] |promise| with `undefined`.
+                </ol>
+            </ol>
+          <li>Return |promise|.
+        </ol>
+
+        <div class="note">
+          [[STREAMS]] specifies that |abortAlgorithm| will only be invoked after
+          the {{Promise}} returned by a previous invocation of |writeAlgorithm|
+          (if any) has resolved. This blocks abort on completion of the most
+          recent write operation. This could be fixed by passing an
+          {{AbortSignal}} to |writeAlgorithm|.
+
+          <p>
+          This enhancement is tracked in
+          <a href="https://github.com/whatwg/streams/issues/1015">whatwg/streams#1015</a>.
+        </div>
+
+      <li>
+        Let |closeAlgorithm| be the following steps:
+        <ol>
+          <li>Let |promise| be [=a new promise=].
+          <li>Run the following steps [=in parallel=].
+            <ol>
+              <li>
+                Invoke the operating system to flush the contents of all
+                software and hardware transmit buffers for the port.
+              <li>
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to run the
+                following steps:
+                <ol>
+                  <li>
+                    Invoke the steps to [=handle closing the writable stream=].
+                  <li>[=Resolve=] |promise| with `undefined`.
+                </ol>
+            </ol>
+          <li>Return |promise|.
+        </ol>
+
+      <li>
+        [=WritableStream/Set up=] |stream| with
+        <a href="https://streams.spec.whatwg.org/#writablestream-set-up-writealgorithm">writeAlgorithm</a>
+        set to |writeAlgorithm|,
+        <a href="https://streams.spec.whatwg.org/#writablestream-set-up-abortalgorithm">abortAlgorithm</a>
+        set to |abortAlgorithm|,
+        <a href="https://streams.spec.whatwg.org/#writablestream-set-up-closealgorithm">closeAlgorithm</a>
+        set to |closeAlgorithm|,
+        <a href="https://streams.spec.whatwg.org/#writablestream-set-up-highwatermark">highWaterMark</a>
+        set to [=this=].{{[[bufferSize]]}}, and
+        <a href="https://streams.spec.whatwg.org/#writablestream-set-up-sizealgorithm">sizeAlgorithm</a>
+        set to a byte-counting size algorithm.
+      <li>Set [=this=].{{[[writable]]}} to |stream|.
+      <li>Return |stream|.
+    </ol>
+
+    To <dfn>handle closing the writable stream</dfn> perform the following
+    steps:
+
+    <ol>
+      <li>Set [=this=].{{[[writable]]}} to `null`.
+      <li>
+        If [=this=].{{[[readable]]}} is `null` and
+        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=resolve=]
+        [=this=].{{[[pendingClosePromise]]}} with `undefined`.
+    </ol>
+  </section>
+
+  <section>
+    <h3><dfn>setSignals()</dfn> method</h3>
+
+    <aside class="example">
+      Serial ports include a number of additional signals for device detection
+      and flow control which can be queried and set explicitly. As an example,
+      programming some micro-controllers first requires entering a "programming"
+      mode by toggling the "Data Terminal Ready" (or DTR) signal.
+
+      <pre class="js">
+        await port.setSignal({ dataTerminalReady: false });
+        await new Promise(resolve => setTimeout(200, resolve));
+        await port.setSignal({ dataTerminalReady: true });
+      </pre>
+    </aside>
+
+    The {{SerialPort/setSignals()}} method steps are:
+
+    <ol>
+      <li>Let |promise| be [=a new promise=].
+      <li>
+        If [=this=].{{[[state]]}} is not `"opened"`, reject |promise| with an
+        "{{InvalidStateError}}" {{DOMException}} and return |promise|.
+      <li>
+        If all of the specified members of |signals| are not present reject |promise|
+        with {{TypeError}} and return |promise|.
+      <li>Perform the following steps [=in parallel=]:
+        <ol>
+          <li>
+            If |signals|["{{SerialOutputSignals/dataTerminalReady}}"] is
+            present, invoke the operating system to either assert (if `true`) or
+            deassert (if `false`) the "data terminal ready" or "DTR" signal on
+            the serial port.
+          <li>
+            If |signals|["{{SerialOutputSignals/requestToSend}}"] is present,
+            invoke the operating system to either assert (if `true`) or deassert
+            (if `false`) the "request to send" or "RTS" signal on the serial
+            port.
+          <li>
+            If |signals|["{{SerialOutputSignals/break}}"] is present, invoke the
+            operating system to either assert (if `true`) or deassert (if
+            `false`) the "break" signal on the serial port.
+
+            <div class="note">
+              The "break" signal is typically implemented as an in-band signal
+              by holding the transmit line at the "mark" voltage and thus
+              prevents data transmission for as long as it remains asserted.
+            </div>
+          <li>
+            If the operating system fails to change the state of any of these
+            signals for any reason, [=queue a global task=] on the [=relevant
+            global object=] of [=this=] using the [=serial port task source=] to
+            reject |promise| with a "{{NetworkError}}" {{DOMException}}.
+          <li>
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with `undefined`.
+        </ol>
+      <li>Return |promise|.
+    </ol>
+
+    <section data-dfn-for="SerialOutputSignals">
+      <h4><dfn>SerialOutputSignals</dfn> dictionary</h4>
+
+      <pre class="idl">
+        dictionary SerialOutputSignals {
+          boolean dataTerminalReady;
+          boolean requestToSend;
+          boolean break;
+        };
+      </pre>
+
+      <dl>
+        <dt><dfn>dataTerminalReady</dfn></dt>
+        <dd>Data Terminal Ready (DTR)</dd>
+        <dt><dfn>requestToSend</dfn></dt>
+        <dd>Request To Send (RTS)</dd>
+        <dt><dfn>break</dfn></dt>
+        <dd>Break</dd>
+      </dl>
+    </section>
+  </section>
+
+  <section>
+    <h3><dfn>getSignals()</dfn> method</h3>
+
+    The {{SerialPort/getSignals()}} method steps are:
+
+    <ol>
+      <li>Let |promise:Promise| be [=a new promise=].
+      <li>
+        If [=this=].{{[[state]]}} is not `"opened"`, reject |promise| with an
+        "{{InvalidStateError}}" {{DOMException}} and return |promise|.
+      <li>Perform the following steps [=in parallel=]:
+        <ol>
+          <li>
+            Query the operating system for the status of the control signals
+            that may be asserted by the device connected to the serial port.
+          <li>
+            If the operating system fails to determine the status of these
+            signals for any reason, [=queue a global task=] on the [=relevant
+            global object=] of [=this=] using the [=serial port task source=] to
+            reject |promise| with a "{{NetworkError}}" {{DOMException}} and
+            abort these steps.
+          <li>
+            Let |signals:SerialInputSignals| be a [=new=]
+            {{SerialInputSignals}}.
+          <li>
+            Set |signals|["{{SerialInputSignals/dataCarrierDetect}}"] to `true`
+            if the "data carrier detect" or "DCD" signal has been asserted by
+            the device, and `false` otherwise.
+          <li>
+            Set |signals|["{{SerialInputSignals/clearToSend}}"] to `true` if the
+            "clear to send" or "CTS" signal has been asserted by the device, and
+            `false` otherwise.
+          <li>
+            Set |signals|["{{SerialInputSignals/dataCarrierDetect}}"] to `true`
+            if the "ring indicator" or "RI" signal has been asserted by the
+            device, and `false` otherwise.
+          <li>
+            Set |signals|["{{SerialInputSignals/dataCarrierDetect}}"] to `true`
+            if the "data set ready" or "DSR" signal has been asserted by the
+            device, and `false` otherwise.
+          <li>
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with |signals|.
+        </ol>
+      <li>Return |promise|.
+    </ol>
+
+    <section data-dfn-for="SerialInputSignals">
+    <h4><dfn>SerialInputSignals</dfn> dictionary</h4>
+
+    <pre class="idl">
+      dictionary SerialInputSignals {
+        required boolean dataCarrierDetect;
+        required boolean clearToSend;
+        required boolean ringIndicator;
+        required boolean dataSetReady;
+      };
+    </pre>
+
+    <dl>
+      <dt><dfn>dataCarrierDetect</dfn> member</dt>
+      <dd>Data Carrier Detect (DCD)</dd>
+      <dt><dfn>clearToSend</dfn> member</dt>
+      <dd>Clear To Send (CTS)</dd>
+      <dt><dfn>ringIndicator</dfn> member</dt>
+      <dd>Ring Indicator (RI)</dd>
+      <dt><dfn>dataSetReady</dfn> member</dt>
+      <dd>Data Set Ready (DSR)</dd>
+    </dl>
+    </section>
+  </section>
+
+  <section>
+    <h3><dfn>close()</dfn> method</h3>
+
+    <aside class="example">
+      When communication with the port is no longer required it can be closed
+      and the associated resources released by the system.
+
+      <p>
+      Calling `port.`{{SerialPort/close()}} implicitly invokes
+      `port.`{{SerialPort/readable}}`.`{{ReadableStream/cancel()}} and
+      `port.`{{SerialPort/writable}}`.`{{WritableStream/abort()}} in order to
+      clear any buffered data. If the application has called
+      `port.`{{SerialPort/readable}}`.`{{ReadableStream/getReader()}} or
+      `port.`{{SerialPort/writable}}`.`{{WritableStream/getWriter()}} the stream
+      is locked and the port cannot be closed. This forces the developer to
+      decide how to handle any read or write operations that are in progress.
+
+      For example, to ensure that all buffered data has been transmitted before
+      the port is closed the application must await the {{Promise}} returned by
+      `writer.`{{WritableStreamDefaultWriter/close()}}.
+
+      <pre class="js">
+        const encoder = new TextEncoder();
+        const writer = port.writable.getWriter();
+        writer.write(encoder.encode("A long message that will take..."));
+        await writer.close();
+        await port.close();
+      </pre>
+
+      To discard any unsent data the application could instead call
+      `writer.`{{WritableStreamDefaultWriter/abort()}}.
+
+      <p>
+      If a {{TransformStream}} is being piped to `port`.{{SerialPort/writable}}
+      then waiting for the {{Promise}} returned by
+      `writer.`{{WritableStreamDefaultWriter/close()}} to resolve is
+      insufficient. The application must wait for the pipe chain to close by
+      waiting for the {{Promise}} returned by {{ReadableStream/pipeTo()}} to
+      resolve instead.
+
+      <pre class="js">
+        const encoder = new TextEncoderStream();
+        const writableStreamClosed = encoder.readable.pipeTo(port.writable);
+        const writer = encoder.writable.getWriter();
+        writer.write("A long message that will take...");
+        writer.close();
+        await writableStreamClosed;
+        await port.close();
+      </pre>
+
+      If a loop is being used to read chunks from the port, as is done in
+      [[[#readable-example]]], then it must be exited before calling
+      `port.`{{SerialPort/close()}}.
+
+      <pre class="js">
+        let keepReading = true;
+        let reader;
+
+        async function readUntilClosed() {
+          while (port.readable && keepReading) {
+            reader = port.readable.getReader();
+            try {
+              while (true) {
+                const { value, done } = await reader.read();
+                if (done) {
+                  // |reader| has been canceled.
+                  break;
+                }
+                // Do something with |value|...
+              }
+            } catch (error) {
+              // Handle |error|...
+            } finally {
+              reader.releaseLock();
+            }
+          }
+
+          await port.close();
+        }
+
+        readUntilClosed();
+
+        // Sometime later...
+        keepReading = false;
+        reader.cancel();
+      </pre>
+
+      Calling `reader.`{{ReadableStreamGenericReader/cancel()}} causes the call
+      to `reader.`{{ReadableStreamDefaultReader/read()}} to return immediately,
+      exiting the inner loop and calling
+      `reader.`{{ReadableStreamDefaultReader/releaseLock()}}. The outer loop
+      then exits because `keepReading` has been set to `false` and with the
+      stream unlocked `port.`{{SerialPort/close()}} can complete successfully.
+    </aside>
+
+    The {{SerialPort/close()}} method steps are:
+
+    <ol>
+      <li>Let |promise| be [=a new promise=].
+      <li>
+        Let |cancelPromise:Promise| be the result of invoking
+        [=ReadableStream/cancel=] on [=this=].{{[[readable]]}} or [=a promise
+        resolved with=] `undefined` if [=this=].{{[[readable]]}} is `null`.
+      <li>
+        Let |abortPromise:Promise| be the result of invoking
+        [=WritableStream/abort=] on [=this=].{{[[writable]]}} or [=a promise
+        resolved with=] `undefined` if [=this=].{{[[writable]]}} is `null`.
+      <li>Let |pendingClosePromise| be [=a new promise=].
+      <li>
+        If [=this=].{{[[readable]]}} and [=this=].{{[[writable]]}} are `null`,
+        [=resolve=] |pendingClosePromise| with `undefined`.
+      <li>Set [=this=].{{[[pendingClosePromise]]}} to |pendingClosePromise|.
+      <li>
+        Let |combinedPromise:Promise| be the result of [=getting a promise to
+        wait for all=] with «|cancelPromise|, |abortPromise|,
+        |pendingClosePromise|».
+      <li>Set [=this=].{{[[state]]}} to `"closing"`.
+      <li>
+        [=promise/React=] to |combinedPromise|.
+        <ul>
+          <li>
+            If |combinedPromise| was fulfilled, then:
+            <ol>
+              <li>
+                Run the following steps [=in parallel=]:
+                <ol>
+                  <li>
+                    Invoke the operating system to close the serial port and
+                    release any associated resources.
+                  <li>Set [=this=].{{[[state]]}} to `"closed"`.
+                  <li>
+                    Set [=this=].{{[[readFatal]]}} and
+                    [=this=].{{[[writeFatal]]}} to `false`.
+                  <li>Set [=this=].{{[[pendingClosePromise]]}} to `null`.
+                  <li>
+                    [=Queue a global task=] on the [=relevant global object=] of
+                    [=this=] using the [=serial port task source=] to
+                    [=resolve=] |promise| with `undefined`.
+                </ol>
+            </ol>
+          <li>
+            If |combinedPromise| was rejected with reason |r|, then:
+            <ol>
+              <li>Set [=this=].{{[[pendingClosePromise]]}} to `null`.
+              <li>
+                [=Queue a global task=] on the [=relevant global object=] of
+                [=this=] using the [=serial port task source=] to [=reject=]
+                |promise| with |r|.
+            </ol>
+        </ul>
+      <li>Return |promise|.
+    </ol>
+  </section>
 </section>
 
-<section data-dfn-for="SerialOptions">
-  ## <dfn>SerialOptions</dfn> dictionary
+<section id="security" class="informative">
+  <h2>Security considerations</h2>
 
-  ```webidl
-    dictionary SerialOptions {
-      long baudRate = 9600;
-      octet dataBits = 8;
-      octet stopBits = 1;
-      ParityType parity = "none";
-      long bufferSize = 255;
-      FlowControlType flowControl = "none";
-    };
-  ```
+  This API poses similar a security risk to [[?WEB-BLUETOOTH]] and [[?WEBUSB]]
+  and so lessons from those are applicable here. The primary threats are:
 
-  <dl>
-    <dt>
-      <dfn>baudRate</dfn> member
-    </dt>
-    <dd>
-      One of 115200, 57600, 38400, 19200, 9600, 4800, 2400, 1800, 1200,
-      600, 300, 200, 150, 134, 110, 75, or 50.
-    </dd>
-    <dt>
-      <dfn>dataBits</dfn> member
-    </dt>
-    <dd>
-      One of 8, 7, 6, or 5.
-    </dd>
-    <dt>
-      <dfn>stopBits</dfn> member
-    </dt>
-    <dd>
-      One of 1 or 2.
-    </dd>
-    <dt>
-      <dfn>parity</dfn> member
-    </dt>
-    <dd>
-      The parity type.
-    </dd>
-    <dt>
-      <dfn>flowControl</dfn> member
-    </dt>
-    <dd>
-      The flow control mode.
-    </dd>
-  </dl>
+  <ul>
+    <li>
+    A malicious site that has tricked the user into granting it access to a
+    device using the device's intended capabilities for malicious purposes. For
+    example, a robot causing physical damage.
+
+    <li>
+    A malicious site that has tricked the user into granting it access to a
+    device installing its own firmware into the device in order to modify the
+    device's intended capabilities for malicious purposes or to attack the host
+    to which it is connected. For example, triggering a buffer overflow in other
+    host software which communicates with the device.
+
+    <li>
+    Malicious code injected into a trusted site which has been granted access to
+    the device doing any of the above. For example, an online firmware update
+    utility being hacked to deliver malicious firmware.
+
+    <li>
+    An attacker convincing the user to connect a malicious device to their
+    system which colludes with a malicious or exploited site to create a
+    web-based channel for communicating back to the attacker.
+  </ul>
+
+  The primary mitigation to all of these attacks is the {{Serial/requestPort()}}
+  pattern, which requires user interaction and only supports granting access to
+  a single device at a time. This prevents drive-by attacks because a site
+  cannot enumerate all connected devices to determine whether a vulnerable
+  device exists and must instead proactively inform the user that it desires
+  access. Implementations may also provide a visual indication that a site is
+  currently communicating with a device and controls for revoking that
+  permission at any time.
+
+  <p>
+  This specification requires the site to be served from a [=secure context=] in
+  order to prevent malicious code from being injected by a network-based
+  attacker. This ensures that the site identity shown to the user when making
+  permission decisions is accurate. This specification also requires top-level
+  documents to opt-in through [[?PERMISSIONS-POLICY]] before allowing a
+  cross-origin iframe to use the API. When combined with [[?CSP3]] these
+  mechanisms provide protection against malicious code injection attacks.
+
+  <p>
+  The remaining concern is the exploitation of a connected device through a
+  phishing attack that convinces the user to grant a malicious site access to a
+  device. These attacks can be used to either exploit the device’s capabilities
+  as designed or to install malicious firmware on the device that will in turn
+  attack the host computer. Host software may be vulnerable to attack because it
+  improperly validates input from connected devices. Security research in this
+  area has encouraged software vendors to treat connected devices as
+  untrustworthy.
+
+  <p>
+  There is no mechanism that will completely prevent this type of attack because
+  data sent from a page to the device is an opaque sequence of bytes. Efforts to
+  block a particular type of data from being sent are likely be met by
+  workarounds on the part of device manufacturers who nevertheless want to send
+  this type of data to their devices.
+
+  <p>
+  User agents can implement additional mechanisms to control access to devices:
+
+  <ul>
+    <li>
+    A setting which prevents sites from calling {{Serial/requestPort()}} unless
+    added to an explicit allow list.
+
+    <p>
+    Systems administrators could apply such a setting across their managed fleet
+    using enterprise policy controls. Such controls may allow the administrator
+    to automatically grant selected sites access to particular devices and no
+    others.
+
+    <li>
+    A list of device IDs for hardware which is known to be exploitable could be
+    deployed with the user agent. Connections to listed devices would be
+    blocked. An implementation could use its automatic update or experiment
+    management system to deploy updates to this list on the fly to block an
+    active attack.
+  </ul>
+
+  Implementations of [[?WEB-BLUETOOTH]] and [[?WEBUSB]] have experimented with
+  these mitigations however there are limits to their effectiveness. First, it
+  is difficult to define whether a device is exploitable. For example, this API
+  will allow a site to upload firmware to a microcontroller development board.
+  This is a key use case for this API as these devices are common in the
+  educational and hobbyist markets. These boards do not implement firmware
+  signature verification and so can easily be turned into a malicious device.
+  These boards are clearly exploitable but should not be blocked.
+
+  <p>
+  In addition, maintaining a list of vulnerable devices works well for USB and
+  Bluetooth because those protocols define out-of-band mechanisms to gather
+  device metadata. The make and model of such devices can thus be easily
+  identified even if they present themselves to the host as a virtual serial
+  ports. However, there are generic USB- or Bluetooth-to-serial adapters as well
+  as systems with "real" serial ports using a DB-25, DE-9 or RJ-45 connector.
+  For these there is no metadata that can be read to determine the identity of
+  the device connected to the port and so blocking access to these is not
+  possible.
 </section>
 
-<section data-dfn-for="ParityType">
-  ## <dfn>ParityType</dfn> enum</h2>
+<section id="privacy" class="informative">
+  <h2>Privacy considerations</h2>
 
-  ```webidl
-  enum ParityType {
-    "none",
-    "even",
-    "odd",
-    "mark",
-    "space"
-  };
-  ```
-  <dl>
-    <dt><dfn>none</dfn></dt>
-    <dd>No parity bit is sent for each data word.</dd>
-    <dt><dfn>even</dfn></dt>
-    <dd>Data word plus parity bit has even parity.</dd>
-    <dt><dfn>odd</dfn></dt>
-    <dd>Data word plus parity bit has odd parity.</dd>
-    <dt><dfn>mark</dfn></dt>
-    <dd>Parity bit has a mark symbol (logical one).</dd>
-    <dt><dfn>space</dfn></dt>
-    <dd>Parity bit has a space symbol (logical zero).</dd>
-  </dl>
-</section>
+  Serial ports and serial devices contain two kinds of sensitive information.
+  When a port is a USB or Bluetooth device there are identifiers such as the
+  vendor and product IDs (which identify the make and model) as well as a serial
+  number or MAC address. The serial device itself may also have its own
+  identifier that is available through commands sent via the serial port. The
+  device may also store other private information which may or may not be
+  identifying.
 
-<section data-dfn-for="FlowControlType">
-  ## <dfn>FlowControlType</dfn> enum
+  <p>
+  In order to manage device permissions an implementation will likely store
+  device identifiers such as the USB vendor ID, product ID and serial number in
+  its user preferences file to be used as stable identifiers for devices the
+  user has granted sites access to. These would not be shared directly with
+  sites and would be cleared when permission is revoked or site data in general
+  is cleared.
 
-  ```webidl
-  enum FlowControlType {
-    "none",
-    "hardware"
-  };
-  ```
-  <dl>
-    <dt><dfn>none</dfn></dt>
-    <dd>No flow control is enabled.</dd>
-    <dt><dfn>hardware</dfn></dt>
-    <dd>Hardware flow control using the RTS and CTS signals is enabled.</dd>
-  </dl>
-</section>
+  <p>
+  Commands a page can send to the device after it has been granted access a page
+  may also be able to access any of the other sensitive information stored by
+  the device. For the reasons mentioned in [[[#security]]] it is impractical and
+  undesirable to attempt to prevent a page from accessing this information.
 
-<section id="security">
-  ## Security considerations
+  <p>
+  Implementations should provide users with complete control over which devices
+  a site can access and not grant device access without user interaction. This
+  is the intention of the {{Serial/requestPort()}} method. This prevents a site
+  from silently enumerating and collecting data from all connected devices. This
+  is similar to the file picker UI. A site has no knowledge of the filesystem,
+  only the files or directories that have been chosen by the user. An
+  implementation could notify the user when a site is using these permissions
+  with an indicator icon appearing in the tab or address bar.
 
-  This section defines the <dfn>Security considerations</dfn> for the <cite>
-  Serial API</cite>.
+  <p>
+  Implementations that provide a "private" or "incognito" browsing mode should
+  ensure that permissions from the user's normal profile do not carry over to
+  such a session and permissions granted in this session are not persisted when
+  the session ends. An implementation may warn the user when granting access to
+  a device in such as session as, similar to entering identifying information by
+  hand, device identifiers and other unique properties available from
+  communicating with the device mentioned previously can be used to identify the
+  user between sessions.
 
-  It is RECOMMENDED that an user interface be presented to the user to allow them
-  to select the serial ports that the page can access. Such an interface would
-  allow an end user to select zero ore more serial ports on the device - or to
-  reject the request to access any ports.
-
-  A user agent SHOULD allow the user to select from all serial ports available
-  on the machine, and be shown an indicator for serial ports that are currently
-  busy, either as a result of prior calls to `requestPorts()` or are in
-  use by the system.
-
-  It is also RECOMMENDED that user agents provide users with a means for the end-
-  user to view which independently of any access request, and be given the
-  ability to revoke individual or complete access to serial ports at any time
-  either at the user agent level or per [=origin=].
-</section>
-
-<section class="informative">
-  ## Use cases and requirements
-
-  ### Hardware disconnection
-  Some devices allow users to manually reset the connection between the user
-  agent and the physical device (e.g., by pushing a button). One example
-  device is the Arduino. Another example is the user abruptly disconnecting
-  one device from another, thus severing the communication channel.
-
-  As such, it is a requirement that the API gracefully handle abrupt
-  disconnection caused by a reset or other event. When such disconnections
-  occur, the API must make it possible for the developer to be notified of such
-  disconnections. When possible, the API should provide details about the
-  disconnection (e.g., reason, time, etc.).
-
-  ### Baud rates
-  Traditionally, serial devices have operated at
-  [baud rates](http://en.wikipedia.org/wiki/Baud)
-  of between 50 and 115,200 bps.
-
-  However, modern USB serial devices are able to operate at significantly higher
-  baud rates than legacy hardware. For example, the
-  [bioloid servos](http://support.robotis.com/en/techsupport_eng.htm#product/dynamixel/ax_series/dxl_ax_actuator.htm)
-  operate at 1 Mbit (1,000,000 bps). Other USB-to-serial chips are able to
-  operate at 3 MBit (3,000,000bps).
-
-  Additionally, other serial devices have standardized baud rates that
-  are not in the commonly accepted value for baud rates. For example,
-  [MIDI](http://en.wikipedia.org/wiki/MIDI) uses a baud rate of 31,250 bps,
-  while a [DMX512 controller](http://en.wikipedia.org/wiki/DMX512)
-  transmits data at 250kbps.
-
-  As such, it is a requirement that the Serial API does not limit the
-  baud rates to a traditional range. Instead, the API must allow a
-  developer to specify any rate so long as the value is an unsigned number.
-  If there is a baud rate that is common for a large range of hardware that
-  will make use of this API, the API should provide a default baud rate value.
-
-  Given the above requirement, it is possible to create software to wrap the
-  Serial API to restrict the possible baud rates used for communicating with some
-  particular hardware. For example, a JavaScript library that communicates with
-  a MIDI device could automatically set the baud rate to 31,250 bps without
-  needing to bother the developer to specify the value.
+  <p>
+  Users may be surprised by the capabilities granted by this API if they do not
+  understand the ways in which granting access to a device breaks traditional
+  isolation boundaries in the web security model. Security UI and documentation
+  should explain that granting a site access to a device could give the site
+  full control over the device and any data contained within.
 </section>
 
 <section id="conformance"></section>
 
-<section class='appendix'>
-  ## Acknowledgements
+<section class="appendix">
+  <h2>Acknowledgements</h2>
 
   The following people contributed to the development of this document.
 
