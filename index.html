@@ -333,7 +333,9 @@ document.
   the <dfn>serial port task source</dfn>.
 
   <p>
-  The [=get the parent=] algorithm for {{SerialPort}} returns {{Navigator/serial}}.
+  The [=get the parent=] algorithm for {{SerialPort}} returns the same
+  {{Serial}} instance that is returned by the {{SerialPort}}'s [=relevant global
+  object=]'s {{Navigator}} object's {{Navigator/serial}} getter.
 
   <p>
   Instances of {{SerialPort}} are created with the internal slots described in
