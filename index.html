@@ -1007,9 +1007,9 @@ document.
       mode by toggling the "Data Terminal Ready" (or DTR) signal.
 
       <pre class="js">
-        await port.setSignal({ dataTerminalReady: false });
-        await new Promise(resolve => setTimeout(200, resolve));
-        await port.setSignal({ dataTerminalReady: true });
+        await port.setSignals({ dataTerminalReady: false });
+        await new Promise(resolve => setTimeout(resolve, 200));
+        await port.setSignals({ dataTerminalReady: true });
       </pre>
     </aside>
 
