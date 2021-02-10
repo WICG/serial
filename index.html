@@ -1233,11 +1233,12 @@ document.
           await port.close();
         }
 
-        readUntilClosed();
+        const closed = readUntilClosed();
 
         // Sometime later...
         keepReading = false;
         reader.cancel();
+        await closed;
       </pre>
 
       Calling `reader.`{{ReadableStreamGenericReader/cancel()}} causes the call
@@ -1246,6 +1247,14 @@ document.
       `reader.`{{ReadableStreamDefaultReader/releaseLock()}}. The outer loop
       then exits because `keepReading` has been set to `false` and with the
       stream unlocked `port.`{{SerialPort/close()}} can complete successfully.
+
+      <p>
+      While it is also possible to call `port.`{{SerialPort/close()}}
+      immediately after awaiting the {{Promise}} returned by
+      `reader.`{{ReadableStreamGenericReader/cancel()}} it is better to place
+      the call to `port.`{{SerialPort/close()}} as the last step of
+      `readUntilClosed()` so that the port is also closed when a fatal error is
+      encountered and `port.`{{SerialPort/readable}} becomes `null`.
     </aside>
 
     The {{SerialPort/close()}} method steps are:
