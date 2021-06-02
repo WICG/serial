@@ -9,7 +9,7 @@ The <cite>Serial API</cite> provides a way for websites to read and write from a
 serial device through script. Such an API would bridge the web and the physical
 world, by allowing documents to communicate with devices such as
 microcontrollers, 3D printers, and other serial devices.
-  
+
 There is also a companion <a
 href="https://github.com/WICG/serial/blob/main/EXPLAINER.md">explainer</a>
 document.
@@ -694,9 +694,12 @@ document.
         <ol>
           <li>
             Let |desiredSize| be the
-            <a href="https://streams.spec.whatwg.org/#desired-size-to-fill-a-streams-internal-queue">desired size</a>
-            of [=this=].{{SerialPort/[[readable]]}}'s
-            <a href="https://streams.spec.whatwg.org/#internal-queues">internal queue</a>.
+            [=ReadableStream/desired size to fill up to the high water mark=] for
+            [=this=].{{SerialPort/[[readable]]}}.
+          <li>
+            If [=this=].{{SerialPort/[[readable]]}}'s [=ReadableStream/current BYOB request view=]
+            is non-null, then set |desiredSize| to [=this=].{{SerialPort/[[readable]]}}'s
+            [=ReadableStream/current BYOB request view=]'s [=BufferSource/byte length=].
           <li>
             Run the following steps [=in parallel=]:
             <ol>
@@ -710,16 +713,20 @@ document.
                 following steps:
                 <ol>
                   <li>
-                    If no errors were encountered run the following steps:
+                    If no errors were encountered, then:
                     <ol>
-                      <li>
-                        Let |buffer| be a [=new=] {{ArrayBuffer}} created from |bytes|.
-                      <li>
-                        Let |chunk| be a [=new=] {{Uint8Array}} view over |buffer|,
-                        who's length is the length of |bytes|.
-                      <li>
-                        Invoke [=ReadableStream/enqueue=] on
-                        [=this=].{{SerialPort/[[readable]]}} with |chunk|.
+                      <li>If [=this=].{{SerialPort/[[readable]]}}'s
+                      [=ReadableStream/current BYOB request view=] is non-null,
+                      then [=ArrayBufferView/write=] |bytes| into
+                      [=this=].{{SerialPort/[[readable]]}}'s
+                      [=ReadableStream/current BYOB request view=], and set
+                      |view| to [=this=].{{SerialPort/[[readable]]}}'s
+                      [=ReadableStream/current BYOB request view=].
+                      <li>Otherwise, set |view| to the result of
+                      [=ArrayBufferView/create|creating=] a {{Uint8Array}} from
+                      |bytes| in [=this=]'s [=relevant Realm=].
+                      <li>[=ReadableStream/Enqueue=] |view| into
+                      [=this=].{{SerialPort/[[readable]]}}.
                     </ol>
                   <li>
                     If a buffer overrun condition was encountered, invoke
@@ -793,15 +800,13 @@ document.
         </ol>
 
       <li>
-        [=ReadableStream/Set up=] |stream| with
-        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-pullalgorithm">pullAlgorithm</a>
+        [=ReadableStream/Set up with byte reading support=] |stream| with
+        <i>[=ReadableStream/set up with byte reading support/pullAlgorithm=]</i>
         set to |pullAlgorithm|,
-        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-cancelalgorithm">cancelAlgorithm</a>
-        set to |cancelAlgorithm|,
-        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-highwatermark">highWaterMark</a>
-        set to [=this=].{{SerialPort/[[bufferSize]]}}, and
-        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-sizealgorithm">sizeAlgorithm</a>
-        set to a byte-counting size algorithm.
+        <i>[=ReadableStream/set up with byte reading support/cancelAlgorithm=]</i>
+        set to |cancelAlgorithm|, and
+        <i>[=ReadableStream/set up with byte reading support/highWaterMark=]</i>
+        set to [=this=].{{SerialPort/[[bufferSize]]}}.
       <li>Set [=this=].{{SerialPort/[[readable]]}} to |stream|.
       <li>Return |stream|.
     </ol>
