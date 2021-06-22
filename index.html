@@ -159,7 +159,7 @@ document.
           <li>
             If the user does not choose a port, [=queue a global task=] on the
             [=relevant global object=] of [=this=] using the [=serial port task
-            source=] to [=reject=] |promise| with an {{"AbortError"}}
+            source=] to [=reject=] |promise| with an {{"NotFoundError"}}
             {{DOMException}} and abort these steps.
           <li>
             Let |port:SerialPort| be a {{SerialPort}} representing the port
