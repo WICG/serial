@@ -126,8 +126,8 @@ document.
       <li>
         If [=this=]'s [=relevant global object=]'s [=associated Document=] is
         not [=allowed to use=] the [=policy-controlled feature=] named
-        `"serial"`, [=reject=] |promise| with a "{{SecurityError}}"
-        {{DOMException}} and return |promise|.
+        "[=policy-controlled feature/serial=]", [=reject=] |promise| with a
+        "{{SecurityError}}" {{DOMException}} and return |promise|.
       <li>
         If the [=relevant global object=] of [=this=] does not have [=transient
         activation=], [=reject=] |promise| with a "{{SecurityError}}"
@@ -1314,6 +1314,25 @@ document.
         </ul>
       <li>Return |promise|.
     </ol>
+  </section>
+</section>
+
+<section id="integrations">
+  <h2>Integrations</h2>
+
+  <section id="permissions-policy">
+    <h3>Permissions Policy</h3>
+
+    <p>
+    This specification defines a feature that controls whether the methods
+    exposed by the {{Navigator/serial}} attribute on the {{Navigator}} object
+    may be used.
+
+    <p>
+    The feature name for this feature is "<dfn data-dfn-for="policy-controlled feature"><code>serial</code></dfn>"`.
+
+    <p>
+    The [=default allowlist=] for this feature is `'self'`.
   </section>
 </section>
 
