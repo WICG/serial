@@ -483,7 +483,7 @@ document.
     <ol>
       <li>Let |promise| be [=a new promise=].
       <li>
-        If [=this=].{{[[state]]}} is not `"closed"`, reject |promise| with an
+        If [=this=].{{SerialPort/[[state]]}} is not `"closed"`, reject |promise| with an
         "{{InvalidStateError}}" {{DOMException}} and return |promise|.
       <li>
         If |options|["{{SerialOptions/dataBits}}"] is not 7 or 8, reject
@@ -498,7 +498,7 @@ document.
         Optionally, if |options|["{{SerialOptions/bufferSize}}"] is larger than
         the implementation is able to support, reject |promise| with a
         {{TypeError}} and return |promise|.
-      <li>Set [=this=].{{[[state]]}} to `"opening"`.
+      <li>Set [=this=].{{SerialPort/[[state]]}} to `"opening"`.
       <li>Perform the following steps [=in parallel=].
         <ol>
           <li>
@@ -509,9 +509,9 @@ document.
             [=relevant global object=] of [=this=] using the [=serial port task
             source=] to [=reject=] |promise| with a "{{NetworkError}}"
             {{DOMException}} and abort these steps.
-          <li>Set [=this=].{{[[state]]}} to `"opened"`.
+          <li>Set [=this=].{{SerialPort/[[state]]}} to `"opened"`.
           <li>
-            Set [=this=].{{[[bufferSize]]}} to
+            Set [=this=].{{SerialPort/[[bufferSize]]}} to
             |options|["{{SerialOptions/bufferSize}}"].
           <li>
             [=Queue a global task=] on the [=relevant global object=] of
@@ -684,10 +684,10 @@ document.
 
     <ol>
       <li>
-        If [=this=].{{[[readable]]}} is not `null`, return
-        [=this=].{{[[readable]]}}.
-      <li>If [=this=].{{[[state]]}} is not `"opened"`, return `null`.
-      <li>If [=this=].{{[[readFatal]]}} is `true`, return `null`.
+        If [=this=].{{SerialPort/[[readable]]}} is not `null`, return
+        [=this=].{{SerialPort/[[readable]]}}.
+      <li>If [=this=].{{SerialPort/[[state]]}} is not `"opened"`, return `null`.
+      <li>If [=this=].{{SerialPort/[[readFatal]]}} is `true`, return `null`.
       <li>Let |stream| be a [=new=] {{ReadableStream}}.
       <li>
         Let |pullAlgorithm| be the following steps:
@@ -695,7 +695,7 @@ document.
           <li>
             Let |desiredSize| be the
             <a href="https://streams.spec.whatwg.org/#desired-size-to-fill-a-streams-internal-queue">desired size</a>
-            of [=this=].{{[[readable]]}}'s
+            of [=this=].{{SerialPort/[[readable]]}}'s
             <a href="https://streams.spec.whatwg.org/#internal-queues">internal queue</a>.
           <li>
             Run the following steps [=in parallel=]:
@@ -719,40 +719,40 @@ document.
                         who's length is the length of |bytes|.
                       <li>
                         Invoke [=ReadableStream/enqueue=] on
-                        [=this=].{{[[readable]]}} with |chunk|.
+                        [=this=].{{SerialPort/[[readable]]}} with |chunk|.
                     </ol>
                   <li>
                     If a buffer overrun condition was encountered, invoke
-                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    [=ReadableStream/error=] on [=this=].{{SerialPort/[[readable]]}} with a
                     "<code>BufferOverrunError</code>" {{DOMException}} and
                     invoke the steps to [=handle closing the readable stream=].
                   <li>
                     If a break condition was encountered, invoke
-                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    [=ReadableStream/error=] on [=this=].{{SerialPort/[[readable]]}} with a
                     "<code>BreakError</code>" {{DOMException}} and invoke the
                     steps to [=handle closing the readable stream=].
                   <li>
                     If a framing error was encountered, invoke
-                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    [=ReadableStream/error=] on [=this=].{{SerialPort/[[readable]]}} with a
                     "<code>FramingError</code>" {{DOMException}} and invoke the
                     steps to [=handle closing the readable stream=].
                   <li>
                     If a parity error was encountered, invoke
-                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with a
+                    [=ReadableStream/error=] on [=this=].{{SerialPort/[[readable]]}} with a
                     "<code>ParityError</code>" {{DOMException}} and invoke the
                     steps to [=handle closing the readable stream=].
                   <li>
                     If an operating system error was encountered, invoke
-                    [=ReadableStream/error=] on [=this=].{{[[readable]]}} with
+                    [=ReadableStream/error=] on [=this=].{{SerialPort/[[readable]]}} with
                     an "{{UnknownError}}" {{DOMException}} and invoke the steps
                     to [=handle closing the readable stream=].
                   <li>
                     If the port was disconnected, run the following steps:
                     <ol>
-                      <li>Set [=this=].{{[[readFatal]]}} to `true`,
+                      <li>Set [=this=].{{SerialPort/[[readFatal]]}} to `true`,
                       <li>
                         Invoke [=ReadableStream/error=] on
-                        [=this=].{{[[readable]]}} with a "{{NetworkError}}"
+                        [=this=].{{SerialPort/[[readable]]}} with a "{{NetworkError}}"
                         {{DOMException}}.
                       <li>
                         Invoke the steps to [=handle closing the readable
@@ -799,10 +799,10 @@ document.
         <a href="https://streams.spec.whatwg.org/#readablestream-set-up-cancelalgorithm">cancelAlgorithm</a>
         set to |cancelAlgorithm|,
         <a href="https://streams.spec.whatwg.org/#readablestream-set-up-highwatermark">highWaterMark</a>
-        set to [=this=].{{[[bufferSize]]}}, and
+        set to [=this=].{{SerialPort/[[bufferSize]]}}, and
         <a href="https://streams.spec.whatwg.org/#readablestream-set-up-sizealgorithm">sizeAlgorithm</a>
         set to a byte-counting size algorithm.
-      <li>Set [=this=].{{[[readable]]}} to |stream|.
+      <li>Set [=this=].{{SerialPort/[[readable]]}} to |stream|.
       <li>Return |stream|.
     </ol>
 
@@ -810,11 +810,11 @@ document.
     steps:
 
     <ol>
-      <li>Set [=this=].{{[[readable]]}} to `null`.
+      <li>Set [=this=].{{SerialPort/[[readable]]}} to `null`.
       <li>
-        If [=this=].{{[[writable]]}} is `null` and
-        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=resolve=]
-        [=this=].{{[[pendingClosePromise]]}} with `undefined`.
+        If [=this=].{{SerialPort/[[writable]]}} is `null` and
+        [=this=].{{SerialPort/[[pendingClosePromise]]}} is not `null`, [=resolve=]
+        [=this=].{{SerialPort/[[pendingClosePromise]]}} with `undefined`.
     </ol>
 
   </section>
@@ -849,10 +849,10 @@ document.
 
     <ol>
       <li>
-        If [=this=].{{[[writable]]}} is not `null`, return
-        [=this=].{{[[writable]]}}.
-      <li>If [=this=].{{[[state]]}} is not `"opened"`, return `null`.
-      <li>If [=this=].{{[[writeFatal]]}} is `true`, return `null`.
+        If [=this=].{{SerialPort/[[writable]]}} is not `null`, return
+        [=this=].{{SerialPort/[[writable]]}}.
+      <li>If [=this=].{{SerialPort/[[state]]}} is not `"opened"`, return `null`.
+      <li>If [=this=].{{SerialPort/[[writeFatal]]}} is `true`, return `null`.
       <li>Let |stream:WritableStream| be a [=new=] {{WritableStream}}.
       <li>Let |writeAlgorithm| be the following steps, given |chunk|:
         <ol>
@@ -901,7 +901,7 @@ document.
                   <li>
                     If the port was disconnected, run the following steps:
                     <ol>
-                      <li>Set [=this=].{{[[writeFatal]]}} to `true`.
+                      <li>Set [=this=].{{SerialPort/[[writeFatal]]}} to `true`.
                       <li>
                         [=Reject=] |promise| with a "{{NetworkError}}"
                         {{DOMException}}.
@@ -978,10 +978,10 @@ document.
         <a href="https://streams.spec.whatwg.org/#writablestream-set-up-closealgorithm">closeAlgorithm</a>
         set to |closeAlgorithm|,
         <a href="https://streams.spec.whatwg.org/#writablestream-set-up-highwatermark">highWaterMark</a>
-        set to [=this=].{{[[bufferSize]]}}, and
+        set to [=this=].{{SerialPort/[[bufferSize]]}}, and
         <a href="https://streams.spec.whatwg.org/#writablestream-set-up-sizealgorithm">sizeAlgorithm</a>
         set to a byte-counting size algorithm.
-      <li>Set [=this=].{{[[writable]]}} to |stream|.
+      <li>Set [=this=].{{SerialPort/[[writable]]}} to |stream|.
       <li>Return |stream|.
     </ol>
 
@@ -989,11 +989,11 @@ document.
     steps:
 
     <ol>
-      <li>Set [=this=].{{[[writable]]}} to `null`.
+      <li>Set [=this=].{{SerialPort/[[writable]]}} to `null`.
       <li>
-        If [=this=].{{[[readable]]}} is `null` and
-        [=this=].{{[[pendingClosePromise]]}} is not `null`, [=resolve=]
-        [=this=].{{[[pendingClosePromise]]}} with `undefined`.
+        If [=this=].{{SerialPort/[[readable]]}} is `null` and
+        [=this=].{{SerialPort/[[pendingClosePromise]]}} is not `null`, [=resolve=]
+        [=this=].{{SerialPort/[[pendingClosePromise]]}} with `undefined`.
     </ol>
   </section>
 
@@ -1018,7 +1018,7 @@ document.
     <ol>
       <li>Let |promise| be [=a new promise=].
       <li>
-        If [=this=].{{[[state]]}} is not `"opened"`, reject |promise| with an
+        If [=this=].{{SerialPort/[[state]]}} is not `"opened"`, reject |promise| with an
         "{{InvalidStateError}}" {{DOMException}} and return |promise|.
       <li>
         If all of the specified members of |signals| are not present reject |promise|
@@ -1088,7 +1088,7 @@ document.
     <ol>
       <li>Let |promise:Promise| be [=a new promise=].
       <li>
-        If [=this=].{{[[state]]}} is not `"opened"`, reject |promise| with an
+        If [=this=].{{SerialPort/[[state]]}} is not `"opened"`, reject |promise| with an
         "{{InvalidStateError}}" {{DOMException}} and return |promise|.
       <li>Perform the following steps [=in parallel=]:
         <ol>
@@ -1263,22 +1263,22 @@ document.
       <li>Let |promise| be [=a new promise=].
       <li>
         Let |cancelPromise:Promise| be the result of invoking
-        [=ReadableStream/cancel=] on [=this=].{{[[readable]]}} or [=a promise
-        resolved with=] `undefined` if [=this=].{{[[readable]]}} is `null`.
+        [=ReadableStream/cancel=] on [=this=].{{SerialPort/[[readable]]}} or [=a promise
+        resolved with=] `undefined` if [=this=].{{SerialPort/[[readable]]}} is `null`.
       <li>
         Let |abortPromise:Promise| be the result of invoking
-        [=WritableStream/abort=] on [=this=].{{[[writable]]}} or [=a promise
-        resolved with=] `undefined` if [=this=].{{[[writable]]}} is `null`.
+        [=WritableStream/abort=] on [=this=].{{SerialPort/[[writable]]}} or [=a promise
+        resolved with=] `undefined` if [=this=].{{SerialPort/[[writable]]}} is `null`.
       <li>Let |pendingClosePromise| be [=a new promise=].
       <li>
-        If [=this=].{{[[readable]]}} and [=this=].{{[[writable]]}} are `null`,
+        If [=this=].{{SerialPort/[[readable]]}} and [=this=].{{SerialPort/[[writable]]}} are `null`,
         [=resolve=] |pendingClosePromise| with `undefined`.
-      <li>Set [=this=].{{[[pendingClosePromise]]}} to |pendingClosePromise|.
+      <li>Set [=this=].{{SerialPort/[[pendingClosePromise]]}} to |pendingClosePromise|.
       <li>
         Let |combinedPromise:Promise| be the result of [=getting a promise to
         wait for all=] with «|cancelPromise|, |abortPromise|,
         |pendingClosePromise|».
-      <li>Set [=this=].{{[[state]]}} to `"closing"`.
+      <li>Set [=this=].{{SerialPort/[[state]]}} to `"closing"`.
       <li>
         [=promise/React=] to |combinedPromise|.
         <ul>
@@ -1291,11 +1291,11 @@ document.
                   <li>
                     Invoke the operating system to close the serial port and
                     release any associated resources.
-                  <li>Set [=this=].{{[[state]]}} to `"closed"`.
+                  <li>Set [=this=].{{SerialPort/[[state]]}} to `"closed"`.
                   <li>
-                    Set [=this=].{{[[readFatal]]}} and
-                    [=this=].{{[[writeFatal]]}} to `false`.
-                  <li>Set [=this=].{{[[pendingClosePromise]]}} to `null`.
+                    Set [=this=].{{SerialPort/[[readFatal]]}} and
+                    [=this=].{{SerialPort/[[writeFatal]]}} to `false`.
+                  <li>Set [=this=].{{SerialPort/[[pendingClosePromise]]}} to `null`.
                   <li>
                     [=Queue a global task=] on the [=relevant global object=] of
                     [=this=] using the [=serial port task source=] to
@@ -1305,7 +1305,7 @@ document.
           <li>
             If |combinedPromise| was rejected with reason |r|, then:
             <ol>
-              <li>Set [=this=].{{[[pendingClosePromise]]}} to `null`.
+              <li>Set [=this=].{{SerialPort/[[pendingClosePromise]]}} to `null`.
               <li>
                 [=Queue a global task=] on the [=relevant global object=] of
                 [=this=] using the [=serial port task source=] to [=reject=]
