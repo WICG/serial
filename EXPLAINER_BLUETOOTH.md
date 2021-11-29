@@ -54,10 +54,10 @@ This proposal adds the ability for the browser to:
 
 The intent is to avoid the tendency to backfill Bluetooth Classic support into
 [Web Bluetooth](https://webbluetoothcg.github.io/web-bluetooth/). If support for
-one profile were to land in Web Bluetooth, this might entice developers to
+one profile were to land in Web Bluetooth, developers might
 request the addition of other classic profiles to Web Bluetooth. Support for
-Bluetooth serial interfaces is seen as a special case as It has come numerous
-times in the form of developer requests needing basic serial port support with
+Bluetooth serial interfaces is seen as a special case as it is so frequently
+requested by developers needing basic serial port support with
 no simple alternative in BLE.
 
 In short, this feature is a natural extension to the Web Serial API, and will
@@ -77,7 +77,7 @@ for Bluetooth serial ports.
 
 ## Non-standard Service Class ID’s
 
-Devices supporting a Serial Port Profile
+Devices supporting the Serial Port Profile
 ([SPP](https://www.bluetooth.com/specifications/specs/serial-port-profile-1-2/))
 often offer this via the standard Serial Port service (UUID: `0x1101`).
 Operating systems may create devices or ports mapped to this Bluetooth service
@@ -108,7 +108,7 @@ with no filters parameter, will pass through:
 ### Service Class ID Filtering
 
 Serial ports for services other than the SerialPort service (UUID: `0x1101`)
- can be requested, but will be omitted unless explicitly filtered for.
+can be requested, but will be omitted unless explicitly filtered for.
 
 `Serial.requestPort()` will be extended to add new filtering abilities for
 bonded Bluetooth devices with services implementing the SPP profile. At present
@@ -127,7 +127,7 @@ will be implemented by adding the following SerialPortFilter member:
 
 1. `bluetoothServiceClassId`
 
-Browser vendors may provide UI for the user to select certain device types such
+Implementations may provide UI for the user to select certain device types such
 as Wired, Bluetooth. This is an implementation issue left to browser vendors.
 
 ### Serial Port Info
@@ -139,8 +139,8 @@ dictionary containing usbVendorId and usbProductId.
 
 SerialPortInfo will be extended by adding the following member:
 
-1. `bluetoothServiceClassId` (string) – The Bluetooth service class UUID. This may
-   be either a 16 or 128 bit UUID.
+1. `bluetoothServiceClassId` (string) – The Bluetooth service class 128-bit
+   UUID.
 
 Opening a mapped port will return a btServiceClassId of `0x1101`.
 
