@@ -1,5 +1,6 @@
 var respecConfig = {
   specStatus: "CG-DRAFT",
+  latestVersion: null,
   shortName: "serial",
   subtitle: "Living document",
   editors: [
