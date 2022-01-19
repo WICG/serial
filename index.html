@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 28.0.6">
+<meta name="generator" content="ReSpec 28.2.2">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 span.example-title{text-transform:none}
@@ -84,7 +84,6 @@ dfn{cursor:pointer}
 25%{transform:scale(1.25,1.25);opacity:.75}
 100%{transform:scale(1,1)}
 }
-.hljs{background:0 0!important}
 :is(h1,h2,h3,h4,h5,h6,a) abbr{border:none}
 dfn{font-weight:700}
 a.internalDFN{color:inherit;border-bottom:1px solid #99c;text-decoration:none}
@@ -160,6 +159,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
 </style>
 <script id="initialUserConfig" type="application/json">{
   "specStatus": "CG-DRAFT",
+  "latestVersion": null,
   "shortName": "serial",
   "subtitle": "Living document",
   "editors": [
@@ -187,8 +187,8 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     "STREAMS",
     "WebIDL"
   ],
-  "publishISODate": "2021-12-01T00:00:00.000Z",
-  "generatedSubtitle": "Draft Community Group Report 01 December 2021"
+  "publishISODate": "2022-01-19T00:00:00.000Z",
+  "generatedSubtitle": "Draft Community Group Report 19 January 2022"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/cg-draft"></head><body class="h-entry" data-cite="WEBIDL DOM HTML Infra PERMISSIONS-POLICY STREAMS WebIDL"><div class="head">
     <a class="logo"><img crossorigin="" alt="Serial API logo" height="100" id="spec-logo" src="images/logo_serial.svg" width="100">
@@ -196,13 +196,11 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <h2 id="subtitle">Living document</h2>
     <h2>
       Draft Community Group Report
-      <time class="dt-published" datetime="2021-12-01">01 December 2021</time>
+      <time class="dt-published" datetime="2022-01-19">19 January 2022</time>
     </h2>
     <dl>
       
-      <dt>Latest published version:</dt><dd>
-              <a href="https://www.w3.org/TR/serial/">https://www.w3.org/TR/serial/</a>
-            </dd>
+      
       <dt>Latest editor's draft:</dt><dd><a href="https://wicg.github.io/serial/">https://wicg.github.io/serial/</a></dd>
       
       
@@ -220,7 +218,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <p class="copyright">
           <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a>
           ©
-          2021
+          2022
           
           the Contributors to the Web Serial API
           Specification, published by the
@@ -1697,7 +1695,7 @@ reader.cancel();
 
   The following people contributed to the development of this document.
 
-  <ul id="gh-contributors"><li><a href="https://github.com/Clemenard">Clément Menard</a></li><li><a href="https://github.com/domenic">Domenic Denicola</a></li><li><a href="https://github.com/dontcallmedom">Dominique Hazael-Massieux</a></li><li><a href="https://github.com/floitsch">Florian Loitsch</a></li><li><a href="https://github.com/reconbot">Francis Gulotta</a></li><li><a href="https://github.com/Keavon">Keavon Chambers</a></li><li><a href="https://github.com/kenchris">Kenneth Rohde Christiansen</a></li><li><a href="https://github.com/marcoscaceres">Marcos Cáceres</a></li><li><a href="https://github.com/MichaelKohler">Michael Kohler</a></li><li><a href="https://github.com/Ms2ger">Ms2ger</a></li><li><a href="https://github.com/reillyeon">Reilly Grant</a></li><li><a href="https://github.com/rwaldron">Rick Waldron</a></li><li><a href="https://github.com/ngsankha">Sankha Narayan Guria</a></li><li><a href="https://github.com/zcorpan">Simon Pieters</a></li><li><a href="https://github.com/noopkat">Suz Hinton</a></li><li><a href="https://github.com/travisleithead">Travis Leithead</a></li><li><a href="https://github.com/scheib">Vincent Scheib</a></li></ul>
+  <ul id="gh-contributors"><li><a href="https://github.com/cmumford">Chris Mumford</a></li><li><a href="https://github.com/Clemenard">Clément Menard</a></li><li><a href="https://github.com/domenic">Domenic Denicola</a></li><li><a href="https://github.com/dontcallmedom">Dominique Hazael-Massieux</a></li><li><a href="https://github.com/floitsch">Florian Loitsch</a></li><li><a href="https://github.com/reconbot">Francis Gulotta</a></li><li><a href="https://github.com/Keavon">Keavon Chambers</a></li><li><a href="https://github.com/kenchris">Kenneth Rohde Christiansen</a></li><li><a href="https://github.com/marcoscaceres">Marcos Cáceres</a></li><li><a href="https://github.com/MichaelKohler">Michael Kohler</a></li><li><a href="https://github.com/Ms2ger">Ms2ger</a></li><li><a href="https://github.com/reillyeon">Reilly Grant</a></li><li><a href="https://github.com/rwaldron">Rick Waldron</a></li><li><a href="https://github.com/ngsankha">Sankha Narayan Guria</a></li><li><a href="https://github.com/zcorpan">Simon Pieters</a></li><li><a href="https://github.com/noopkat">Suz Hinton</a></li><li><a href="https://github.com/travisleithead">Travis Leithead</a></li><li><a href="https://github.com/scheib">Vincent Scheib</a></li></ul>
 </section>
 <section id="references" class="appendix"><h2 id="b-references"><bdi class="secno">B. </bdi>References<a class="self-link" href="#references" aria-label="Permalink for Appendix B."></a></h2><section id="normative-references">
     <h3 id="b-1-normative-references"><bdi class="secno">B.1 </bdi>Normative references<a class="self-link" href="#normative-references" aria-label="Permalink for Appendix B.1"></a></h3>
