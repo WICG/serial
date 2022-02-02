@@ -256,11 +256,11 @@ document.
         });
 
         navigator.serial.addEventListener('connect', e => {
-          // Add |e.port| to the UI or automatically connect.
+          // Add |e.target| to the UI or automatically connect.
         });
 
         navigator.serial.addEventListener('disconnect', e => {
-          // Remove |e.port| from the UI. If the device was open the
+          // Remove |e.target| from the UI. If the device was open the
           // disconnection can also be observed as a stream error.
         });
       </pre>
