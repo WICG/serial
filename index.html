@@ -854,9 +854,24 @@ document.
       <li>If [=this=].{{SerialPort/[[state]]}} is not `"opened"`, return `null`.
       <li>If [=this=].{{SerialPort/[[writeFatal]]}} is `true`, return `null`.
       <li>Let |stream:WritableStream| be a [=new=] {{WritableStream}}.
-      <li>Let |writeAlgorithm| be the following steps, given |chunk|:
+      <li>
+        Let |writeAlgorithm| be the following steps, given |chunk| and
+        |controller:WritableStreamDefaultController|:
         <ol>
           <li>Let |promise:Promise| be [=a new promise=].
+          <li>
+            Let |signal:AbortSignal| be
+            |controller|.{{WritableStreamDefaultController/signal}}.
+          <li>
+            If |signal| is [=AbortSignal/aborted=], then [=reject=] |promise|
+            with |signal|'s [=AbortSignal/abort reason=] and return |promise|.
+          <li>[=AbortSignal/Add=] the following abort steps to |signal|:
+            <ol>
+              <li>
+                Cause any invocation of the operating system to write to the
+                port to return as soon as possible no matter how much data has
+                been written.
+            </ol>
           <li>
             If |chunk| cannot be [=converted to an IDL value=] of type
             {{BufferSource}}, reject |promise| with a {{TypeError}} and return
@@ -909,6 +924,9 @@ document.
                         Invoke the steps to [=handle closing the writable
                         stream=].
                     </ol>
+                  <li>
+                    If |signal| is [=AbortSignal/aborted=], [=reject=] |promise|
+                    with |signal|'s [=AbortSignal/abort reason=].
                 </ol>
             </ol>
           <li>Return |promise|.
@@ -935,18 +953,6 @@ document.
           <li>Return |promise|.
         </ol>
 
-        <div class="note">
-          [[STREAMS]] specifies that |abortAlgorithm| will only be invoked after
-          the {{Promise}} returned by a previous invocation of |writeAlgorithm|
-          (if any) has resolved. This blocks abort on completion of the most
-          recent write operation. This could be fixed by passing an
-          {{AbortSignal}} to |writeAlgorithm|.
-
-          <p>
-          This enhancement is tracked in
-          <a href="https://github.com/whatwg/streams/issues/1015">whatwg/streams#1015</a>.
-        </div>
-
       <li>
         Let |closeAlgorithm| be the following steps:
         <ol>
@@ -968,7 +974,6 @@ document.
             </ol>
           <li>Return |promise|.
         </ol>
-
       <li>
         [=WritableStream/Set up=] |stream| with
         <a href="https://streams.spec.whatwg.org/#writablestream-set-up-writealgorithm">writeAlgorithm</a>
