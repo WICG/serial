@@ -326,6 +326,7 @@ document.
       Promise&lt;undefined> setSignals(optional SerialOutputSignals signals = {});
       Promise&lt;SerialInputSignals> getSignals();
       Promise&lt;undefined> close();
+      Promise&lt;undefined> forget();
     };
   </pre>
 
@@ -1316,6 +1317,32 @@ document.
                 |promise| with |r|.
             </ol>
         </ul>
+      <li>Return |promise|.
+    </ol>
+  </section>
+  <section>
+    <h3><dfn>forget()</dfn> method</h3>
+
+    <aside class="example">
+      It is posssible to voluntarily revoke a permission to a serial port that was granted by a user.
+
+      <pre class="js">
+        // Request a serial port.
+        const port = await navigator.serial.requestPort();
+
+        // Then later... revoke permission to the serial port.
+        await port.forget();
+      </pre>
+    </aside>
+
+    The {{SerialPort/forget()}} method steps are:
+
+    <ol>
+      <li>Let |promise| be [=a new promise=].
+      <li>
+        Remove |this| from the sequence of available serial ports on
+        the system which the user has allowed the site to access as the
+        result of a previous call to {{Serial/requestPort()}}.
       <li>Return |promise|.
     </ol>
   </section>
