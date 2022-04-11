@@ -1267,6 +1267,9 @@ document.
     <ol>
       <li>Let |promise| be [=a new promise=].
       <li>
+        If [=this=].{{SerialPort/[[state]]}} is not `"opened"`, reject |promise| with an
+        "{{InvalidStateError}}" {{DOMException}} and return |promise|.
+      <li>
         Let |cancelPromise:Promise| be the result of invoking
         [=ReadableStream/cancel=] on [=this=].{{SerialPort/[[readable]]}} or [=a promise
         resolved with=] `undefined` if [=this=].{{SerialPort/[[readable]]}} is `null`.
@@ -1339,10 +1342,18 @@ document.
 
     <ol>
       <li>Let |promise| be [=a new promise=].
+      <li>Set [=this=].{{SerialPort/[[state]]}} to `"forgetting"`.
       <li>
-        Remove |this| from the sequence of available serial ports on
+        If [=this=].{{SerialPort/[[readable]]}} is not `null`, invoke
+        [=ReadableStream/cancel=] on [=this=].{{SerialPort/[[readable]]}}.
+      <li>
+        If [=this=].{{SerialPort/[[writable]]}} is not `null`, invoke
+        [=WritableStream/abort=] on [=this=].{{SerialPort/[[writable]]}}.
+      <li>
+        Remove [=this=] from the sequence of available serial ports on
         the system which the user has allowed the site to access as the
         result of a previous call to {{Serial/requestPort()}}.
+      <li>Set [=this=].{{SerialPort/[[state]]}} to `"forgotten"`.
       <li>Return |promise|.
     </ol>
   </section>
