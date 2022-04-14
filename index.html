@@ -326,6 +326,7 @@ document.
       Promise&lt;undefined> setSignals(optional SerialOutputSignals signals = {});
       Promise&lt;SerialInputSignals> getSignals();
       Promise&lt;undefined> close();
+      Promise&lt;undefined> forget();
     };
   </pre>
 
@@ -704,6 +705,11 @@ document.
                 Invoke the operating system to read up to |desiredSize| bytes
                 from the port, putting the result in the [=byte sequence=]
                 |bytes|.
+
+                <div class="note">
+                  [=this=].{{SerialPort/[[state]]}} becoming `"forgotten"`
+                  must be treated as if |the port was disconnected|.
+                </div>
               <li>
                 [=Queue a global task=] on the [=relevant global object=] of
                 [=this=] using the [=serial port task source=] to run the
@@ -747,7 +753,7 @@ document.
                     an "{{UnknownError}}" {{DOMException}} and invoke the steps
                     to [=handle closing the readable stream=].
                   <li>
-                    If the port was disconnected, run the following steps:
+                    If |the port was disconnected|, run the following steps:
                     <ol>
                       <li>Set [=this=].{{SerialPort/[[readFatal]]}} to `true`,
                       <li>
@@ -880,6 +886,11 @@ document.
                   |bytes| has been queued for transmission rather than after it
                   has been transmitted.
                 </div>
+
+                <div class="note">
+                  [=this=].{{SerialPort/[[state]]}} becoming `"forgotten"`
+                  must be treated as if |the port was disconnected|.
+                </div>
               <li>
                 [=Queue a global task=] on the [=relevant global object=] of
                 [=this=] using the [=serial port task source=] to run the
@@ -902,7 +913,7 @@ document.
                     If an operating system error was encountered, [=reject=]
                     |promise| with an "{{UnknownError}}" {{DOMException}}.
                   <li>
-                    If the port was disconnected, run the following steps:
+                    If |the port was disconnected|, run the following steps:
                     <ol>
                       <li>Set [=this=].{{SerialPort/[[writeFatal]]}} to `true`.
                       <li>
@@ -1266,6 +1277,9 @@ document.
     <ol>
       <li>Let |promise| be [=a new promise=].
       <li>
+        If [=this=].{{SerialPort/[[state]]}} is not `"opened"`, reject |promise| with an
+        "{{InvalidStateError}}" {{DOMException}} and return |promise|.
+      <li>
         Let |cancelPromise:Promise| be the result of invoking
         [=ReadableStream/cancel=] on [=this=].{{SerialPort/[[readable]]}} or [=a promise
         resolved with=] `undefined` if [=this=].{{SerialPort/[[readable]]}} is `null`.
@@ -1317,6 +1331,43 @@ document.
             </ol>
         </ul>
       <li>Return |promise|.
+    </ol>
+  </section>
+  <section>
+    <h3><dfn>forget()</dfn> method</h3>
+
+    <aside class="example">
+      It is posssible to voluntarily revoke a permission to a serial port that was granted by a user.
+
+      <pre class="js">
+        // Request a serial port.
+        const port = await navigator.serial.requestPort();
+
+        // Then later... revoke permission to the serial port.
+        await port.forget();
+      </pre>
+    </aside>
+
+    The {{SerialPort/forget()}} method steps are:
+
+    <ol>
+      <li>
+        If the user agent can't perform this action (e.g. permission was granted
+        by administrator policy), return [=a promise resolved with=] `undefined`.
+      <li>Run the following steps [=in parallel=]:
+        <ol>
+          <li>Set [=this=].{{SerialPort/[[state]]}} to `"forgetting"`.
+          <li>
+            Remove [=this=] from the sequence of available serial ports on
+            the system which the user has allowed the site to access as the
+            result of a previous call to {{Serial/requestPort()}}.
+          <li>Set [=this=].{{SerialPort/[[state]]}} to `"forgotten"`.
+          <li>
+            [=Queue a global task=] on the [=relevant global object=] of
+            [=this=] using the [=serial port task source=] to [=resolve=]
+            |promise| with `undefined`.
+      </ol>
+    <li>Return |promise|.
     </ol>
   </section>
 </section>
