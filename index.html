@@ -1358,12 +1358,6 @@ document.
         <ol>
           <li>Set [=this=].{{SerialPort/[[state]]}} to `"forgetting"`.
           <li>
-            If [=this=].{{SerialPort/[[readable]]}} is not `null`, invoke
-            [=ReadableStream/cancel=] on [=this=].{{SerialPort/[[readable]]}}.
-          <li>
-            If [=this=].{{SerialPort/[[writable]]}} is not `null`, invoke
-            [=WritableStream/abort=] on [=this=].{{SerialPort/[[writable]]}}.
-          <li>
             Remove [=this=] from the sequence of available serial ports on
             the system which the user has allowed the site to access as the
             result of a previous call to {{Serial/requestPort()}}.
