@@ -679,6 +679,34 @@ document.
       with its length or to wait a defined length of time before transmitting
       the next message. Implementing a {{TransformStream}} for these types of
       message boundaries is left as an exercise for the reader.
+
+      <p>
+      While the {{ReadableStreamDefaultReader/read()}} method is asynchronous
+      and does not block execution, in code using async/await syntax it can
+      seem as if it does. In this situation it may be helpful to implement a
+      timeout which will allow the code to continue execution if no data is
+      received for a period of time. The example below uses the
+      {{ReadableStreamDefaultReader/releaseLock()}} method to interrupt a call
+      to {{ReadableStreamDefaultReader/read()}} after a timer expires. This
+      will not close the stream and so any data received after the timeout can
+      still be read later after calling {{ReadableStream/getReader()}} again.
+
+      <pre class="js">
+        async function readWithTimeout(port, timeout) {
+          const reader = port.readable.getReader();
+          const timer = setTimeout(() => {
+            reader.releaseLock();
+          }, timeout);
+          const result = await reader.read();
+          clearTimeout(timer);
+          reader.releaseLock();
+          return result;
+        }
+      </pre>
+
+      This feature of {{ReadableStreamDefaultReader/releaseLock()}} was added
+      in <a href="https://github.com/whatwg/streams/pull/1168">whatwg/streams#1168</a>
+      and has only recently been implemented by browsers.
     </aside>
 
     The {{SerialPort/readable}} getter steps are:
