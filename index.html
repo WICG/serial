@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 32.1.2">
+<meta name="generator" content="ReSpec 32.1.10">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 span.example-title{text-transform:none}
@@ -17,6 +17,7 @@ aside.example div.example{border-left-width:.1em;border-color:#999;background:#f
 .warning{padding:.5em;border-left-width:.5em;border-left-style:solid}
 span.warning{padding:.1em .5em .15em}
 .issue.closed span.issue-number{text-decoration:line-through}
+.issue.closed span.issue-number::after{content:" (Closed)";font-size:smaller}
 .warning{border-color:#f11;border-width:.2em;border-style:solid;background:#fbe9e9}
 .warning-title:before{content:"⚠";font-size:1.3em;float:left;padding-right:.3em;margin-top:-.3em}
 li.task-list-item{list-style:none}
@@ -53,7 +54,7 @@ a.idlEnumItem{color:#000;border-bottom:1px dotted #ccc;text-decoration:none}
 </style>
 <style>
 dfn{cursor:pointer}
-.dfn-panel{position:absolute;z-index:35;min-width:300px;max-width:500px;padding:.5em .75em;margin-top:.6em;font:small Helvetica Neue,sans-serif,Droid Sans Fallback;background:#fff;color:#000;box-shadow:0 1em 3em -.4em rgba(0,0,0,.3),0 0 1px 1px rgba(0,0,0,.05);border-radius:2px}
+.dfn-panel{position:absolute;z-index:35;min-width:300px;max-width:500px;padding:.5em .75em;margin-top:.6em;font-family:"Helvetica Neue",sans-serif;font-size:small;background:#fff;color:#000;box-shadow:0 1em 3em -.4em rgba(0,0,0,.3),0 0 1px 1px rgba(0,0,0,.05);border-radius:2px}
 .dfn-panel:not(.docked)>.caret{position:absolute;top:-9px}
 .dfn-panel:not(.docked)>.caret::after,.dfn-panel:not(.docked)>.caret::before{content:"";position:absolute;border:10px solid transparent;border-top:0;border-bottom:10px solid #fff;top:0}
 .dfn-panel:not(.docked)>.caret::before{border-bottom:9px solid #a2a9b1}
@@ -189,8 +190,8 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     "STREAMS",
     "WebIDL"
   ],
-  "publishISODate": "2022-04-14T00:00:00.000Z",
-  "generatedSubtitle": "Draft Community Group Report 14 April 2022"
+  "publishISODate": "2022-07-19T00:00:00.000Z",
+  "generatedSubtitle": "Draft Community Group Report 19 July 2022"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/cg-draft"></head><body class="h-entry" data-cite="WEBIDL DOM HTML Infra PERMISSIONS-POLICY STREAMS WebIDL"><div class="head">
     <p class="logos"><a class="logo"><img crossorigin="" alt="Serial API logo" height="100" id="spec-logo" src="images/logo_serial.svg" width="100">
@@ -198,7 +199,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <h1 id="title" class="title">Web Serial API</h1> <h2 id="subtitle" class="subtitle">Living document</h2>
     <p id="w3c-state">
       <a href="https://www.w3.org/standards/types#reports">Draft Community Group Report</a>
-      <time class="dt-published" datetime="2022-04-14">14 April 2022</time>
+      <time class="dt-published" datetime="2022-07-19">19 July 2022</time>
     </p>
     <dl>
       
@@ -893,6 +894,32 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
       with its length or to wait a defined length of time before transmitting
       the next message. Implementing a <a data-link-type="idl" data-lt="TransformStream" data-type="interface" href="https://streams.spec.whatwg.org/#transformstream"><code>TransformStream</code></a> for these types of
       message boundaries is left as an exercise for the reader.
+
+      <p>
+      While the <a data-link-type="idl" data-lt="read()" data-type="method" href="https://streams.spec.whatwg.org/#default-reader-read"><code>read</code></a><code>()</code> method is asynchronous
+      and does not block execution, in code using async/await syntax it can
+      seem as if it does. In this situation it may be helpful to implement a
+      timeout which will allow the code to continue execution if no data is
+      received for a period of time. The example below uses the
+      <a data-link-type="idl" data-lt="releaseLock()" data-type="method" href="https://streams.spec.whatwg.org/#default-reader-release-lock"><code>releaseLock</code></a><code>()</code> method to interrupt a call
+      to <a data-link-type="idl" data-lt="read()" data-type="method" href="https://streams.spec.whatwg.org/#default-reader-read"><code>read</code></a><code>()</code> after a timer expires. This
+      will not close the stream and so any data received after the timeout can
+      still be read later after calling <a data-link-type="idl" data-lt="getReader()" data-type="method" href="https://streams.spec.whatwg.org/#rs-get-reader"><code>getReader</code></a><code>()</code> again.
+
+      </p><pre aria-busy="false"><code class="hljs js"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readWithTimeout</span>(<span class="hljs-params">port, timeout</span>) </span>{
+  <span class="hljs-keyword">const</span> reader = port.readable.getReader();
+  <span class="hljs-keyword">const</span> timer = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+    reader.releaseLock();
+  }, timeout);
+  <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> reader.read();
+  <span class="hljs-built_in">clearTimeout</span>(timer);
+  reader.releaseLock();
+  <span class="hljs-keyword">return</span> result;
+}</code></pre>
+
+      This feature of <a data-link-type="idl" data-lt="releaseLock()" data-type="method" href="https://streams.spec.whatwg.org/#default-reader-release-lock"><code>releaseLock</code></a><code>()</code> was added
+      in <a href="https://github.com/whatwg/streams/pull/1168">whatwg/streams#1168</a>
+      and has only recently been implemented by browsers.
     </aside>
 
     The <a data-link-type="idl" href="#dom-serialport-readable" class="internalDFN" id="ref-for-dom-serialport-readable-6"><code>readable</code></a> getter steps are:
@@ -1758,7 +1785,7 @@ reader.cancel();
 
   The following people contributed to the development of this document.
 
-  <ul id="gh-contributors"><li><a href="https://github.com/cmumford">Chris Mumford</a></li><li><a href="https://github.com/Clemenard">Clément Menard</a></li><li><a href="https://github.com/domenic">Domenic Denicola</a></li><li><a href="https://github.com/dontcallmedom">Dominique Hazael-Massieux</a></li><li><a href="https://github.com/floitsch">Florian Loitsch</a></li><li><a href="https://github.com/Elchi3">Florian Scholz</a></li><li><a href="https://github.com/reconbot">Francis Gulotta</a></li><li><a href="https://github.com/Keavon">Keavon Chambers</a></li><li><a href="https://github.com/kenchris">Kenneth Rohde Christiansen</a></li><li><a href="https://github.com/marcoscaceres">Marcos Cáceres</a></li><li><a href="https://github.com/MichaelKohler">Michael Kohler</a></li><li><a href="https://github.com/Ms2ger">Ms2ger</a></li><li><a href="https://github.com/reillyeon">Reilly Grant</a></li><li><a href="https://github.com/rwaldron">Rick Waldron</a></li><li><a href="https://github.com/ngsankha">Sankha Narayan Guria</a></li><li><a href="https://github.com/zcorpan">Simon Pieters</a></li><li><a href="https://github.com/noopkat">Suz Hinton</a></li><li><a href="https://github.com/travisleithead">Travis Leithead</a></li><li><a href="https://github.com/scheib">Vincent Scheib</a></li></ul>
+  <ul id="gh-contributors"><li><a href="https://github.com/cmumford">Chris Mumford</a></li><li><a href="https://github.com/Clemenard">Clément Menard</a></li><li><a href="https://github.com/domenic">Domenic Denicola</a></li><li><a href="https://github.com/dontcallmedom">Dominique Hazael-Massieux</a></li><li><a href="https://github.com/floitsch">Florian Loitsch</a></li><li><a href="https://github.com/Elchi3">Florian Scholz</a></li><li><a href="https://github.com/reconbot">Francis Gulotta</a></li><li><a href="https://github.com/beaufortfrancois">François Beaufort</a></li><li><a href="https://github.com/Keavon">Keavon Chambers</a></li><li><a href="https://github.com/kenchris">Kenneth Rohde Christiansen</a></li><li><a href="https://github.com/marcoscaceres">Marcos Cáceres</a></li><li><a href="https://github.com/MichaelKohler">Michael Kohler</a></li><li><a href="https://github.com/Ms2ger">Ms2ger</a></li><li><a href="https://github.com/reillyeon">Reilly Grant</a></li><li><a href="https://github.com/rwaldron">Rick Waldron</a></li><li><a href="https://github.com/ngsankha">Sankha Narayan Guria</a></li><li><a href="https://github.com/zcorpan">Simon Pieters</a></li><li><a href="https://github.com/noopkat">Suz Hinton</a></li><li><a href="https://github.com/travisleithead">Travis Leithead</a></li><li><a href="https://github.com/scheib">Vincent Scheib</a></li></ul>
 </section>
 <section id="references" class="appendix"><div class="header-wrapper"><h2 id="b-references"><bdi class="secno">B. </bdi>References</h2><a class="self-link" href="#references" aria-label="Permalink for Appendix B."></a></div><section id="normative-references"><div class="header-wrapper"><h3 id="b-1-normative-references"><bdi class="secno">B.1 </bdi>Normative references</h3><a class="self-link" href="#normative-references" aria-label="Permalink for Appendix B.1"></a></div>
     
