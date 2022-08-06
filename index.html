@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 32.1.10">
+<meta name="generator" content="ReSpec 32.2.2">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 span.example-title{text-transform:none}
@@ -98,8 +98,6 @@ a.bibref{text-decoration:none}
 }
 #references :target{background:#eaf3ff;animation:pop .4s ease-in-out 0s 1}
 cite .bibref{font-style:normal}
-code{color:#c63501}
-th code{color:inherit}
 a[href].orcid{padding-left:4px;padding-right:4px}
 a[href].orcid>svg{margin-bottom:-2px}
 .toc a,.tof a{text-decoration:none}
@@ -190,8 +188,8 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     "STREAMS",
     "WebIDL"
   ],
-  "publishISODate": "2022-07-19T00:00:00.000Z",
-  "generatedSubtitle": "Draft Community Group Report 19 July 2022"
+  "publishISODate": "2022-08-06T00:00:00.000Z",
+  "generatedSubtitle": "Draft Community Group Report 06 August 2022"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/cg-draft"></head><body class="h-entry" data-cite="WEBIDL DOM HTML Infra PERMISSIONS-POLICY STREAMS WebIDL"><div class="head">
     <p class="logos"><a class="logo"><img crossorigin="" alt="Serial API logo" height="100" id="spec-logo" src="images/logo_serial.svg" width="100">
@@ -199,7 +197,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <h1 id="title" class="title">Web Serial API</h1> <h2 id="subtitle" class="subtitle">Living document</h2>
     <p id="w3c-state">
       <a href="https://www.w3.org/standards/types#reports">Draft Community Group Report</a>
-      <time class="dt-published" datetime="2022-07-19">19 July 2022</time>
+      <time class="dt-published" datetime="2022-08-06">06 August 2022</time>
     </p>
     <dl>
       
@@ -243,7 +241,7 @@ The <cite>Serial API</cite> provides a way for websites to read and write from a
 serial device through script. Such an API would bridge the web and the physical
 world, by allowing documents to communicate with devices such as
 microcontrollers, 3D printers, and other serial devices.
-  
+
 There is also a companion <a href="https://github.com/WICG/serial/blob/main/EXPLAINER.md">explainer</a>
 document.
 </section>
@@ -936,9 +934,12 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
         <ol>
           <li>
             Let <var>desiredSize</var> be the
-            <a href="https://streams.spec.whatwg.org/#desired-size-to-fill-a-streams-internal-queue">desired size</a>
-            of <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-3"><code>[[readable]]</code></a>'s
-            <a href="https://streams.spec.whatwg.org/#internal-queues">internal queue</a>.
+            <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-desired-size-to-fill-up-to-the-high-water-mark">desired size to fill up to the high water mark</a> for
+            <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-3"><code>[[readable]]</code></a>.
+          </li><li>
+            If <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-4"><code>[[readable]]</code></a>'s <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-current-byob-request-view">current BYOB request view</a>
+            is non-null, then set <var>desiredSize</var> to <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-5"><code>[[readable]]</code></a>'s
+            <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-current-byob-request-view">current BYOB request view</a>'s <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#buffersource-byte-length">byte length</a>.
           </li><li>
             Run the following steps <a data-link-type="dfn" data-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>:
             <ol>
@@ -957,40 +958,44 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
                 following steps:
                 <ol>
                   <li>
-                    If no errors were encountered run the following steps:
+                    If no errors were encountered, then:
                     <ol>
-                      <li>
-                        Let <var>buffer</var> be a <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#new">new</a> <a data-link-type="idl" data-lt="ArrayBuffer" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-ArrayBuffer"><code>ArrayBuffer</code></a> created from <var>bytes</var>.
-                      </li><li>
-                        Let <var>chunk</var> be a <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#new">new</a> <a data-link-type="idl" data-lt="Uint8Array" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-Uint8Array"><code>Uint8Array</code></a> view over <var>buffer</var>,
-                        who's length is the length of <var>bytes</var>.
-                      </li><li>
-                        Invoke <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-enqueue">enqueue</a> on
-                        <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-4"><code>[[readable]]</code></a> with <var>chunk</var>.
+                      <li>If <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-6"><code>[[readable]]</code></a>'s
+                      <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-current-byob-request-view">current BYOB request view</a> is non-null,
+                      then <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#arraybufferview-write">write</a> <var>bytes</var> into
+                      <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-7"><code>[[readable]]</code></a>'s
+                      <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-current-byob-request-view">current BYOB request view</a>, and set
+                      <var>view</var> to <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-8"><code>[[readable]]</code></a>'s
+                      <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-current-byob-request-view">current BYOB request view</a>.
+                      </li><li>Otherwise, set <var>view</var> to the result of
+                      <a data-link-type="dfn" data-lt="create" data-type="dfn" href="https://webidl.spec.whatwg.org/#arraybufferview-create">creating</a> a <a data-link-type="idl" data-lt="Uint8Array" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-Uint8Array"><code>Uint8Array</code></a> from
+                      <var>bytes</var> in <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>'s <a data-link-type="dfn" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm">relevant Realm</a>.
+                      </li><li><a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-enqueue">Enqueue</a> <var>view</var> into
+                      <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-9"><code>[[readable]]</code></a>.
                     </li></ol>
                   </li><li>
                     If a buffer overrun condition was encountered, invoke
-                    <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-5"><code>[[readable]]</code></a> with a
+                    <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-10"><code>[[readable]]</code></a> with a
                     "<code>BufferOverrunError</code>" <a data-link-type="idl" data-lt="DOMException" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMException"><code>DOMException</code></a> and
                     invoke the steps to <a data-link-type="dfn" href="#dfn-handle-closing-the-readable-stream" class="internalDFN" id="ref-for-dfn-handle-closing-the-readable-stream-1">handle closing the readable stream</a>.
                   </li><li>
                     If a break condition was encountered, invoke
-                    <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-6"><code>[[readable]]</code></a> with a
+                    <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-11"><code>[[readable]]</code></a> with a
                     "<code>BreakError</code>" <a data-link-type="idl" data-lt="DOMException" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMException"><code>DOMException</code></a> and invoke the
                     steps to <a data-link-type="dfn" href="#dfn-handle-closing-the-readable-stream" class="internalDFN" id="ref-for-dfn-handle-closing-the-readable-stream-2">handle closing the readable stream</a>.
                   </li><li>
                     If a framing error was encountered, invoke
-                    <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-7"><code>[[readable]]</code></a> with a
+                    <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-12"><code>[[readable]]</code></a> with a
                     "<code>FramingError</code>" <a data-link-type="idl" data-lt="DOMException" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMException"><code>DOMException</code></a> and invoke the
                     steps to <a data-link-type="dfn" href="#dfn-handle-closing-the-readable-stream" class="internalDFN" id="ref-for-dfn-handle-closing-the-readable-stream-3">handle closing the readable stream</a>.
                   </li><li>
                     If a parity error was encountered, invoke
-                    <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-8"><code>[[readable]]</code></a> with a
+                    <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-13"><code>[[readable]]</code></a> with a
                     "<code>ParityError</code>" <a data-link-type="idl" data-lt="DOMException" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMException"><code>DOMException</code></a> and invoke the
                     steps to <a data-link-type="dfn" href="#dfn-handle-closing-the-readable-stream" class="internalDFN" id="ref-for-dfn-handle-closing-the-readable-stream-4">handle closing the readable stream</a>.
                   </li><li>
                     If an operating system error was encountered, invoke
-                    <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-9"><code>[[readable]]</code></a> with
+                    <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-14"><code>[[readable]]</code></a> with
                     an "<a data-link-type="idl" data-lt="UnknownError" data-type="exception" href="https://webidl.spec.whatwg.org/#unknownerror"><code>UnknownError</code></a>" <a data-link-type="idl" data-lt="DOMException" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMException"><code>DOMException</code></a> and invoke the steps
                     to <a data-link-type="dfn" href="#dfn-handle-closing-the-readable-stream" class="internalDFN" id="ref-for-dfn-handle-closing-the-readable-stream-5">handle closing the readable stream</a>.
                   </li><li>
@@ -999,7 +1004,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
                       <li>Set <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readFatal]]" href="#dfn-readfatal" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readfatal-2"><code>[[readFatal]]</code></a> to <code>true</code>,
                       </li><li>
                         Invoke <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-error">error</a> on
-                        <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-10"><code>[[readable]]</code></a> with a "<a data-link-type="idl" data-lt="NetworkError" data-type="exception" href="https://webidl.spec.whatwg.org/#networkerror"><code>NetworkError</code></a>"
+                        <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-15"><code>[[readable]]</code></a> with a "<a data-link-type="idl" data-lt="NetworkError" data-type="exception" href="https://webidl.spec.whatwg.org/#networkerror"><code>NetworkError</code></a>"
                         <a data-link-type="idl" data-lt="DOMException" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMException"><code>DOMException</code></a>.
                       </li><li>
                         Invoke the steps to <a data-link-type="dfn" href="#dfn-handle-closing-the-readable-stream" class="internalDFN" id="ref-for-dfn-handle-closing-the-readable-stream-6">handle closing the readable stream</a>.
@@ -1039,16 +1044,14 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
         </li></ol>
 
       </li><li>
-        <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-set-up">Set up</a> <var>stream</var> with
-        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-pullalgorithm">pullAlgorithm</a>
+        <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-set-up-with-byte-reading-support">Set up with byte reading support</a> <var>stream</var> with
+        <i><a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-set-up-with-byte-reading-support-pullalgorithm">pullAlgorithm</a></i>
         set to <var>pullAlgorithm</var>,
-        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-cancelalgorithm">cancelAlgorithm</a>
-        set to <var>cancelAlgorithm</var>,
-        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-highwatermark">highWaterMark</a>
-        set to <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[bufferSize]]" href="#dfn-buffersize" class="internalDFN" data-link-type="idl" id="ref-for-dfn-buffersize-2"><code>[[bufferSize]]</code></a>, and
-        <a href="https://streams.spec.whatwg.org/#readablestream-set-up-sizealgorithm">sizeAlgorithm</a>
-        set to a byte-counting size algorithm.
-      </li><li>Set <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-11"><code>[[readable]]</code></a> to <var>stream</var>.
+        <i><a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-set-up-with-byte-reading-support-cancelalgorithm">cancelAlgorithm</a></i>
+        set to <var>cancelAlgorithm</var>, and
+        <i><a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-set-up-with-byte-reading-support-highwatermark">highWaterMark</a></i>
+        set to <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[bufferSize]]" href="#dfn-buffersize" class="internalDFN" data-link-type="idl" id="ref-for-dfn-buffersize-2"><code>[[bufferSize]]</code></a>.
+      </li><li>Set <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-16"><code>[[readable]]</code></a> to <var>stream</var>.
       </li><li>Return <var>stream</var>.
     </li></ol>
 
@@ -1056,7 +1059,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
     steps:
 
     <ol>
-      <li>Set <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-12"><code>[[readable]]</code></a> to <code>null</code>.
+      <li>Set <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-17"><code>[[readable]]</code></a> to <code>null</code>.
       </li><li>
         If <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[writable]]" href="#dfn-writable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-writable-1"><code>[[writable]]</code></a> is <code>null</code> and
         <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[pendingClosePromise]]" href="#dfn-pendingclosepromise" class="internalDFN" data-link-type="idl" id="ref-for-dfn-pendingclosepromise-1"><code>[[pendingClosePromise]]</code></a> is not <code>null</code>, <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#resolve">resolve</a>
@@ -1245,7 +1248,7 @@ writer.releaseLock();</code></pre>
     <ol>
       <li>Set <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[writable]]" href="#dfn-writable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-writable-5"><code>[[writable]]</code></a> to <code>null</code>.
       </li><li>
-        If <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-13"><code>[[readable]]</code></a> is <code>null</code> and
+        If <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-18"><code>[[readable]]</code></a> is <code>null</code> and
         <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[pendingClosePromise]]" href="#dfn-pendingclosepromise" class="internalDFN" data-link-type="idl" id="ref-for-dfn-pendingclosepromise-3"><code>[[pendingClosePromise]]</code></a> is not <code>null</code>, <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#resolve">resolve</a>
         <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[pendingClosePromise]]" href="#dfn-pendingclosepromise" class="internalDFN" data-link-type="idl" id="ref-for-dfn-pendingclosepromise-4"><code>[[pendingClosePromise]]</code></a> with <code>undefined</code>.
     </li></ol>
@@ -1510,13 +1513,13 @@ reader.cancel();
         "<a data-link-type="idl" data-lt="InvalidStateError" data-type="exception" href="https://webidl.spec.whatwg.org/#invalidstateerror"><code>InvalidStateError</code></a>" <a data-link-type="idl" data-lt="DOMException" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMException"><code>DOMException</code></a> and return <var>promise</var>.
       </li><li>
         Let <var data-type="Promise">cancelPromise</var> be the result of invoking
-        <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-cancel">cancel</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-14"><code>[[readable]]</code></a> or <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-resolved-with">a promise resolved with</a> <code>undefined</code> if <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-15"><code>[[readable]]</code></a> is <code>null</code>.
+        <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#readablestream-cancel">cancel</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-19"><code>[[readable]]</code></a> or <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-resolved-with">a promise resolved with</a> <code>undefined</code> if <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-20"><code>[[readable]]</code></a> is <code>null</code>.
       </li><li>
         Let <var data-type="Promise">abortPromise</var> be the result of invoking
         <a data-link-type="dfn" data-type="dfn" href="https://streams.spec.whatwg.org/#writablestream-abort">abort</a> on <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[writable]]" href="#dfn-writable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-writable-6"><code>[[writable]]</code></a> or <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-resolved-with">a promise resolved with</a> <code>undefined</code> if <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[writable]]" href="#dfn-writable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-writable-7"><code>[[writable]]</code></a> is <code>null</code>.
       </li><li>Let <var>pendingClosePromise</var> be <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise">a new promise</a>.
       </li><li>
-        If <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-16"><code>[[readable]]</code></a> and <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[writable]]" href="#dfn-writable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-writable-8"><code>[[writable]]</code></a> are <code>null</code>,
+        If <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[readable]]" href="#dfn-readable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-readable-21"><code>[[readable]]</code></a> and <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[writable]]" href="#dfn-writable" class="internalDFN" data-link-type="idl" id="ref-for-dfn-writable-8"><code>[[writable]]</code></a> are <code>null</code>,
         <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#resolve">resolve</a> <var>pendingClosePromise</var> with <code>undefined</code>.
       </li><li>Set <a data-link-type="dfn" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-lt="[[pendingClosePromise]]" href="#dfn-pendingclosepromise" class="internalDFN" data-link-type="idl" id="ref-for-dfn-pendingclosepromise-5"><code>[[pendingClosePromise]]</code></a> to <var>pendingClosePromise</var>.
       </li><li>
@@ -2154,11 +2157,11 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-    <a href="#ref-for-dfn-readable-1" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> <a href="#ref-for-dfn-readable-2" title="Reference 2">(2)</a> <a href="#ref-for-dfn-readable-3" title="Reference 3">(3)</a> <a href="#ref-for-dfn-readable-4" title="Reference 4">(4)</a> <a href="#ref-for-dfn-readable-5" title="Reference 5">(5)</a> <a href="#ref-for-dfn-readable-6" title="Reference 6">(6)</a> <a href="#ref-for-dfn-readable-7" title="Reference 7">(7)</a> <a href="#ref-for-dfn-readable-8" title="Reference 8">(8)</a> <a href="#ref-for-dfn-readable-9" title="Reference 9">(9)</a> <a href="#ref-for-dfn-readable-10" title="Reference 10">(10)</a> <a href="#ref-for-dfn-readable-11" title="Reference 11">(11)</a> <a href="#ref-for-dfn-readable-12" title="Reference 12">(12)</a> 
+    <a href="#ref-for-dfn-readable-1" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> <a href="#ref-for-dfn-readable-2" title="Reference 2">(2)</a> <a href="#ref-for-dfn-readable-3" title="Reference 3">(3)</a> <a href="#ref-for-dfn-readable-4" title="Reference 4">(4)</a> <a href="#ref-for-dfn-readable-5" title="Reference 5">(5)</a> <a href="#ref-for-dfn-readable-6" title="Reference 6">(6)</a> <a href="#ref-for-dfn-readable-7" title="Reference 7">(7)</a> <a href="#ref-for-dfn-readable-8" title="Reference 8">(8)</a> <a href="#ref-for-dfn-readable-9" title="Reference 9">(9)</a> <a href="#ref-for-dfn-readable-10" title="Reference 10">(10)</a> <a href="#ref-for-dfn-readable-11" title="Reference 11">(11)</a> <a href="#ref-for-dfn-readable-12" title="Reference 12">(12)</a> <a href="#ref-for-dfn-readable-13" title="Reference 13">(13)</a> <a href="#ref-for-dfn-readable-14" title="Reference 14">(14)</a> <a href="#ref-for-dfn-readable-15" title="Reference 15">(15)</a> <a href="#ref-for-dfn-readable-16" title="Reference 16">(16)</a> <a href="#ref-for-dfn-readable-17" title="Reference 17">(17)</a> 
   </li><li>
-    <a href="#ref-for-dfn-readable-13" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> 
+    <a href="#ref-for-dfn-readable-18" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> 
   </li><li>
-    <a href="#ref-for-dfn-readable-14" title="§ 4.9 close() method">§ 4.9 close() method</a> <a href="#ref-for-dfn-readable-15" title="Reference 2">(2)</a> <a href="#ref-for-dfn-readable-16" title="Reference 3">(3)</a> 
+    <a href="#ref-for-dfn-readable-19" title="§ 4.9 close() method">§ 4.9 close() method</a> <a href="#ref-for-dfn-readable-20" title="Reference 2">(2)</a> <a href="#ref-for-dfn-readable-21" title="Reference 3">(3)</a> 
   </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-readfatal" aria-label="Links in this document to definition: [[readFatal]]">
