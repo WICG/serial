@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 32.2.2">
+<meta name="generator" content="ReSpec 32.2.3">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 span.example-title{text-transform:none}
@@ -188,8 +188,8 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     "STREAMS",
     "WebIDL"
   ],
-  "publishISODate": "2022-08-06T00:00:00.000Z",
-  "generatedSubtitle": "Draft Community Group Report 06 August 2022"
+  "publishISODate": "2022-08-30T00:00:00.000Z",
+  "generatedSubtitle": "Draft Community Group Report 30 August 2022"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/cg-draft"></head><body class="h-entry" data-cite="WEBIDL DOM HTML Infra PERMISSIONS-POLICY STREAMS WebIDL"><div class="head">
     <p class="logos"><a class="logo"><img crossorigin="" alt="Serial API logo" height="100" id="spec-logo" src="images/logo_serial.svg" width="100">
@@ -197,7 +197,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <h1 id="title" class="title">Web Serial API</h1> <h2 id="subtitle" class="subtitle">Living document</h2>
     <p id="w3c-state">
       <a href="https://www.w3.org/standards/types#reports">Draft Community Group Report</a>
-      <time class="dt-published" datetime="2022-08-06">06 August 2022</time>
+      <time class="dt-published" datetime="2022-08-30">30 August 2022</time>
     </p>
     <dl>
       
@@ -746,8 +746,8 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
     <section data-dfn-for="SerialOptions" id="serialoptions-dictionary"><div class="header-wrapper"><h4 id="x4-4-1-serialoptions-dictionary"><bdi class="secno">4.4.1 </bdi><dfn data-export="" data-dfn-type="dictionary" id="dom-serialoptions" data-idl="dictionary" data-title="SerialOptions" data-dfn-for="" tabindex="0" aria-haspopup="dialog"><code>SerialOptions</code></dfn> dictionary</h4><a class="self-link" href="#serialoptions-dictionary" aria-label="Permalink for Section 4.4.1"></a></div>
       
 
-      <pre class="idl def" id="webidl-238839431"><span class="idlHeader"><a class="self-link" href="#webidl-238839431">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialoptions" data-title="SerialOptions">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialoptions" id="ref-for-dom-serialoptions-2"><code>SerialOptions</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialoptions-baudrate" data-title="baudRate" data-dfn-for="SerialOptions">
-  required<span class="idlType"> [<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#EnforceRange">EnforceRange</a></span>] <a data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-long">unsigned long</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialoptions-baudrate" id="ref-for-dom-serialoptions-baudrate-1"><code>baudRate</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialoptions-databits" data-title="dataBits" data-dfn-for="SerialOptions">
+      <pre class="idl def" id="webidl-547934505"><span class="idlHeader"><a class="self-link" href="#webidl-547934505">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialoptions" data-title="SerialOptions">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialoptions" id="ref-for-dom-serialoptions-2"><code>SerialOptions</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialoptions-baudrate" data-title="baudRate" data-dfn-for="SerialOptions">
+  [<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#EnforceRange">EnforceRange</a></span>] required<span class="idlType"> <a data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-long">unsigned long</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialoptions-baudrate" id="ref-for-dom-serialoptions-baudrate-1"><code>baudRate</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialoptions-databits" data-title="dataBits" data-dfn-for="SerialOptions">
   [<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#EnforceRange">EnforceRange</a></span>]<span class="idlType"> <a data-type="interface" href="https://webidl.spec.whatwg.org/#idl-octet">octet</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialoptions-databits" id="ref-for-dom-serialoptions-databits-2"><code>dataBits</code></a> = 8;</span><span data-idl="" class="idlMember" id="idl-def-serialoptions-stopbits" data-title="stopBits" data-dfn-for="SerialOptions">
   [<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#EnforceRange">EnforceRange</a></span>]<span class="idlType"> <a data-type="interface" href="https://webidl.spec.whatwg.org/#idl-octet">octet</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialoptions-stopbits" id="ref-for-dom-serialoptions-stopbits-2"><code>stopBits</code></a> = 1;</span><span data-idl="" class="idlMember" id="idl-def-serialoptions-parity" data-title="parity" data-dfn-for="SerialOptions"><span class="idlType">
   <a href="#dom-paritytype" class="internalDFN" data-link-type="idl" id="ref-for-dom-paritytype-1"><code>ParityType</code></a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialoptions-parity" id="ref-for-dom-serialoptions-parity-1"><code>parity</code></a> = "none";</span><span data-idl="" class="idlMember" id="idl-def-serialoptions-buffersize" data-title="bufferSize" data-dfn-for="SerialOptions">
@@ -2328,7 +2328,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialoptions" aria-label="Permalink for definition: SerialOptions. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-238839431">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2342,7 +2342,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialoptions-baudrate" aria-label="Permalink for definition: baudRate. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-238839431">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2354,7 +2354,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialoptions-databits" aria-label="Permalink for definition: dataBits. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-238839431">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2368,7 +2368,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialoptions-stopbits" aria-label="Permalink for definition: stopBits. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-238839431">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2382,7 +2382,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialoptions-parity" aria-label="Permalink for definition: parity. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-238839431">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2394,7 +2394,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialoptions-buffersize" aria-label="Permalink for definition: bufferSize. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-238839431">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2408,7 +2408,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialoptions-flowcontrol" aria-label="Permalink for definition: flowControl. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-238839431">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
