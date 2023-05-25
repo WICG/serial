@@ -9,11 +9,13 @@ Bluetooth Low Energy (BLE) and mesh, active development still exists on
 Bluetooth BR/EDR (AKA "classic"). The Bluetooth classic
 [Serial Port Profile](https://www.bluetooth.com/specifications/specs/serial-port-profile-1-2/)
 (SPP) remains a popular profile, has support from currently shipping hardware,
-and at present has no suitable replacement in BLE.
+and at present has no suitable replacement in BLE. SPP is implemented using the
+lower-level Radio Frequency Communication (RFCOMM) protocol designed to emulate
+RS-232 serial ports.
 
 New hardware is still being introduced with performance characteristics that
-need the latency & bandwidth of SPP. We can address this need by exposing serial
-connections via the Web Serial API.
+need the latency & bandwidth of SPP and RFCOMM. We can address this need by
+exposing serial connections via the Web Serial API.
 
 Some use cases which consistently come up requiring Bluetooth serial support,
 such as:
@@ -21,7 +23,7 @@ such as:
 1. Bluetooth devices that expose a serial interface using the standard Serial
    Port service are supported by some platforms but the experience is
    inconsistent without explicit support from the Web Serial API.
-2. Devices may implement the Serial Port Profile without using the standard
+2. Devices may implement an RFCOMM serial service without using the standard
    Serial Port service. Explicit support from the Web Serial API is needed for
    these devices.
 3. Consumers and device manufacturers that augment existing wired serial devices
@@ -47,8 +49,9 @@ This proposal adds the ability for the browser to:
    standard Serial Port service.
 2. Communicate with the serial interface even if the operating system has not
    created a device node for that port.
-3. Communicate with a non-Serial Port service that exposes a serial interface.
-   See [Non-standard Service Class ID’s](#non-standard-service-class-ids) below.
+3. Communicate with a non-Serial Port service that exposes an RFCOMM serial
+   interface. See [Non-standard Service Class ID’s](#non-standard-service-class-ids)
+   below.
 
 ## Why not enhance Web Bluetooth?
 
@@ -72,7 +75,7 @@ and macOS a pair of filesystem nodes in /dev (i.e. `/dev/cu.*` and
 `/dev/tty.*`).
 
 This proposal will allow support for Bluetooth services that implement the
-Serial Port Profile even if the operating system does not create device nodes
+RFCOMM protocol even if the operating system does not create device nodes
 for Bluetooth serial ports.
 
 ## Non-standard Service Class ID’s
@@ -85,8 +88,8 @@ during the bonding process. On macOS and Windows, two device nodes are created
 for each bonded device that exposes a serial port using the standard Serial Port
 service.
 
-This proposal recommends supporting **any** service that implements the Serial
-Port Profile, regardless of whether the service is a standard Serial Port
+This proposal recommends supporting **any** service that implements an RFCOMM
+serial service, regardless of whether the service is a standard Serial Port
 service or is automatically mapped by the operating system. By default
 `Serial.requestPort()` will only include Bluetooth serial ports exposed by
 devices with a standard Serial Port service. A new service UUID filter option is
@@ -206,10 +209,10 @@ User agents may implement additional settings to mitigate potential phishing
 attacks:
 
 * All [Bluetooth specified services](https://www.bluetooth.com/specifications/specs/)
-  will be blocked. Only vendor defined service class ID’s will be exposed to Web
-  Serial.
+  will be blocked except SPP. Only vendor defined service class ID’s will be
+  exposed to Web Serial.
 * Enterprise policy settings so that concerned systems administrators can
-  disable  non-standard serial port services throughout their organization. This
+  disable non-standard serial port services throughout their organization. This
   default could be overridden for particular trusted origins.
 * Browsers may implement UUID blocklists to protect against exploits targeting
   known hardware vulnerabilities.
