@@ -19,6 +19,7 @@ It is necessary to expose this information so that applications can distinguish 
 The service UUID must be exposed without modification because the value is decided by the manufacturer and applications expect to be able to match against the exact value.
 [Design principles](https://www.w3.org/TR/design-principles/#device-ids) suggests to use a random number in place of unique identifiers.
 This is not possible for service class UUIDs since the exact value of the UUID is known by the application and used to identify supported features on the device.
+Similar to other device identifiers like USB vendor and product IDs, service class UUIDs are not truly unique device identifiers as every instance of a particular device model is expected to have the same service UUIDs.
 
 ## Do features in your specification expose the minimum amount of information necessary to enable their intended uses?
 
@@ -119,4 +120,4 @@ The Web Serial API specification has not yet been updated to handle back/forward
 
 ## What should this questionnaire have asked?
 
-N/A
+I can't think of anything else.
