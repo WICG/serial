@@ -33,7 +33,7 @@
     partial interface Navigator {
       [SameObject] readonly attribute Serial serial;
     };
-  </pre>
+      </pre>
       <h3>
         <dfn>serial</dfn> attribute
       </h3>When getting, the {{Navigator/serial}} attribute always returns the
@@ -48,7 +48,7 @@
     partial interface WorkerNavigator {
       [SameObject] readonly attribute Serial serial;
     };
-  </pre>
+      </pre>
       <h3>
         <dfn>serial</dfn> attribute
       </h3>When getting, the {{WorkerNavigator/serial}} attribute always
@@ -66,37 +66,46 @@
       Promise&lt;sequence&lt;SerialPort&gt;&gt; getPorts();
       [Exposed=Window] Promise&lt;SerialPort&gt; requestPort(optional SerialPortRequestOptions options = {});
     };
-  </pre>
+      </pre>
       <section>
         <h3>
           <dfn>requestPort()</dfn> method
         </h3>
         <aside class="example">
-          When the user first visits a site it will not have permission to
-          access any serial devices. A site must first call
-          {{Serial/requestPort()}}. This call gives the browser the opportunity
-          to prompt the user for which device the site should be allowed to
-          control. If the site is designed to work with a particular device
-          which is always connected via USB the site can provide a filter
-          restricting the devices the user can select to only those that would
-          be compatible. For example, a site which programs Arduino-powered
-          robots could specify a like the following to limit the set of
-          selectable ports to only USB devices with Arduino's USB vendor ID,
+          <p>
+            When the user first visits a site it will not have permission to
+            access any serial devices. A site must first call
+            {{Serial/requestPort()}}. This call gives the browser the
+            opportunity to prompt the user for which device the site should be
+            allowed to control. If the site is designed to work with a
+            particular device which is always connected via USB the site can
+            provide a filter restricting the devices the user can select to
+            only those that would be compatible. For example, a site which
+            programs Arduino-powered robots could specify a like the following
+            to limit the set of selectable ports to only USB devices with
+            Arduino's USB vendor ID,
+          </p>
           <pre class="js">
         const filter = { usbVendorId: 0x2341 };
         const port = await navigator.serial.requestPort({ filters: [filter] });
-      </pre>If on the other hand the site expects to be used with a wide
-variety of devices or devices connected through a USB to serial converter it
-may specify no filter at all and rely on the user to select the appropriate
-device,
+          </pre>
+          <p>
+            If on the other hand the site expects to be used with a wide
+            variety of devices or devices connected through a USB to serial
+            converter it may specify no filter at all and rely on the user to
+            select the appropriate device,
+          </p>
           <pre class="js">
         const port = await navigator.serial.requestPort();
-      </pre>Asking the user to choose a port requires showing a prompt to the
-user and so the site must have [=transient activation=] from something like the
-user clicking a button.
+          </pre>
+          <p>
+            Asking the user to choose a port requires showing a prompt to the
+            user and so the site must have [=transient activation=] from
+            something like the user clicking a button.
+          </p>
           <pre class="html">
         &lt;button id="connect"&gt;Connect&lt;/button&gt;
-      </pre>
+          </pre>
           <pre class="js">
         const connectButton = document.getElementById("connect");
         connectButton.addEventListener('click', () =&gt; {
@@ -107,10 +116,16 @@ user clicking a button.
             // The prompt has been dismissed without selecting a device.
           }
         });
-      </pre>The user may choose not to select a device, in which case the
-{{Promise}} will be rejected with a "{{NotFoundError}}" {{DOMException}} that
-the site must handle.
-        </aside>The {{Serial/requestPort()}} method steps are:
+          </pre>
+          <p>
+            The user may choose not to select a device, in which case the
+            {{Promise}} will be rejected with a "{{NotFoundError}}"
+            {{DOMException}} that the site must handle.
+          </p>
+        </aside>
+        <p>
+          The {{Serial/requestPort()}} method steps are:
+        </p>
         <ol>
           <li>Let |promise:Promise| be [=a new promise=].
           </li>
@@ -173,7 +188,7 @@ the site must handle.
         dictionary SerialPortRequestOptions {
           sequence&lt;SerialPortFilter&gt; filters;
         };
-      </pre>
+          </pre>
           <dl>
             <dt>
               <dfn>filters</dfn> member
@@ -192,7 +207,7 @@ the site must handle.
           unsigned short usbVendorId;
           unsigned short usbProductId;
         };
-      </pre>
+          </pre>
           <dl>
             <dt>
               <dfn>usbVendorId</dfn> member
@@ -253,10 +268,12 @@ the site must handle.
           <dfn>getPorts()</dfn> method
         </h3>
         <aside class="example">
-          If a serial port is provided by a USB device then that device may be
-          connected or disconnected from the system. Once a site has permission
-          to access a port it can receive these events and query for the set of
-          connected devices it currently has access to.
+          <p>
+            If a serial port is provided by a USB device then that device may
+            be connected or disconnected from the system. Once a site has
+            permission to access a port it can receive these events and query
+            for the set of connected devices it currently has access to.
+          </p>
           <pre class="js">
         // Check to see what ports are available when the page loads.
         document.addEventListener('DOMContentLoaded', async () =&gt; {
@@ -273,8 +290,11 @@ the site must handle.
           // Remove |e.target| from the UI. If the device was open the
           // disconnection can also be observed as a stream error.
         });
-      </pre>
-        </aside>The {{Serial/getPorts()}} method steps are:
+          </pre>
+        </aside>
+        <p>
+          The {{Serial/getPorts()}} method steps are:
+        </p>
         <ol>
           <li>Let |promise:Promise| be [=a new promise=].
           </li>
@@ -335,8 +355,11 @@ the site must handle.
       Promise&lt;undefined&gt; close();
       Promise&lt;undefined&gt; forget();
     };
-  </pre>Methods on this interface typically complete asynchronously, queuing
-work on the <dfn>serial port task source</dfn>.
+      </pre>
+      <p>
+        Methods on this interface typically complete asynchronously, queuing
+        work on the <dfn>serial port task source</dfn>.
+      </p>
       <p>
         The [=get the parent=] algorithm for {{SerialPort}} returns the same
         {{Serial}} instance that is returned by the {{SerialPort}}'s [=relevant
@@ -503,7 +526,7 @@ work on the <dfn>serial port task source</dfn>.
         unsigned short usbVendorId;
         unsigned short usbProductId;
       };
-    </pre>
+          </pre>
           <dl>
             <dt>
               <dfn>usbVendorId</dfn> member
@@ -529,18 +552,26 @@ work on the <dfn>serial port task source</dfn>.
           <dfn>open()</dfn> method
         </h3>
         <aside class="example">
-          Before communicating on a serial port it must be opened. Opening the
-          port allows the site to specify the necessary parameters which
-          control how data is transmitted and received. Developers should check
-          the documentation for the device they are connecting to for the
-          appropriate parameters.
+          <p>
+            Before communicating on a serial port it must be opened. Opening
+            the port allows the site to specify the necessary parameters which
+            control how data is transmitted and received. Developers should
+            check the documentation for the device they are connecting to for
+            the appropriate parameters.
+          </p>
           <pre class="js">
         await port.open({ baudRate: /* pick your baud rate */ });
-      </pre>Once {{SerialPort/open()}} has resolved the {{SerialPort/readable}}
-and {{SerialPort/writable}} attributes can be accessed to get the
-{{ReadableStream}} and {{WritableStream}} instances for receiving data from and
-sending data to the connected device.
-        </aside>The {{SerialPort/open()}} method steps are:
+          </pre>
+          <p>
+            Once {{SerialPort/open()}} has resolved the {{SerialPort/readable}}
+            and {{SerialPort/writable}} attributes can be accessed to get the
+            {{ReadableStream}} and {{WritableStream}} instances for receiving
+            data from and sending data to the connected device.
+          </p>
+        </aside>
+        <p>
+          The {{SerialPort/open()}} method steps are:
+        </p>
         <ol>
           <li>Let |promise| be [=a new promise=].
           </li>
@@ -600,7 +631,7 @@ sending data to the connected device.
           [EnforceRange] unsigned long bufferSize = 255;
           FlowControlType flowControl = "none";
         };
-      </pre>
+          </pre>
           <dl>
             <dt>
               <dfn>baudRate</dfn> member
@@ -661,7 +692,7 @@ sending data to the connected device.
             "even",
             "odd"
           };
-        </pre>
+            </pre>
             <dl>
               <dt>
                 <dfn>none</dfn>
@@ -692,7 +723,7 @@ sending data to the connected device.
             "none",
             "hardware"
           };
-        </pre>
+            </pre>
             <dl>
               <dt>
                 <dfn>none</dfn>
@@ -715,8 +746,10 @@ sending data to the connected device.
           <dfn>readable</dfn> attribute
         </h2>
         <aside class="example" id="readable-example">
-          An application receiving data from a serial port will typically use a
-          nested pair of loops like this,
+          <p>
+            An application receiving data from a serial port will typically use
+            a nested pair of loops like this,
+          </p>
           <pre class="js">
         while (port.readable) {
           const reader = port.readable.getReader();
@@ -735,11 +768,14 @@ sending data to the connected device.
             reader.releaseLock();
           }
         }
-      </pre>The inner loop will read chunks of data from the port until an
-error is encountered, at which point the code in the "catch" block will be
-executed. The outer loop handles recoverable errors such as parity check
-failures by opening a new reader. Fatal errors will cause
-{{SerialPort/readable}} to become `null` and the loop to end.
+          </pre>
+          <p>
+            The inner loop will read chunks of data from the port until an
+            error is encountered, at which point the code in the "catch" block
+            will be executed. The outer loop handles recoverable errors such as
+            parity check failures by opening a new reader. Fatal errors will
+            cause {{SerialPort/readable}} to become `null` and the loop to end.
+          </p>
           <p>
             As long as the serial port is open it can continue to produce data
             and the amount of data in each of the chunks returned by
@@ -775,10 +811,14 @@ failures by opening a new reader. Fatal errors will cause
             .pipeThrough(new TextDecoderStream())
             .pipeThrough(new TransformStream(new LineBreakTransformer()))
             .getReader();
-      </pre>Some other ways of encoding message boundaries are to prefix each
-message with its length or to wait a defined length of time before transmitting
-the next message. Implementing a {{TransformStream}} for these types of message
-boundaries is left as an exercise for the reader.
+          </pre>
+          <p>
+            Some other ways of encoding message boundaries are to prefix each
+            message with its length or to wait a defined length of time before
+            transmitting the next message. Implementing a {{TransformStream}}
+            for these types of message boundaries is left as an exercise for
+            the reader.
+          </p>
           <p>
             While the {{ReadableStreamDefaultReader/read()}} method is
             asynchronous and does not block execution, in code using
@@ -803,11 +843,17 @@ boundaries is left as an exercise for the reader.
           reader.releaseLock();
           return result;
         }
-      </pre>This feature of {{ReadableStreamDefaultReader/releaseLock()}} was
-added in <a href=
-"https://github.com/whatwg/streams/pull/1168">whatwg/streams#1168</a> and has
-only recently been implemented by browsers.
-        </aside>The {{SerialPort/readable}} getter steps are:
+          </pre>
+          <p>
+            This feature of {{ReadableStreamDefaultReader/releaseLock()}} was
+            added in <a href=
+            "https://github.com/whatwg/streams/pull/1168">whatwg/streams#1168</a>
+            and has only recently been implemented by browsers.
+          </p>
+        </aside>
+        <p>
+          The {{SerialPort/readable}} getter steps are:
+        </p>
         <ol>
           <li>If [=this=].{{SerialPort/[[readable]]}} is not `null`, return
           [=this=].{{SerialPort/[[readable]]}}.
@@ -981,24 +1027,33 @@ only recently been implemented by browsers.
           <dfn>writable</dfn> attribute
         </h3>
         <aside class="example">
-          To write individual chunks of data to the port a
-          {{WritableStreamDefaultWriter}} can be created and released as
-          necessary. This example uses a `TextEncoder` to encode a
-          {{DOMString}} as the necessary {{Uint8Array}} for transmission.
+          <p>
+            To write individual chunks of data to the port a
+            {{WritableStreamDefaultWriter}} can be created and released as
+            necessary. This example uses a `TextEncoder` to encode a
+            {{DOMString}} as the necessary {{Uint8Array}} for transmission.
+          </p>
           <pre class="js">
         const encoder = new TextEncoder();
         const writer = port.writable.getWriter();
         await writer.write(encoder.encode("PING"));
         writer.releaseLock();
-      </pre>When writing larger chunks it can be important to allow the port to
-apply back pressure so that the serial transmitter does not get too far behind
-sending data generated by the application. The
-{{WritableStreamDefaultWriter/write()}} method returns a {{Promise}} which
-resolves when data has been written. While having some data available in the
-transmit buffer is important to maintain good throughput awaiting this
-{{Promise}} before generating too many chunks of data is a good practice to
-avoid excessive buffering.
-        </aside>The {{SerialPort/writable}} getter steps are:
+          </pre>
+          <p>
+            When writing larger chunks it can be important to allow the port to
+            apply back pressure so that the serial transmitter does not get too
+            far behind sending data generated by the application. The
+            {{WritableStreamDefaultWriter/write()}} method returns a
+            {{Promise}} which resolves when data has been written. While having
+            some data available in the transmit buffer is important to maintain
+            good throughput awaiting this {{Promise}} before generating too
+            many chunks of data is a good practice to avoid excessive
+            buffering.
+          </p>
+        </aside>
+        <p>
+          The {{SerialPort/writable}} getter steps are:
+        </p>
         <ol>
           <li>If [=this=].{{SerialPort/[[writable]]}} is not `null`, return
           [=this=].{{SerialPort/[[writable]]}}.
@@ -1185,17 +1240,22 @@ avoid excessive buffering.
           <dfn>setSignals()</dfn> method
         </h3>
         <aside class="example">
-          Serial ports include a number of additional signals for device
-          detection and flow control which can be queried and set explicitly.
-          As an example, programming some micro-controllers first requires
-          entering a "programming" mode by toggling the "Data Terminal Ready"
-          (or DTR) signal.
+          <p>
+            Serial ports include a number of additional signals for device
+            detection and flow control which can be queried and set explicitly.
+            As an example, programming some micro-controllers first requires
+            entering a "programming" mode by toggling the "Data Terminal Ready"
+            (or DTR) signal.
+          </p>
           <pre class="js">
         await port.setSignals({ dataTerminalReady: false });
         await new Promise(resolve =&gt; setTimeout(resolve, 200));
         await port.setSignals({ dataTerminalReady: true });
-      </pre>
-        </aside>The {{SerialPort/setSignals()}} method steps are:
+          </pre>
+        </aside>
+        <p>
+          The {{SerialPort/setSignals()}} method steps are:
+        </p>
         <ol>
           <li>Let |promise| be [=a new promise=].
           </li>
@@ -1253,7 +1313,7 @@ avoid excessive buffering.
           boolean requestToSend;
           boolean break;
         };
-      </pre>
+          </pre>
           <dl>
             <dt>
               <dfn>dataTerminalReady</dfn>
@@ -1338,7 +1398,7 @@ avoid excessive buffering.
         required boolean ringIndicator;
         required boolean dataSetReady;
       };
-    </pre>
+          </pre>
           <dl>
             <dt>
               <dfn>dataCarrierDetect</dfn> member
@@ -1372,8 +1432,10 @@ avoid excessive buffering.
           <dfn>close()</dfn> method
         </h3>
         <aside class="example">
-          When communication with the port is no longer required it can be
-          closed and the associated resources released by the system.
+          <p>
+            When communication with the port is no longer required it can be
+            closed and the associated resources released by the system.
+          </p>
           <p>
             Calling `port.`{{SerialPort/close()}} implicitly invokes
             `port.`{{SerialPort/readable}}`.`{{ReadableStream/cancel()}} and
@@ -1394,8 +1456,11 @@ avoid excessive buffering.
         writer.write(encoder.encode("A long message that will take..."));
         await writer.close();
         await port.close();
-      </pre>To discard any unsent data the application could instead call
-`writer.`{{WritableStreamDefaultWriter/abort()}}.
+          </pre>
+          <p>
+            To discard any unsent data the application could instead call
+            `writer.`{{WritableStreamDefaultWriter/abort()}}.
+          </p>
           <p>
             If a {{TransformStream}} is being piped to
             `port`.{{SerialPort/writable}} then waiting for the {{Promise}}
@@ -1412,9 +1477,12 @@ avoid excessive buffering.
         writer.close();
         await writableStreamClosed;
         await port.close();
-      </pre>If a loop is being used to read chunks from the port, as is done in
-[[[#readable-example]]], then it must be exited before calling
-`port.`{{SerialPort/close()}}.
+          </pre>
+          <p>
+            If a loop is being used to read chunks from the port, as is done in
+            [[[#readable-example]]], then it must be exited before calling
+            `port.`{{SerialPort/close()}}.
+          </p>
           <pre class="js">
         let keepReading = true;
         let reader;
@@ -1447,12 +1515,16 @@ avoid excessive buffering.
         keepReading = false;
         reader.cancel();
         await closed;
-      </pre>Calling `reader.`{{ReadableStreamGenericReader/cancel()}} causes
-the call to `reader.`{{ReadableStreamDefaultReader/read()}} to return
-immediately, exiting the inner loop and calling
-`reader.`{{ReadableStreamDefaultReader/releaseLock()}}. The outer loop then
-exits because `keepReading` has been set to `false` and with the stream
-unlocked `port.`{{SerialPort/close()}} can complete successfully.
+          </pre>
+          <p>
+            Calling `reader.`{{ReadableStreamGenericReader/cancel()}} causes
+            the call to `reader.`{{ReadableStreamDefaultReader/read()}} to
+            return immediately, exiting the inner loop and calling
+            `reader.`{{ReadableStreamDefaultReader/releaseLock()}}. The outer
+            loop then exits because `keepReading` has been set to `false` and
+            with the stream unlocked `port.`{{SerialPort/close()}} can complete
+            successfully.
+          </p>
           <p>
             While it is also possible to call `port.`{{SerialPort/close()}}
             immediately after awaiting the {{Promise}} returned by
@@ -1462,7 +1534,10 @@ unlocked `port.`{{SerialPort/close()}} can complete successfully.
             error is encountered and `port.`{{SerialPort/readable}} becomes
             `null`.
           </p>
-        </aside>The {{SerialPort/close()}} method steps are:
+        </aside>
+        <p>
+          The {{SerialPort/close()}} method steps are:
+        </p>
         <ol>
           <li>Let |promise| be [=a new promise=].
           </li>
@@ -1542,16 +1617,21 @@ unlocked `port.`{{SerialPort/close()}} can complete successfully.
           <dfn>forget()</dfn> method
         </h3>
         <aside class="example">
-          It is posssible to voluntarily revoke a permission to a serial port
-          that was granted by a user.
+          <p>
+            It is posssible to voluntarily revoke a permission to a serial port
+            that was granted by a user.
+          </p>
           <pre class="js">
         // Request a serial port.
         const port = await navigator.serial.requestPort();
 
         // Then later... revoke permission to the serial port.
         await port.forget();
-      </pre>
-        </aside>The {{SerialPort/forget()}} method steps are:
+          </pre>
+        </aside>
+        <p>
+          The {{SerialPort/forget()}} method steps are:
+        </p>
         <ol>
           <li>If the user agent can't perform this action (e.g. permission was
           granted by administrator policy), return [=a promise resolved with=]
