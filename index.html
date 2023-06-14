@@ -143,10 +143,49 @@ the site must handle.
           </li>
           <li>Run the following steps [=in parallel=]:
             <ol>
+              <li>Let |allPorts:list&lt;SerialPort&gt;| be an empty [=list=].
+              </li>
+              <li>[=list/For each=] available Bluetooth device:
+                <ol>
+                  <li>[=list/For each=] {{BluetoothServiceUUID}}
+                  |uuid:BluetoothServiceUUID| supported by the device:
+                    <ol>
+                      <li>If |uuid| is not a [=blocked Bluetooth service class
+                      UUID=]:
+                        <ol>
+                          <li>If |uuid| is equal to the [=Serial Port Profile
+                          service class ID=], or
+                          </li>
+                          <li>
+                          |options|["{{SerialPortRequestOptions/allowedBluetoothServiceClassIds}}"]
+                          is present and [=list/contains=] |uuid|:
+                            <ol>
+                              <li>Let |port:SerialPort| be a {{SerialPort}}
+                              representing the service on the Bluetooth device.
+                              </li>
+                              <li>[=list/Append=] |port| to |allPorts|.
+                              </li>
+                            </ol>
+                          </li>
+                        </ol>
+                      </li>
+                    </ol>
+                  </li>
+                </ol>
+              </li>
+              <li>[=list/For each=] available non-Bluetooth serial port:
+                <ol>
+                  <li>Let |port:SerialPort| be a {{SerialPort}} representing
+                  the port.
+                  </li>
+                  <li>[=list/Append=] |port| to |allPorts|.
+                  </li>
+                </ol>
+              </li>
               <li>Prompt the user to grant the site access to a serial port by
-              presenting them with a list of available ports that [=match any
-              filter=] in |options|["{{SerialPortRequestOptions/filters}}"] if
-              present and all available ports otherwise.
+              presenting them with a list of ports in |allPorts| that [=match
+              any filter=] in |options|["{{SerialPortRequestOptions/filters}}"]
+              if present and |allPorts| otherwise.
               </li>
               <li>If the user does not choose a port, [=queue a global task=]
               on the [=relevant global object=] of [=this=] using the [=serial
@@ -172,6 +211,7 @@ the site must handle.
           <pre class="idl">
         dictionary SerialPortRequestOptions {
           sequence&lt;SerialPortFilter&gt; filters;
+          sequence&lt;BluetoothServiceUUID&gt; allowedBluetoothServiceClassIds;
         };
       </pre>
           <dl>
@@ -180,6 +220,15 @@ the site must handle.
             </dt>
             <dd>
               Filters for serial ports
+            </dd>
+            <dt>
+              <dfn>allowedBluetoothServiceClassIds</dfn> member
+            </dt>
+            <dd>
+              A list of {{BluetoothServiceUUID}} values representing Bluetooth
+              service class IDs. Bluetooth ports with custom service class IDs
+              are excluded from the list of ports presented to the user unless
+              the service class ID is included in this list.
             </dd>
           </dl>
         </section>
@@ -191,6 +240,7 @@ the site must handle.
         dictionary SerialPortFilter {
           unsigned short usbVendorId;
           unsigned short usbProductId;
+          BluetoothServiceUUID bluetoothServiceClassId;
         };
       </pre>
           <dl>
@@ -206,40 +256,68 @@ the site must handle.
             <dd>
               USB Product ID
             </dd>
+            <dt>
+              <dfn>bluetoothServiceClassId</dfn> member
+            </dt>
+            <dd>
+              Bluetooth service class ID
+            </dd>
           </dl>
           <p>
-            A serial port <dfn data-lt="match the filter">matches the
-            filter</dfn> |filter:SerialPortFilter| if these steps return
-            `true`:
+            A serial port |port:SerialPort| <dfn>matches the filter</dfn>
+            |filter:SerialPortFilter| if these steps return `true`:
           </p>
           <ol>
+            <li>Let |info:SerialPortInfo| be the result of calling
+            |port|.{{SerialPort/getInfo()}}.
+            </li>
+            <li>If |filter|["{{SerialPortFilter/bluetoothServiceClassId}}"] is
+            present:
+              <ol>
+                <li>If the serial port is not part of a Bluetooth device,
+                return `false`.
+                </li>
+                <li>If |filter|["{{SerialPortFilter/bluetoothServiceClassId}}"]
+                is equal to
+                |info|["{{SerialPortInfo/bluetoothServiceClassId}}"], return
+                `true`.
+                </li>
+                <li>Otherwise, return `false`.
+                </li>
+              </ol>
+            </li>
             <li>If |filter|["{{SerialPortFilter/usbVendorId}}"] is not present,
             return `true`.
             </li>
             <li>If the serial port is not part of a USB device, return `false`.
             </li>
-            <li>If the USB device's vendor ID is not equal to
+            <li>If |info|["{{SerialPortInfo/usbVendorId}}"] is not present,
+            return `false`.
+            </li>
+            <li>If |info|["{{SerialPortInfo/usbVendorId}}"] is not equal to
             |filter|["{{SerialPortFilter/usbVendorId}}"], return `false`.
             </li>
             <li>If |filter|["{{SerialPortFilter/usbProductId}}"] is not
             present, return `true`.
             </li>
-            <li>If the USB device's product ID is not equal to
+            <li>If |info|["{{SerialPortInfo/usbProductId}}"] is not present,
+            return `false`.
+            </li>
+            <li>If |info|["{{SerialPortInfo/usbProductId}}"] is not equal to
             |filter|["{{SerialPortFilter/usbProductId}}"], return `false`.
             </li>
             <li>Otherwise, return `true`.
             </li>
           </ol>
           <p>
-            A serial port <dfn data-lt="match any filter">matches any
-            filter</dfn> in a sequence of {{SerialPortFilter}} if these steps
-            return `true`:
+            A serial port |port:SerialPort| <dfn data-lt=
+            "match any filter">matches any filter</dfn> in a sequence of
+            {{SerialPortFilter}} if these steps return `true`:
           </p>
           <ol>
             <li>For each |filter| in the sequence, run these sub-steps:
               <ol>
-                <li>If the serial port [=matches the filter=] |filter|, return
-                `true`.
+                <li>If |port| [=matches the filter=] |filter|, return `true`.
                 </li>
               </ol>
             </li>
@@ -491,6 +569,14 @@ work on the <dfn>serial port task source</dfn>.
               </li>
             </ol>
           </li>
+          <li>If the port is a service on a Bluetooth device, perform the
+          following steps:
+            <ol>
+              <li>Set |info|["{{SerialPortInfo/bluetoothServiceClassId}}"] to
+              the service class UUID of the Bluetooth service.
+              </li>
+            </ol>
+          </li>
           <li>Return |info|.
           </li>
         </ol>
@@ -502,6 +588,7 @@ work on the <dfn>serial port task source</dfn>.
       dictionary SerialPortInfo {
         unsigned short usbVendorId;
         unsigned short usbProductId;
+        BluetoothServiceUUID bluetoothServiceClassId;
       };
     </pre>
           <dl>
@@ -520,6 +607,14 @@ work on the <dfn>serial port task source</dfn>.
               If the port is part of a USB device this member will be the
               16-bit product ID of that device. Otherwise it will be
               `undefined`.
+            </dd>
+            <dt>
+              <dfn>bluetoothServiceClassId</dfn> member
+            </dt>
+            <dd>
+              If the port is a service on a Bluetooth device this member will
+              be a {{BluetoothServiceUUID}} containing the service class UUID.
+              Otherwise it will be `undefined`.
             </dd>
           </dl>
         </section>
@@ -1577,6 +1672,50 @@ unlocked `port.`{{SerialPort/close()}} can complete successfully.
           </li>
         </ol>
       </section>
+    </section>
+    <section id="blocklist">
+      <h2>
+        Blocklist
+      </h2>
+      <p>
+        This specification relies on a blocklist file in the <a href=
+        "https://github.com/WICG/serial">https://github.com/WICG/serial</a>
+        repository to restrict the set of ports a website can access.
+      </p>
+      <p>
+        The result of <dfn>parsing the Bluetooth service class ID
+        blocklist</dfn> at a URL |url| is a [=list=] of {{UUID}} values
+        representing custom service IDs.
+      </p>
+      <p>
+        The <dfn>Serial Port Profile service class ID</dfn> is a
+        {{BluetoothServiceUUID}} with value
+        "`00001101-0000-1000-8000-00805f9b34fb`".
+      </p>
+      <p>
+        A {{BluetoothServiceUUID} |serviceUuid:BluetoothServiceUUID| is a
+        <dfn>blocked Bluetooth service class UUID</dfn> if the following steps
+        return `true`:
+      </p>
+      <ol>
+        <li>Let |uuid:UUID| be the result of calling
+        {{BluetoothUUID}}.{{BluetoothUUID/getService()}} with |serviceUuid|.
+        </li>
+        <li>Let |blocklist:list&lt;BluetoothServiceUUID&gt;| be the result of
+        [=parsing the Bluetooth service class ID blocklist=] at <a href=
+        "https://github.com/WICG/serial/blob/main/blocklist.txt">https://github.com/WICG/serial/blob/main/blocklist.txt</a>.
+        </li>
+        <li>If |blocklist| [=list/contains=] |uuid|, return `true`.
+        </li>
+        <li>If |uuid| [=string/is=] the [=Serial Port Profile service class
+        ID=], return `false`.
+        </li>
+        <li>If |uuid| [=string/ends with=] "`-0000-1000-8000-00805f9b34fb`",
+        return `true`.
+        </li>
+        <li>Otherwise, return `false`.
+        </li>
+      </ol>
     </section>
     <section id="integrations">
       <h2>
