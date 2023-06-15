@@ -145,14 +145,14 @@ the site must handle.
             <ol>
               <li>Let |allPorts:list&lt;SerialPort&gt;| be an empty [=list=].
               </li>
-              <li>[=list/For each=] available Bluetooth device:
+              <li>[=list/For each=] paired Bluetooth device:
                 <ol>
                   <li>[=list/For each=] {{BluetoothServiceUUID}}
                   |uuid:BluetoothServiceUUID| supported by the device:
                     <ol>
                       <li>If |uuid| is not a [=blocked Bluetooth service class
                       UUID=]:
-                        <ol>
+                        <ul>
                           <li>If |uuid| is equal to the [=Serial Port Profile
                           service class ID=], or
                           </li>
@@ -167,7 +167,7 @@ the site must handle.
                               </li>
                             </ol>
                           </li>
-                        </ol>
+                        </ul>
                       </li>
                     </ol>
                   </li>
@@ -290,9 +290,6 @@ the site must handle.
             return `true`.
             </li>
             <li>If the serial port is not part of a USB device, return `false`.
-            </li>
-            <li>If |info|["{{SerialPortInfo/usbVendorId}}"] is not present,
-            return `false`.
             </li>
             <li>If |info|["{{SerialPortInfo/usbVendorId}}"] is not equal to
             |filter|["{{SerialPortFilter/usbVendorId}}"], return `false`.
