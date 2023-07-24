@@ -80,21 +80,27 @@ for Bluetooth serial ports.
 
 ## Non-standard Service Class ID’s
 
-Devices supporting the Serial Port Profile
+RFCOMM communication is ubiquitous in Bluetooth Classic profiles as it is the
+standard transport protocol. The Serial Port Profile is intended as a way for
+devices to advertise that a service supports direct RFCOMM-based communication
+(as opposed to following a procedure in the Bluetooth Specifications). Devices
+supporting the Serial Port Profile
 ([SPP](https://www.bluetooth.com/specifications/specs/serial-port-profile-1-2/))
 often offer this via the standard Serial Port service (UUID: `0x1101`).
 Operating systems may create devices or ports mapped to this Bluetooth service
 during the bonding process. On macOS and Windows, two device nodes are created
 for each bonded device that exposes a serial port using the standard Serial Port
-service.
+service. Additionally, devices may have a non-standard Bluetooth Service built
+on top of SPP that behaves the same way but has a different UUID outside of the
+standard Bluetooth range.
 
-This proposal recommends supporting **any** service that implements an RFCOMM
-serial service, regardless of whether the service is a standard Serial Port
-service or is automatically mapped by the operating system. By default
-`Serial.requestPort()` will only include Bluetooth serial ports exposed by
-devices with a standard Serial Port service. A new service UUID filter option is
-added to `Serial.requestPort()` to enable requesting serial ports for other
-services.
+This proposal recommends supporting Serial Port Profile and **any** non-standard
+services based on Serial Port Profile regardless of whether the service is
+automatically mapped by the operating system. By default `Serial.requestPort()`
+will only include Bluetooth serial ports exposed by devices with a standard
+Serial Port service. A new service UUID filter option as well as a new mechanism
+for explicitly allowing non-standard Bluetooth services is added to
+`Serial.requestPort()` to enable requesting serial ports for other services.
 
 ## Potential specification changes
 
@@ -108,10 +114,25 @@ with no filters parameter, will pass through:
 3. Any unmapped serial port provided by a standard Bluetooth SerialPort service.
    These will appear on operating systems without automatic port mapping.
 
+### Enabling Non-standard Bluetooth Services
+
+While many devices expose SPP-based communication via the SPP service directly,
+others use custom SPP-based services. These devices will present a Service Class
+ID that is not in the standard Bluetooth UUID range. Since SPP is part of the
+Bluetooth specification it is not particularly remarkable that it should exist,
+and is widespread enough to not give away any information about the user or device
+by its mere presence. Non-standard UUIDs, however, may identify the exact device
+model just by their Service Class ID. To mitigate the resulting privacy and
+security concerns, Serial.requestPort() will be extended to require that callers
+explicitly list the UUIDs that they are searching for via a new optional parameter
+representing a list of UUIDs to allow:
+
+1. `allowedBluetoothServiceClassIds`
+
 ### Service Class ID Filtering
 
 Serial ports for services other than the SerialPort service (UUID: `0x1101`)
-can be requested, but will be omitted unless explicitly filtered for.
+can be requested, but will be omitted unless explicitly allowed.
 
 `Serial.requestPort()` will be extended to add new filtering abilities for
 bonded Bluetooth devices with services implementing the SPP profile. At present
@@ -155,12 +176,13 @@ The Web Serial API remembers serial ports granted access by
 method.
 
 Browser implementations may persist Bluetooth serial port access and return them
-to the caller. Note that a persisted Bluetooth serial port may no longer be in
-communications range. Browser implementations may choose to filter out devices
-that cannot be reached, but this is not required. If the browser does not check
-for device availability while resolving `Serial.getPorts()`, `SerialPort.open()`
-will fail just as it would had that Bluetooth device been mapped as a serial
-port by the OS.
+to the caller. User agents may remember permission decisions for particular
+devices based on available device properties.Note that a persisted Bluetooth
+serial port may no longer be in communications range. Browser implementations
+may choose to filter out devices that cannot be reached, but this is not
+required. If the browser does not check for device availability while resolving
+`Serial.getPorts()`, `SerialPort.open()` will fail just as it would had that
+Bluetooth device been mapped as a serial port by the OS.
 
 ### Events
 
