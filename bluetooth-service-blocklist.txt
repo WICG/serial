@@ -1,0 +1,19 @@
+# This file holds a list of Bluetooth custom service UUIDs that websites using
+# the Web Serial API are forbidden from accessing.
+#
+# The format of each line is a 128-bit service class UUID rendered as a
+# hexadecimal string with the format `01234567-89ab-cdef-0123-456789abcdef`.
+#
+# Example:
+#   01234567-89ab-cdef-0123-456789abcdef
+#
+# Generic serial adapters should not be added to this list because they do not
+# provide any metadata about the connected serial device.
+#
+# All service class UUIDs that use the Bluetooth SIG Base UUID (that is, all
+# UUIDs that end in `-0000-1000-8000-00805f9b34fb`) are blocked by default
+# except the Serial Port Profile UUID (`00001101-0000-1000-8000-00805f9b34fb`).
+# Service class UUIDs that use the base UUID should not be added to this list.
+#
+# Additions to this file must be made by pull request. Please keep entries
+# sorted.

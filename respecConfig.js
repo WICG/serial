@@ -18,5 +18,10 @@ var respecConfig = {
   }],
   group: "wicg",
   github: "https://github.com/wicg/serial",
-  xref: ["DOM", "HTML", "Infra", "PERMISSIONS-POLICY", "STREAMS", "WebIDL"]
+  xref: [
+    "DOM", "HTML", "Infra", "PERMISSIONS-POLICY", "STREAMS", "WebIDL",
+    "web-bluetooth"
+  ],
+  // Suppress "Normative reference to BluetoothServiceUUID" warnings
+  lint: { "informative-dfn": false }
 };
