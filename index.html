@@ -187,19 +187,23 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     "Infra",
     "PERMISSIONS-POLICY",
     "STREAMS",
-    "WebIDL"
+    "WebIDL",
+    "web-bluetooth"
   ],
-  "publishISODate": "2023-07-19T00:00:00.000Z",
-  "generatedSubtitle": "Draft Community Group Report 19 July 2023"
+  "lint": {
+    "informative-dfn": false
+  },
+  "publishISODate": "2023-07-25T00:00:00.000Z",
+  "generatedSubtitle": "Draft Community Group Report 25 July 2023"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/cg-draft"></head>
-  <body class="h-entry" data-cite="WEBIDL DOM HTML Infra PERMISSIONS-POLICY STREAMS WebIDL"><div class="head">
+  <body class="h-entry" data-cite="WEBIDL DOM HTML Infra PERMISSIONS-POLICY STREAMS WebIDL web-bluetooth"><div class="head">
     <p class="logos"><a class="logo"><img crossorigin="" alt="Serial API logo" height="100" id="spec-logo" src="images/logo_serial.svg" width="100">
   </a></p>
     <h1 id="title" class="title">Web Serial API</h1> <h2 id="subtitle" class="subtitle">Living document</h2>
     <p id="w3c-state">
       <a href="https://www.w3.org/standards/types#reports">Draft Community Group Report</a>
-      <time class="dt-published" datetime="2023-07-19">19 July 2023</time>
+      <time class="dt-published" datetime="2023-07-25">25 July 2023</time>
     </p>
     <dl>
       
@@ -322,15 +326,17 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
           <span data-export="" data-dfn-type="method" data-idl="operation" data-title="close()" data-dfn-for="SerialPort" data-type="Promise" data-lt="close()" data-local-lt="SerialPort.close|SerialPort.close()|close"><code>close()</code></span> method
         </a></li><li class="tocline"><a class="tocxref" href="#forget-method"><bdi class="secno">4.10 </bdi>
           <span data-export="" data-dfn-type="method" data-idl="operation" data-title="forget()" data-dfn-for="SerialPort" data-type="Promise" data-lt="forget()" data-local-lt="SerialPort.forget|SerialPort.forget()|forget"><code>forget()</code></span> method
-        </a></li></ol></li><li class="tocline"><a class="tocxref" href="#integrations"><bdi class="secno">5. </bdi>
+        </a></li></ol></li><li class="tocline"><a class="tocxref" href="#blocklist"><bdi class="secno">5. </bdi>
+        Blocklist
+      </a></li><li class="tocline"><a class="tocxref" href="#integrations"><bdi class="secno">6. </bdi>
         Integrations
-      </a><ol class="toc"><li class="tocline"><a class="tocxref" href="#permissions-policy"><bdi class="secno">5.1 </bdi>
+      </a><ol class="toc"><li class="tocline"><a class="tocxref" href="#permissions-policy"><bdi class="secno">6.1 </bdi>
           Permissions Policy
-        </a></li></ol></li><li class="tocline"><a class="tocxref" href="#security"><bdi class="secno">6. </bdi>
+        </a></li></ol></li><li class="tocline"><a class="tocxref" href="#security"><bdi class="secno">7. </bdi>
         Security considerations
-      </a></li><li class="tocline"><a class="tocxref" href="#privacy"><bdi class="secno">7. </bdi>
+      </a></li><li class="tocline"><a class="tocxref" href="#privacy"><bdi class="secno">8. </bdi>
         Privacy considerations
-      </a></li><li class="tocline"><a class="tocxref" href="#conformance"><bdi class="secno">8. </bdi>Conformance</a></li><li class="tocline"><a class="tocxref" href="#acknowledgements"><bdi class="secno">A. </bdi>
+      </a></li><li class="tocline"><a class="tocxref" href="#conformance"><bdi class="secno">9. </bdi>Conformance</a></li><li class="tocline"><a class="tocxref" href="#acknowledgements"><bdi class="secno">A. </bdi>
         Acknowledgements
       </a></li><li class="tocline"><a class="tocxref" href="#references"><bdi class="secno">B. </bdi>References</a><ol class="toc"><li class="tocline"><a class="tocxref" href="#normative-references"><bdi class="secno">B.1 </bdi>Normative references</a></li><li class="tocline"><a class="tocxref" href="#informative-references"><bdi class="secno">B.2 </bdi>Informative references</a></li></ol></li></ol></nav>
     <section data-dfn-for="Navigator" id="extensions-to-the-navigator-interface"><div class="header-wrapper"><h2 id="x1-extensions-to-the-navigator-interface"><bdi class="secno">1. </bdi>
@@ -453,15 +459,52 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
           </li>
           <li>Run the following steps <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>:
             <ol>
+              <li>Let <var data-type="list<SerialPort>">allPorts</var> be an empty <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list">list</a>.
+              </li>
+              <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate">For each</a> paired Bluetooth device:
+                <ol>
+                  <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate">For each</a> <a data-link-type="idl" data-lt="BluetoothServiceUUID" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid"><code>BluetoothServiceUUID</code></a>
+                  <var data-type="BluetoothServiceUUID">uuid</var> supported by the device:
+                    <ol>
+                      <li>If <var data-type="BluetoothServiceUUID">uuid</var> is not a <a data-link-type="dfn|abstract-op" href="#dfn-blocked-bluetooth-service-class-uuid" class="internalDFN" id="ref-for-dfn-blocked-bluetooth-service-class-uuid-1">blocked Bluetooth service class UUID</a>:
+                        <ul>
+                          <li>If <var data-type="BluetoothServiceUUID">uuid</var> is equal to the <a data-link-type="dfn|abstract-op" href="#dfn-serial-port-profile-service-class-id" class="internalDFN" id="ref-for-dfn-serial-port-profile-service-class-id-1">Serial Port Profile service class ID</a>, or
+                          </li>
+                          <li>
+                          <var>options</var>["<a data-link-type="idl" href="#dom-serialportrequestoptions-allowedbluetoothserviceclassids" class="internalDFN" id="ref-for-dom-serialportrequestoptions-allowedbluetoothserviceclassids-1"><code>allowedBluetoothServiceClassIds</code></a>"]
+                          is present and <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-contain">contains</a> <var data-type="BluetoothServiceUUID">uuid</var>:
+                            <ol>
+                              <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-3"><code>SerialPort</code></a>
+                              representing the service on the Bluetooth device.
+                              </li>
+                              <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-append">Append</a> <var data-type="SerialPort">port</var> to <var data-type="list<SerialPort>">allPorts</var>.
+                              </li>
+                            </ol>
+                          </li>
+                        </ul>
+                      </li>
+                    </ol>
+                  </li>
+                </ol>
+              </li>
+              <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate">For each</a> available non-Bluetooth serial port:
+                <ol>
+                  <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-4"><code>SerialPort</code></a> representing
+                  the port.
+                  </li>
+                  <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-append">Append</a> <var data-type="SerialPort">port</var> to <var data-type="list<SerialPort>">allPorts</var>.
+                  </li>
+                </ol>
+              </li>
               <li>Prompt the user to grant the site access to a serial port by
-              presenting them with a list of available ports that <a data-link-type="dfn|abstract-op" href="#dfn-match-any-filter" class="internalDFN" id="ref-for-dfn-match-any-filter-1">match any filter</a> in <var>options</var>["<a data-link-type="idl" href="#dom-serialportrequestoptions-filters" class="internalDFN" id="ref-for-dom-serialportrequestoptions-filters-3"><code>filters</code></a>"] if
-              present and all available ports otherwise.
+              presenting them with a list of ports in <var data-type="list<SerialPort>">allPorts</var> that <a data-link-type="dfn|abstract-op" href="#dfn-match-any-filter" class="internalDFN" id="ref-for-dfn-match-any-filter-1">match any filter</a> in <var>options</var>["<a data-link-type="idl" href="#dom-serialportrequestoptions-filters" class="internalDFN" id="ref-for-dom-serialportrequestoptions-filters-3"><code>filters</code></a>"]
+              if present and <var data-type="list<SerialPort>">allPorts</var> otherwise.
               </li>
               <li>If the user does not choose a port, <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task">queue a global task</a>
               on the <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global">relevant global object</a> of <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> using the <a data-link-type="dfn|abstract-op" href="#dfn-serial-port-task-source" class="internalDFN" id="ref-for-dfn-serial-port-task-source-1">serial port task source</a> to <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#reject">reject</a> <var data-type="Promise">promise</var> with a
               "<a data-link-type="idl" data-type="exception" href="https://webidl.spec.whatwg.org/#notfounderror"><code>NotFoundError</code></a>" <a data-link-type="idl" data-lt="DOMException" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMException"><code>DOMException</code></a> and abort these steps.
               </li>
-              <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-3"><code>SerialPort</code></a> representing the
+              <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-5"><code>SerialPort</code></a> representing the
               port chosen by the user.
               </li>
               <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task">Queue a global task</a> on the <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global">relevant global object</a> of
@@ -477,8 +520,9 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
             <dfn data-export="" data-dfn-type="dictionary" id="dom-serialportrequestoptions" data-idl="dictionary" data-title="SerialPortRequestOptions" data-dfn-for="" tabindex="0" aria-haspopup="dialog"><code>SerialPortRequestOptions</code></dfn> dictionary
           </h4><a class="self-link" href="#serialportrequestoptions-dictionary" aria-label="Permalink for Section 3.1.1"></a></div>
           
-          <pre class="idl def" id="webidl-2102735499"><span class="idlHeader"><a class="self-link" href="#webidl-2102735499">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialportrequestoptions" data-title="SerialPortRequestOptions">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialportrequestoptions" id="ref-for-dom-serialportrequestoptions-2"><code>SerialPortRequestOptions</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialportrequestoptions-filters" data-title="filters" data-dfn-for="SerialPortRequestOptions"><span class="idlType">
-  <a data-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence">sequence</a>&lt;<a data-link-type="idl" href="#dom-serialportfilter" class="internalDFN" id="ref-for-dom-serialportfilter-2"><code>SerialPortFilter</code></a>&gt;</span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportrequestoptions-filters" id="ref-for-dom-serialportrequestoptions-filters-4"><code>filters</code></a>;</span>
+          <pre class="idl def" id="webidl-1146248160"><span class="idlHeader"><a class="self-link" href="#webidl-1146248160">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialportrequestoptions" data-title="SerialPortRequestOptions">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialportrequestoptions" id="ref-for-dom-serialportrequestoptions-2"><code>SerialPortRequestOptions</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialportrequestoptions-filters" data-title="filters" data-dfn-for="SerialPortRequestOptions"><span class="idlType">
+  <a data-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence">sequence</a>&lt;<a data-link-type="idl" href="#dom-serialportfilter" class="internalDFN" id="ref-for-dom-serialportfilter-2"><code>SerialPortFilter</code></a>&gt;</span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportrequestoptions-filters" id="ref-for-dom-serialportrequestoptions-filters-4"><code>filters</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialportrequestoptions-allowedbluetoothserviceclassids" data-title="allowedBluetoothServiceClassIds" data-dfn-for="SerialPortRequestOptions"><span class="idlType">
+  <a data-type="dfn" href="https://webidl.spec.whatwg.org/#idl-sequence">sequence</a>&lt;<a data-link-type="idl" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid">BluetoothServiceUUID</a>&gt;</span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportrequestoptions-allowedbluetoothserviceclassids" id="ref-for-dom-serialportrequestoptions-allowedbluetoothserviceclassids-2"><code>allowedBluetoothServiceClassIds</code></a>;</span>
 };</span></code></pre>
           <dl>
             <dt>
@@ -487,15 +531,25 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
             <dd>
               Filters for serial ports
             </dd>
+            <dt>
+              <dfn data-export="" data-dfn-type="dict-member" id="dom-serialportrequestoptions-allowedbluetoothserviceclassids" data-idl="field" data-title="allowedBluetoothServiceClassIds" data-dfn-for="SerialPortRequestOptions" data-type="sequence" tabindex="0" aria-haspopup="dialog"><code>allowedBluetoothServiceClassIds</code></dfn> member
+            </dt>
+            <dd>
+              A list of <a data-link-type="idl" data-lt="BluetoothServiceUUID" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid"><code>BluetoothServiceUUID</code></a> values representing Bluetooth
+              service class IDs. Bluetooth ports with custom service class IDs
+              are excluded from the list of ports presented to the user unless
+              the service class ID is included in this list.
+            </dd>
           </dl>
         </section>
         <section data-dfn-for="SerialPortFilter" id="serialportfilter-dictionary"><div class="header-wrapper"><h4 id="x3-1-2-serialportfilter-dictionary"><bdi class="secno">3.1.2 </bdi>
             <dfn data-export="" data-dfn-type="dictionary" id="dom-serialportfilter" data-idl="dictionary" data-title="SerialPortFilter" data-dfn-for="" tabindex="0" aria-haspopup="dialog"><code>SerialPortFilter</code></dfn> dictionary
           </h4><a class="self-link" href="#serialportfilter-dictionary" aria-label="Permalink for Section 3.1.2"></a></div>
           
-          <pre class="idl def" id="webidl-1205996115"><span class="idlHeader"><a class="self-link" href="#webidl-1205996115">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialportfilter" data-title="SerialPortFilter">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialportfilter" id="ref-for-dom-serialportfilter-3"><code>SerialPortFilter</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialportfilter-usbvendorid" data-title="usbVendorId" data-dfn-for="SerialPortFilter"><span class="idlType">
+          <pre class="idl def" id="webidl-365048672"><span class="idlHeader"><a class="self-link" href="#webidl-365048672">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialportfilter" data-title="SerialPortFilter">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialportfilter" id="ref-for-dom-serialportfilter-3"><code>SerialPortFilter</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialportfilter-usbvendorid" data-title="usbVendorId" data-dfn-for="SerialPortFilter"><span class="idlType">
   <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportfilter-usbvendorid" id="ref-for-dom-serialportfilter-usbvendorid-3"><code>usbVendorId</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialportfilter-usbproductid" data-title="usbProductId" data-dfn-for="SerialPortFilter"><span class="idlType">
-  <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportfilter-usbproductid" id="ref-for-dom-serialportfilter-usbproductid-2"><code>usbProductId</code></a>;</span>
+  <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportfilter-usbproductid" id="ref-for-dom-serialportfilter-usbproductid-2"><code>usbProductId</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialportfilter-bluetoothserviceclassid" data-title="bluetoothServiceClassId" data-dfn-for="SerialPortFilter"><span class="idlType">
+  <a data-link-type="idl" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid">BluetoothServiceUUID</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportfilter-bluetoothserviceclassid" id="ref-for-dom-serialportfilter-bluetoothserviceclassid-1"><code>bluetoothServiceClassId</code></a>;</span>
 };</span></code></pre>
           <dl>
             <dt>
@@ -510,40 +564,61 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
             <dd>
               USB Product ID
             </dd>
+            <dt>
+              <dfn data-export="" data-dfn-type="dict-member" id="dom-serialportfilter-bluetoothserviceclassid" data-idl="field" data-title="bluetoothServiceClassId" data-dfn-for="SerialPortFilter" data-type="BluetoothServiceUUID" tabindex="0" aria-haspopup="dialog"><code>bluetoothServiceClassId</code></dfn> member
+            </dt>
+            <dd>
+              Bluetooth service class ID
+            </dd>
           </dl>
           <p>
-            A serial port <dfn data-lt="match the filter|matches the filter" id="dfn-match-the-filter" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">matches the
-            filter</dfn> <var data-type="SerialPortFilter">filter</var> if these steps return
-            <code>true</code>:
+            A serial port <var data-type="SerialPort">port</var> <dfn id="dfn-matches-the-filter" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">matches the filter</dfn>
+            <var data-type="SerialPortFilter">filter</var> if these steps return <code>true</code>:
           </p>
           <ol>
+            <li>Let <var data-type="SerialPortInfo">info</var> be the result of calling
+            <var data-type="SerialPort">port</var>.<a data-link-type="idl" data-lt="getInfo()" href="#dom-serialport-getinfo" class="internalDFN" id="ref-for-dom-serialport-getinfo-1"><code>getInfo</code></a><code>()</code>.
+            </li>
+            <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-bluetoothserviceclassid" class="internalDFN" id="ref-for-dom-serialportfilter-bluetoothserviceclassid-2"><code>bluetoothServiceClassId</code></a>"] is
+            present:
+              <ol>
+                <li>If the serial port is not part of a Bluetooth device,
+                return <code>false</code>.
+                </li>
+                <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-bluetoothserviceclassid" class="internalDFN" id="ref-for-dom-serialportfilter-bluetoothserviceclassid-3"><code>bluetoothServiceClassId</code></a>"]
+                is equal to
+                <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-bluetoothserviceclassid" class="internalDFN" id="ref-for-dom-serialportinfo-bluetoothserviceclassid-1"><code>bluetoothServiceClassId</code></a>"], return
+                <code>true</code>.
+                </li>
+                <li>Otherwise, return <code>false</code>.
+                </li>
+              </ol>
+            </li>
             <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-4"><code>usbVendorId</code></a>"] is not present,
             return <code>true</code>.
             </li>
             <li>If the serial port is not part of a USB device, return <code>false</code>.
             </li>
-            <li>If the USB device's vendor ID is not equal to
+            <li>If <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-usbvendorid" class="internalDFN" id="ref-for-dom-serialportinfo-usbvendorid-1"><code>usbVendorId</code></a>"] is not equal to
             <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-5"><code>usbVendorId</code></a>"], return <code>false</code>.
             </li>
             <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbproductid" class="internalDFN" id="ref-for-dom-serialportfilter-usbproductid-3"><code>usbProductId</code></a>"] is not
             present, return <code>true</code>.
             </li>
-            <li>If the USB device's product ID is not equal to
+            <li>If <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-usbproductid" class="internalDFN" id="ref-for-dom-serialportinfo-usbproductid-1"><code>usbProductId</code></a>"] is not equal to
             <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbproductid" class="internalDFN" id="ref-for-dom-serialportfilter-usbproductid-4"><code>usbProductId</code></a>"], return <code>false</code>.
             </li>
             <li>Otherwise, return <code>true</code>.
             </li>
           </ol>
           <p>
-            A serial port <dfn data-lt="match any filter|matches any filter" id="dfn-match-any-filter" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">matches any
-            filter</dfn> in a sequence of <a data-link-type="idl" data-lt="SerialPortFilter" href="#dom-serialportfilter" class="internalDFN" id="ref-for-dom-serialportfilter-4"><code>SerialPortFilter</code></a> if these steps
-            return <code>true</code>:
+            A serial port <var data-type="SerialPort">port</var> <dfn data-lt="match any filter|matches any filter" id="dfn-match-any-filter" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">matches any filter</dfn> in a sequence of
+            <a data-link-type="idl" data-lt="SerialPortFilter" href="#dom-serialportfilter" class="internalDFN" id="ref-for-dom-serialportfilter-4"><code>SerialPortFilter</code></a> if these steps return <code>true</code>:
           </p>
           <ol>
             <li>For each <var data-type="SerialPortFilter">filter</var> in the sequence, run these sub-steps:
               <ol>
-                <li>If the serial port <a data-link-type="dfn|abstract-op" href="#dfn-match-the-filter" class="internalDFN" id="ref-for-dfn-match-the-filter-1">matches the filter</a> <var data-type="SerialPortFilter">filter</var>, return
-                <code>true</code>.
+                <li>If <var data-type="SerialPort">port</var> <a data-link-type="dfn|abstract-op" href="#dfn-matches-the-filter" class="internalDFN" id="ref-for-dfn-matches-the-filter-1">matches the filter</a> <var data-type="SerialPortFilter">filter</var>, return <code>true</code>.
                 </li>
               </ol>
             </li>
@@ -596,7 +671,7 @@ navigator.serial.addEventListener(<span class="hljs-string">'disconnect'</span>,
               ports on the system which the user has allowed the site to access
               as the result of a previous call to <a data-link-type="idl" data-lt="requestPort()" href="#dom-serial-requestport" class="internalDFN" id="ref-for-dom-serial-requestport-4"><code>requestPort</code></a><code>()</code>.
               </li>
-              <li>Let <var>ports</var> be the sequence of the <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-4"><code>SerialPort</code></a>s
+              <li>Let <var>ports</var> be the sequence of the <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-6"><code>SerialPort</code></a>s
               representing the ports in <var>availablePorts</var>.
               </li>
               <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-global-task">Queue a global task</a> on the <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global">relevant global object</a> of
@@ -627,13 +702,13 @@ navigator.serial.addEventListener(<span class="hljs-string">'disconnect'</span>,
       </h2><a class="self-link" href="#serialport-interface" aria-label="Permalink for Section 4."></a></div>
       
       <pre class="idl def" id="webidl-1967322147"><span class="idlHeader"><a class="self-link" href="#webidl-1967322147">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-serialport" data-title="SerialPort">[<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed">Exposed</a>=(DedicatedWorker,Window)</span>, <span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext">SecureContext</a></span>]
-interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-serialport" id="ref-for-dom-serialport-5"><code>SerialPort</code></a> : <span class="idlSuperclass"><a data-link-type="idl" data-type="interface" href="https://dom.spec.whatwg.org/#eventtarget">EventTarget</a></span> {<span data-idl="" class="idlAttribute" id="idl-def-serialport-onconnect" data-title="onconnect" data-dfn-for="SerialPort">
+interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-serialport" id="ref-for-dom-serialport-7"><code>SerialPort</code></a> : <span class="idlSuperclass"><a data-link-type="idl" data-type="interface" href="https://dom.spec.whatwg.org/#eventtarget">EventTarget</a></span> {<span data-idl="" class="idlAttribute" id="idl-def-serialport-onconnect" data-title="onconnect" data-dfn-for="SerialPort">
   attribute<span class="idlType"> <a data-link-type="idl" data-type="typedef" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-serialport-onconnect" id="ref-for-dom-serialport-onconnect-1"><code>onconnect</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-serialport-ondisconnect" data-title="ondisconnect" data-dfn-for="SerialPort">
   attribute<span class="idlType"> <a data-link-type="idl" data-type="typedef" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-serialport-ondisconnect" id="ref-for-dom-serialport-ondisconnect-1"><code>ondisconnect</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-serialport-readable" data-title="readable" data-dfn-for="SerialPort">
   readonly attribute<span class="idlType"> <a data-link-type="idl" data-type="interface" href="https://streams.spec.whatwg.org/#readablestream">ReadableStream</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-serialport-readable" id="ref-for-dom-serialport-readable-1"><code>readable</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-serialport-writable" data-title="writable" data-dfn-for="SerialPort">
   readonly attribute<span class="idlType"> <a data-link-type="idl" data-type="interface" href="https://streams.spec.whatwg.org/#writablestream">WritableStream</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-serialport-writable" id="ref-for-dom-serialport-writable-1"><code>writable</code></a>;</span><span data-idl="" class="idlMethod" id="idl-def-serialport-getinfo" data-title="getInfo" data-dfn-for="SerialPort"><span class="idlType">
 
-  <a data-link-type="idl" href="#dom-serialportinfo" class="internalDFN" id="ref-for-dom-serialportinfo-1"><code>SerialPortInfo</code></a></span> <a class="internalDFN idlName" data-link-type="method" href="#dom-serialport-getinfo" id="ref-for-dom-serialport-getinfo-1"><code>getInfo</code></a>();</span><span data-idl="" class="idlMethod" id="idl-def-serialport-open-options" data-title="open" data-dfn-for="SerialPort"><span class="idlType">
+  <a data-link-type="idl" href="#dom-serialportinfo" class="internalDFN" id="ref-for-dom-serialportinfo-1"><code>SerialPortInfo</code></a></span> <a class="internalDFN idlName" data-link-type="method" href="#dom-serialport-getinfo" id="ref-for-dom-serialport-getinfo-2"><code>getInfo</code></a>();</span><span data-idl="" class="idlMethod" id="idl-def-serialport-open-options" data-title="open" data-dfn-for="SerialPort"><span class="idlType">
 
   <a data-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise">Promise</a>&lt;<a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined">undefined</a>&gt;</span> <a class="internalDFN idlName" data-link-type="method" href="#dom-serialport-open" id="ref-for-dom-serialport-open-1"><code>open</code></a>(<span class="idlType"><a data-link-type="idl" href="#dom-serialoptions" class="internalDFN" id="ref-for-dom-serialoptions-1"><code>SerialOptions</code></a></span> <span class="idlParamName">options</span>);</span><span data-idl="" class="idlMethod" id="idl-def-serialport-setsignals-signals" data-title="setSignals" data-dfn-for="SerialPort"><span class="idlType">
   <a data-type="interface" href="https://webidl.spec.whatwg.org/#idl-promise">Promise</a>&lt;<a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined">undefined</a>&gt;</span> <a class="internalDFN idlName" data-link-type="method" href="#dom-serialport-setsignals" id="ref-for-dom-serialport-setsignals-1"><code>setSignals</code></a>(optional<span class="idlType"> <a data-link-type="idl" href="#dom-serialoutputsignals" class="internalDFN" id="ref-for-dom-serialoutputsignals-1"><code>SerialOutputSignals</code></a></span> <span class="idlParamName">signals</span> = {});</span><span data-idl="" class="idlMethod" id="idl-def-serialport-getsignals" data-title="getSignals" data-dfn-for="SerialPort"><span class="idlType">
@@ -646,11 +721,11 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
         work on the <dfn id="dfn-serial-port-task-source" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">serial port task source</dfn>.
       </p>
       <p>
-        The <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://dom.spec.whatwg.org/#get-the-parent">get the parent</a> algorithm for <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-6"><code>SerialPort</code></a> returns the same
-        <a data-link-type="idl" data-lt="Serial" href="#dom-serial" class="internalDFN" id="ref-for-dom-serial-6"><code>Serial</code></a> instance that is returned by the <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-7"><code>SerialPort</code></a>'s <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global">relevant global object</a>'s <a data-link-type="idl" data-lt="Navigator" data-type="interface" href="https://html.spec.whatwg.org/multipage/system-state.html#navigator"><code>Navigator</code></a> object's <a data-link-type="idl" href="#dom-navigator-serial" class="internalDFN" id="ref-for-dom-navigator-serial-3"><code>serial</code></a> getter.
+        The <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://dom.spec.whatwg.org/#get-the-parent">get the parent</a> algorithm for <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-8"><code>SerialPort</code></a> returns the same
+        <a data-link-type="idl" data-lt="Serial" href="#dom-serial" class="internalDFN" id="ref-for-dom-serial-6"><code>Serial</code></a> instance that is returned by the <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-9"><code>SerialPort</code></a>'s <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global">relevant global object</a>'s <a data-link-type="idl" data-lt="Navigator" data-type="interface" href="https://html.spec.whatwg.org/multipage/system-state.html#navigator"><code>Navigator</code></a> object's <a data-link-type="idl" href="#dom-navigator-serial" class="internalDFN" id="ref-for-dom-navigator-serial-3"><code>serial</code></a> getter.
       </p>
       <p>
-        Instances of <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-8"><code>SerialPort</code></a> are created with the internal slots
+        Instances of <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-10"><code>SerialPort</code></a> are created with the internal slots
         described in the following table:
       </p>
       <table class="simple" data-dfn-for="SerialPort">
@@ -673,7 +748,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
             <code>"closed"</code>
           </td>
           <td>
-            Tracks the active state of the <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-9"><code>SerialPort</code></a>
+            Tracks the active state of the <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-11"><code>SerialPort</code></a>
           </td>
         </tr>
         <tr>
@@ -755,7 +830,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
           <a data-link-type="idl" data-lt="requestPort()" href="#dom-serial-requestport" class="internalDFN" id="ref-for-dom-serial-requestport-5"><code>requestPort</code></a><code>()</code>, run the following steps:
         </p>
         <ol>
-          <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-10"><code>SerialPort</code></a> representing the port.
+          <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-12"><code>SerialPort</code></a> representing the port.
           </li>
           <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-fire">Fire an event</a> named <a data-link-type="idl" data-lt="connect" href="#dfn-connect" class="internalDFN" id="ref-for-dfn-connect-2"><code>connect</code></a> at <var data-type="SerialPort">port</var> with its
           <a data-link-type="idl" data-type="attribute" href="https://dom.spec.whatwg.org/#dom-event-bubbles"><code>bubbles</code></a> attribute initialized to <code>true</code>.
@@ -773,7 +848,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
           <a data-link-type="idl" data-lt="requestPort()" href="#dom-serial-requestport" class="internalDFN" id="ref-for-dom-serial-requestport-6"><code>requestPort</code></a><code>()</code>, run the following steps:
         </p>
         <ol>
-          <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-11"><code>SerialPort</code></a> representing the port.
+          <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-13"><code>SerialPort</code></a> representing the port.
           </li>
           <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-fire">Fire an event</a> named <a data-link-type="idl" data-lt="disconnect" href="#dfn-disconnect" class="internalDFN" id="ref-for-dfn-disconnect-2"><code>disconnect</code></a> at <var data-type="SerialPort">port</var> with its
           <a data-link-type="idl" data-type="attribute" href="https://dom.spec.whatwg.org/#dom-event-bubbles"><code>bubbles</code></a> attribute initialized to <code>true</code>.
@@ -783,18 +858,26 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
       <section id="getinfo-method"><div class="header-wrapper"><h3 id="x4-3-getinfo-method"><bdi class="secno">4.3 </bdi>
           <dfn data-export="" data-dfn-type="method" id="dom-serialport-getinfo" data-idl="operation" data-title="getInfo()" data-dfn-for="SerialPort" data-type="SerialPortInfo" data-lt="getInfo()" data-local-lt="SerialPort.getInfo|SerialPort.getInfo()|getInfo" tabindex="0" aria-haspopup="dialog"><code>getInfo()</code></dfn> method
         </h3><a class="self-link" href="#getinfo-method" aria-label="Permalink for Section 4.3"></a></div>
-        The <a data-link-type="idl" data-lt="getInfo()" href="#dom-serialport-getinfo" class="internalDFN" id="ref-for-dom-serialport-getinfo-2"><code>getInfo</code></a><code>()</code> method steps are:
+        The <a data-link-type="idl" data-lt="getInfo()" href="#dom-serialport-getinfo" class="internalDFN" id="ref-for-dom-serialport-getinfo-3"><code>getInfo</code></a><code>()</code> method steps are:
         <ol>
           <li>Let <var data-type="SerialPortInfo">info</var> be a <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#new">new</a> <a data-link-type="idl" data-lt="SerialPortInfo" href="#dom-serialportinfo" class="internalDFN" id="ref-for-dom-serialportinfo-2"><code>SerialPortInfo</code></a>
           dictionary.
           </li>
           <li>If the port is part of a USB device, perform the following steps:
             <ol>
-              <li>Set <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-usbvendorid" class="internalDFN" id="ref-for-dom-serialportinfo-usbvendorid-1"><code>usbVendorId</code></a>"] to the vendor ID
+              <li>Set <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-usbvendorid" class="internalDFN" id="ref-for-dom-serialportinfo-usbvendorid-2"><code>usbVendorId</code></a>"] to the vendor ID
               of the device.
               </li>
-              <li>Set <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-usbproductid" class="internalDFN" id="ref-for-dom-serialportinfo-usbproductid-1"><code>usbProductId</code></a>"] to the product
+              <li>Set <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-usbproductid" class="internalDFN" id="ref-for-dom-serialportinfo-usbproductid-2"><code>usbProductId</code></a>"] to the product
               ID of the device.
+              </li>
+            </ol>
+          </li>
+          <li>If the port is a service on a Bluetooth device, perform the
+          following steps:
+            <ol>
+              <li>Set <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-bluetoothserviceclassid" class="internalDFN" id="ref-for-dom-serialportinfo-bluetoothserviceclassid-2"><code>bluetoothServiceClassId</code></a>"] to
+              the service class UUID of the Bluetooth service.
               </li>
             </ol>
           </li>
@@ -805,9 +888,10 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
             <dfn data-export="" data-dfn-type="dictionary" id="dom-serialportinfo" data-idl="dictionary" data-title="SerialPortInfo" data-dfn-for="" tabindex="0" aria-haspopup="dialog"><code>SerialPortInfo</code></dfn> dictionary
           </h4><a class="self-link" href="#serialportinfo-dictionary" aria-label="Permalink for Section 4.3.1"></a></div>
           
-          <pre class="idl def" id="webidl-1698041821"><span class="idlHeader"><a class="self-link" href="#webidl-1698041821">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialportinfo" data-title="SerialPortInfo">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialportinfo" id="ref-for-dom-serialportinfo-3"><code>SerialPortInfo</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialportinfo-usbvendorid" data-title="usbVendorId" data-dfn-for="SerialPortInfo"><span class="idlType">
-  <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportinfo-usbvendorid" id="ref-for-dom-serialportinfo-usbvendorid-2"><code>usbVendorId</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialportinfo-usbproductid" data-title="usbProductId" data-dfn-for="SerialPortInfo"><span class="idlType">
-  <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportinfo-usbproductid" id="ref-for-dom-serialportinfo-usbproductid-2"><code>usbProductId</code></a>;</span>
+          <pre class="idl def" id="webidl-1960202070"><span class="idlHeader"><a class="self-link" href="#webidl-1960202070">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialportinfo" data-title="SerialPortInfo">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialportinfo" id="ref-for-dom-serialportinfo-3"><code>SerialPortInfo</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialportinfo-usbvendorid" data-title="usbVendorId" data-dfn-for="SerialPortInfo"><span class="idlType">
+  <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportinfo-usbvendorid" id="ref-for-dom-serialportinfo-usbvendorid-3"><code>usbVendorId</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialportinfo-usbproductid" data-title="usbProductId" data-dfn-for="SerialPortInfo"><span class="idlType">
+  <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportinfo-usbproductid" id="ref-for-dom-serialportinfo-usbproductid-3"><code>usbProductId</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialportinfo-bluetoothserviceclassid" data-title="bluetoothServiceClassId" data-dfn-for="SerialPortInfo"><span class="idlType">
+  <a data-link-type="idl" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid">BluetoothServiceUUID</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportinfo-bluetoothserviceclassid" id="ref-for-dom-serialportinfo-bluetoothserviceclassid-3"><code>bluetoothServiceClassId</code></a>;</span>
 };</span></code></pre>
           <dl>
             <dt>
@@ -825,6 +909,14 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
               If the port is part of a USB device this member will be the
               16-bit product ID of that device. Otherwise it will be
               <code>undefined</code>.
+            </dd>
+            <dt>
+              <dfn data-export="" data-dfn-type="dict-member" id="dom-serialportinfo-bluetoothserviceclassid" data-idl="field" data-title="bluetoothServiceClassId" data-dfn-for="SerialPortInfo" data-type="BluetoothServiceUUID" tabindex="0" aria-haspopup="dialog"><code>bluetoothServiceClassId</code></dfn> member
+            </dt>
+            <dd>
+              If the port is a service on a Bluetooth device this member will
+              be a <a data-link-type="idl" data-lt="BluetoothServiceUUID" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid"><code>BluetoothServiceUUID</code></a> containing the service class UUID.
+              Otherwise it will be <code>undefined</code>.
             </dd>
           </dl>
         </section>
@@ -1899,13 +1991,54 @@ reader.cancel();
         </ol>
       </section>
     </section>
-    <section id="integrations"><div class="header-wrapper"><h2 id="x5-integrations"><bdi class="secno">5. </bdi>
-        Integrations
-      </h2><a class="self-link" href="#integrations" aria-label="Permalink for Section 5."></a></div>
+    <section id="blocklist"><div class="header-wrapper"><h2 id="x5-blocklist"><bdi class="secno">5. </bdi>
+        Blocklist
+      </h2><a class="self-link" href="#blocklist" aria-label="Permalink for Section 5."></a></div>
       
-      <section id="permissions-policy"><div class="header-wrapper"><h3 id="x5-1-permissions-policy"><bdi class="secno">5.1 </bdi>
+      <p>
+        This specification relies on a blocklist file in the <a href="https://github.com/WICG/serial">https://github.com/WICG/serial</a>
+        repository to restrict the set of ports a website can access.
+      </p>
+      <p>
+        The result of <dfn id="dfn-parsing-the-bluetooth-service-class-id-blocklist" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">parsing the Bluetooth service class ID
+        blocklist</dfn> at a URL <var>url</var> is a <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list">list</a> of <a data-link-type="idl" data-lt="UUID" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-uuid"><code>UUID</code></a> values
+        representing custom service IDs.
+      </p>
+      <p>
+        The <dfn id="dfn-serial-port-profile-service-class-id" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">Serial Port Profile service class ID</dfn> is a
+        <a data-link-type="idl" data-lt="BluetoothServiceUUID" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid"><code>BluetoothServiceUUID</code></a> with value
+        "<code>00001101-0000-1000-8000-00805f9b34fb</code>".
+      </p>
+      <p>
+        A {{BluetoothServiceUUID} <var data-type="BluetoothServiceUUID">serviceUuid</var> is a
+        <dfn id="dfn-blocked-bluetooth-service-class-uuid" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">blocked Bluetooth service class UUID</dfn> if the following steps
+        return <code>true</code>:
+      </p>
+      <ol>
+        <li>Let <var data-type="UUID">uuid</var> be the result of calling
+        <a data-link-type="idl" data-lt="BluetoothUUID" data-type="interface" href="https://webbluetoothcg.github.io/web-bluetooth/#bluetoothuuid"><code>BluetoothUUID</code></a>.<a data-link-type="idl" data-lt="getService()" data-type="method" href="https://webbluetoothcg.github.io/web-bluetooth/#dom-bluetoothuuid-getservice"><code>getService</code></a><code>()</code> with <var data-type="BluetoothServiceUUID">serviceUuid</var>.
+        </li>
+        <li>Let <var data-type="list<BluetoothServiceUUID>">blocklist</var> be the result of
+        <a data-link-type="dfn|abstract-op" href="#dfn-parsing-the-bluetooth-service-class-id-blocklist" class="internalDFN" id="ref-for-dfn-parsing-the-bluetooth-service-class-id-blocklist-1">parsing the Bluetooth service class ID blocklist</a> at <a href="https://github.com/WICG/serial/blob/main/blocklist.txt">https://github.com/WICG/serial/blob/main/blocklist.txt</a>.
+        </li>
+        <li>If <var data-type="list<BluetoothServiceUUID>">blocklist</var> <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-contain">contains</a> <var data-type="UUID">uuid</var>, return <code>true</code>.
+        </li>
+        <li>If <var data-type="UUID">uuid</var> <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#string-is">is</a> the <a data-link-type="dfn|abstract-op" href="#dfn-serial-port-profile-service-class-id" class="internalDFN" id="ref-for-dfn-serial-port-profile-service-class-id-2">Serial Port Profile service class ID</a>, return <code>false</code>.
+        </li>
+        <li>If <var data-type="UUID">uuid</var> <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#string-ends-with">ends with</a> "<code>-0000-1000-8000-00805f9b34fb</code>",
+        return <code>true</code>.
+        </li>
+        <li>Otherwise, return <code>false</code>.
+        </li>
+      </ol>
+    </section>
+    <section id="integrations"><div class="header-wrapper"><h2 id="x6-integrations"><bdi class="secno">6. </bdi>
+        Integrations
+      </h2><a class="self-link" href="#integrations" aria-label="Permalink for Section 6."></a></div>
+      
+      <section id="permissions-policy"><div class="header-wrapper"><h3 id="x6-1-permissions-policy"><bdi class="secno">6.1 </bdi>
           Permissions Policy
-        </h3><a class="self-link" href="#permissions-policy" aria-label="Permalink for Section 5.1"></a></div>
+        </h3><a class="self-link" href="#permissions-policy" aria-label="Permalink for Section 6.1"></a></div>
         
         <p>
           This specification defines a feature that controls whether the
@@ -1921,9 +2054,9 @@ reader.cancel();
         </p>
       </section>
     </section>
-    <section id="security" class="informative"><div class="header-wrapper"><h2 id="x6-security-considerations"><bdi class="secno">6. </bdi>
+    <section id="security" class="informative"><div class="header-wrapper"><h2 id="x7-security-considerations"><bdi class="secno">7. </bdi>
         Security considerations
-      </h2><a class="self-link" href="#security" aria-label="Permalink for Section 6."></a></div><p><em>This section is non-normative.</em></p>
+      </h2><a class="self-link" href="#security" aria-label="Permalink for Section 7."></a></div><p><em>This section is non-normative.</em></p>
       This API poses similar a security risk to [<cite><a class="bibref" data-link-type="biblio" href="#bib-web-bluetooth" title="Web Bluetooth">WEB-BLUETOOTH</a></cite>] and
       [<cite><a class="bibref" data-link-type="biblio" href="#bib-webusb" title="WebUSB API">WEBUSB</a></cite>] and so lessons from those are applicable here. The primary
       threats are:
@@ -2022,9 +2155,9 @@ reader.cancel();
         connected to the port and so blocking access to these is not possible.
       </p>
     </section>
-    <section id="privacy" class="informative"><div class="header-wrapper"><h2 id="x7-privacy-considerations"><bdi class="secno">7. </bdi>
+    <section id="privacy" class="informative"><div class="header-wrapper"><h2 id="x8-privacy-considerations"><bdi class="secno">8. </bdi>
         Privacy considerations
-      </h2><a class="self-link" href="#privacy" aria-label="Permalink for Section 7."></a></div><p><em>This section is non-normative.</em></p>
+      </h2><a class="self-link" href="#privacy" aria-label="Permalink for Section 8."></a></div><p><em>This section is non-normative.</em></p>
       Serial ports and serial devices contain two kinds of sensitive
       information. When a port is a USB or Bluetooth device there are
       identifiers such as the vendor and product IDs (which identify the make
@@ -2044,7 +2177,7 @@ reader.cancel();
         Commands a page can send to the device after it has been granted access
         a page may also be able to access any of the other sensitive
         information stored by the device. For the reasons mentioned in
-        <a href="#security" data-matched-text="[[[#security]]]" class="sec-ref"><bdi class="secno">6. </bdi>
+        <a href="#security" data-matched-text="[[[#security]]]" class="sec-ref"><bdi class="secno">7. </bdi>
         Security considerations</a> it is impractical and undesirable to attempt to prevent
         a page from accessing this information.
       </p>
@@ -2078,7 +2211,7 @@ reader.cancel();
         contained within.
       </p>
     </section>
-    <section id="conformance"><div class="header-wrapper"><h2 id="x8-conformance"><bdi class="secno">8. </bdi>Conformance</h2><a class="self-link" href="#conformance" aria-label="Permalink for Section 8."></a></div><p>As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.</p></section>
+    <section id="conformance"><div class="header-wrapper"><h2 id="x9-conformance"><bdi class="secno">9. </bdi>Conformance</h2><a class="self-link" href="#conformance" aria-label="Permalink for Section 9."></a></div><p>As well as sections marked as non-normative, all authoring guidelines, diagrams, examples, and notes in this specification are non-normative. Everything else in this specification is normative.</p></section>
     <section class="appendix" id="acknowledgements"><div class="header-wrapper"><h2 id="a-acknowledgements"><bdi class="secno">A. </bdi>
         Acknowledgements
       </h2><a class="self-link" href="#acknowledgements" aria-label="Permalink for Appendix A."></a></div>
@@ -2100,6 +2233,8 @@ reader.cancel();
       <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. Ian Clelland.  W3C. 17 July 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
     </dd><dt id="bib-streams">[STREAMS]</dt><dd>
       <a href="https://streams.spec.whatwg.org/"><cite>Streams Standard</cite></a>. Adam Rice; Domenic Denicola; Mattias Buelens; 吉野剛史 (Takeshi Yoshino).  WHATWG. Living Standard. URL: <a href="https://streams.spec.whatwg.org/">https://streams.spec.whatwg.org/</a>
+    </dd><dt id="bib-web-bluetooth">[WEB-BLUETOOTH]</dt><dd>
+      <a href="https://webbluetoothcg.github.io/web-bluetooth/"><cite>Web Bluetooth</cite></a>. Jeffrey Yasskin.  W3C Web Bluetooth Community Group. Draft Community Group Report. URL: <a href="https://webbluetoothcg.github.io/web-bluetooth/">https://webbluetoothcg.github.io/web-bluetooth/</a>
     </dd><dt id="bib-webidl">[WEBIDL]</dt><dd>
       <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Edgar Chen; Timothy Gu.  WHATWG. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
     </dd></dl>
@@ -2107,8 +2242,6 @@ reader.cancel();
     
     <dl class="bibliography"><dt id="bib-csp3">[CSP3]</dt><dd>
       <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. Mike West; Antonio Sartori.  W3C. 28 June 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
-    </dd><dt id="bib-web-bluetooth">[WEB-BLUETOOTH]</dt><dd>
-      <a href="https://webbluetoothcg.github.io/web-bluetooth/"><cite>Web Bluetooth</cite></a>. Jeffrey Yasskin.  W3C Web Bluetooth Community Group. Draft Community Group Report. URL: <a href="https://webbluetoothcg.github.io/web-bluetooth/">https://webbluetoothcg.github.io/web-bluetooth/</a>
     </dd><dt id="bib-webusb">[WEBUSB]</dt><dd>
       <a href="https://wicg.github.io/webusb/"><cite>WebUSB API</cite></a>.  WICG. cg-draft. URL: <a href="https://wicg.github.io/webusb/">https://wicg.github.io/webusb/</a>
     </dd></dl>
@@ -2129,7 +2262,7 @@ reader.cancel();
     </li><li>
       <a href="#ref-for-dom-navigator-serial-3" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
     </li><li>
-      <a href="#ref-for-dom-navigator-serial-4" title="§ 5.1 Permissions Policy">§ 5.1 Permissions Policy</a> 
+      <a href="#ref-for-dom-navigator-serial-4" title="§ 6.1 Permissions Policy">§ 6.1 Permissions Policy</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-workernavigator-serial" aria-label="Links in this document to definition: serial">
@@ -2189,16 +2322,16 @@ reader.cancel();
     </li><li>
       <a href="#ref-for-dom-serial-requestport-7" title="§ 4.10 forget() method">§ 4.10 forget() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serial-requestport-8" title="§ 6. Security considerations">§ 6. Security considerations</a> <a href="#ref-for-dom-serial-requestport-9" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dom-serial-requestport-8" title="§ 7. Security considerations">§ 7. Security considerations</a> <a href="#ref-for-dom-serial-requestport-9" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dom-serial-requestport-10" title="§ 7. Privacy considerations">§ 7. Privacy considerations</a> 
+      <a href="#ref-for-dom-serial-requestport-10" title="§ 8. Privacy considerations">§ 8. Privacy considerations</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialportrequestoptions" aria-label="Links in this document to definition: SerialPortRequestOptions">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialportrequestoptions" aria-label="Permalink for definition: SerialPortRequestOptions. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-2102735499">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1146248160">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2212,7 +2345,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialportrequestoptions-filters" aria-label="Permalink for definition: filters. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-2102735499">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1146248160">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2222,11 +2355,25 @@ reader.cancel();
       <a href="#ref-for-dom-serialportrequestoptions-filters-4" title="§ 3.1.1 SerialPortRequestOptions dictionary">§ 3.1.1 SerialPortRequestOptions dictionary</a> 
     </li>
   </ul>
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialportrequestoptions-allowedbluetoothserviceclassids" aria-label="Links in this document to definition: allowedBluetoothServiceClassIds">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dom-serialportrequestoptions-allowedbluetoothserviceclassids" aria-label="Permalink for definition: allowedBluetoothServiceClassIds. Activate to close this dialog.">Permalink</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1146248160">IDL</a>
+      </div>
+      <p><b>Referenced in:</b></p>
+      <ul>
+    <li>
+      <a href="#ref-for-dom-serialportrequestoptions-allowedbluetoothserviceclassids-1" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> 
+    </li><li>
+      <a href="#ref-for-dom-serialportrequestoptions-allowedbluetoothserviceclassids-2" title="§ 3.1.1 SerialPortRequestOptions dictionary">§ 3.1.1 SerialPortRequestOptions dictionary</a> 
+    </li>
+  </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialportfilter" aria-label="Links in this document to definition: SerialPortFilter">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialportfilter" aria-label="Permalink for definition: SerialPortFilter. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1205996115">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-365048672">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2242,7 +2389,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialportfilter-usbvendorid" aria-label="Permalink for definition: usbVendorId. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1205996115">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-365048672">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2256,7 +2403,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialportfilter-usbproductid" aria-label="Permalink for definition: usbProductId. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1205996115">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-365048672">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2266,16 +2413,28 @@ reader.cancel();
       <a href="#ref-for-dom-serialportfilter-usbproductid-2" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> <a href="#ref-for-dom-serialportfilter-usbproductid-3" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialportfilter-usbproductid-4" title="Reference 3">(3)</a> 
     </li>
   </ul>
-    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-match-the-filter" aria-label="Links in this document to definition: matches the filter">
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialportfilter-bluetoothserviceclassid" aria-label="Links in this document to definition: bluetoothServiceClassId">
       <span class="caret"></span>
       <div>
-        <a class="self-link" href="#dfn-match-the-filter" aria-label="Permalink for definition: matches the filter. Activate to close this dialog.">Permalink</a>
+        <a class="self-link" href="#dom-serialportfilter-bluetoothserviceclassid" aria-label="Permalink for definition: bluetoothServiceClassId. Activate to close this dialog.">Permalink</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-365048672">IDL</a>
+      </div>
+      <p><b>Referenced in:</b></p>
+      <ul>
+    <li>
+      <a href="#ref-for-dom-serialportfilter-bluetoothserviceclassid-1" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> <a href="#ref-for-dom-serialportfilter-bluetoothserviceclassid-2" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialportfilter-bluetoothserviceclassid-3" title="Reference 3">(3)</a> 
+    </li>
+  </ul>
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-matches-the-filter" aria-label="Links in this document to definition: matches the filter">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dfn-matches-the-filter" aria-label="Permalink for definition: matches the filter. Activate to close this dialog.">Permalink</a>
          
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dfn-match-the-filter-1" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> 
+      <a href="#ref-for-dfn-matches-the-filter-1" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-match-any-filter" aria-label="Links in this document to definition: matches any filter">
@@ -2367,15 +2526,15 @@ reader.cancel();
     <li>
       <a href="#ref-for-dom-serialport-1" title="§ 3. Serial interface">§ 3. Serial interface</a> <a href="#ref-for-dom-serialport-2" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-3" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> 
+      <a href="#ref-for-dom-serialport-3" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> <a href="#ref-for-dom-serialport-4" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-5" title="Reference 3">(3)</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-4" title="§ 3.2 getPorts() method">§ 3.2 getPorts() method</a> 
+      <a href="#ref-for-dom-serialport-6" title="§ 3.2 getPorts() method">§ 3.2 getPorts() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-5" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> <a href="#ref-for-dom-serialport-6" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-7" title="Reference 3">(3)</a> <a href="#ref-for-dom-serialport-8" title="Reference 4">(4)</a> <a href="#ref-for-dom-serialport-9" title="Reference 5">(5)</a> 
+      <a href="#ref-for-dom-serialport-7" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> <a href="#ref-for-dom-serialport-8" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-9" title="Reference 3">(3)</a> <a href="#ref-for-dom-serialport-10" title="Reference 4">(4)</a> <a href="#ref-for-dom-serialport-11" title="Reference 5">(5)</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-10" title="§ 4.1 onconnect attribute">§ 4.1 onconnect attribute</a> 
+      <a href="#ref-for-dom-serialport-12" title="§ 4.1 onconnect attribute">§ 4.1 onconnect attribute</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-11" title="§ 4.2 ondisconnect attribute">§ 4.2 ondisconnect attribute</a> 
+      <a href="#ref-for-dom-serialport-13" title="§ 4.2 ondisconnect attribute">§ 4.2 ondisconnect attribute</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-serial-port-task-source" aria-label="Links in this document to definition: serial port task source">
@@ -2559,16 +2718,18 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialport-getinfo-1" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
+      <a href="#ref-for-dom-serialport-getinfo-1" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-getinfo-2" title="§ 4.3 getInfo() method">§ 4.3 getInfo() method</a> 
+      <a href="#ref-for-dom-serialport-getinfo-2" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
+    </li><li>
+      <a href="#ref-for-dom-serialport-getinfo-3" title="§ 4.3 getInfo() method">§ 4.3 getInfo() method</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialportinfo" aria-label="Links in this document to definition: SerialPortInfo">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialportinfo" aria-label="Permalink for definition: SerialPortInfo. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1698041821">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1960202070">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2584,28 +2745,48 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialportinfo-usbvendorid" aria-label="Permalink for definition: usbVendorId. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1698041821">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1960202070">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialportinfo-usbvendorid-1" title="§ 4.3 getInfo() method">§ 4.3 getInfo() method</a> 
+      <a href="#ref-for-dom-serialportinfo-usbvendorid-1" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> 
     </li><li>
-      <a href="#ref-for-dom-serialportinfo-usbvendorid-2" title="§ 4.3.1 SerialPortInfo dictionary">§ 4.3.1 SerialPortInfo dictionary</a> 
+      <a href="#ref-for-dom-serialportinfo-usbvendorid-2" title="§ 4.3 getInfo() method">§ 4.3 getInfo() method</a> 
+    </li><li>
+      <a href="#ref-for-dom-serialportinfo-usbvendorid-3" title="§ 4.3.1 SerialPortInfo dictionary">§ 4.3.1 SerialPortInfo dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialportinfo-usbproductid" aria-label="Links in this document to definition: usbProductId">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialportinfo-usbproductid" aria-label="Permalink for definition: usbProductId. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1698041821">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1960202070">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialportinfo-usbproductid-1" title="§ 4.3 getInfo() method">§ 4.3 getInfo() method</a> 
+      <a href="#ref-for-dom-serialportinfo-usbproductid-1" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> 
     </li><li>
-      <a href="#ref-for-dom-serialportinfo-usbproductid-2" title="§ 4.3.1 SerialPortInfo dictionary">§ 4.3.1 SerialPortInfo dictionary</a> 
+      <a href="#ref-for-dom-serialportinfo-usbproductid-2" title="§ 4.3 getInfo() method">§ 4.3 getInfo() method</a> 
+    </li><li>
+      <a href="#ref-for-dom-serialportinfo-usbproductid-3" title="§ 4.3.1 SerialPortInfo dictionary">§ 4.3.1 SerialPortInfo dictionary</a> 
+    </li>
+  </ul>
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialportinfo-bluetoothserviceclassid" aria-label="Links in this document to definition: bluetoothServiceClassId">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dom-serialportinfo-bluetoothserviceclassid" aria-label="Permalink for definition: bluetoothServiceClassId. Activate to close this dialog.">Permalink</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1960202070">IDL</a>
+      </div>
+      <p><b>Referenced in:</b></p>
+      <ul>
+    <li>
+      <a href="#ref-for-dom-serialportinfo-bluetoothserviceclassid-1" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> 
+    </li><li>
+      <a href="#ref-for-dom-serialportinfo-bluetoothserviceclassid-2" title="§ 4.3 getInfo() method">§ 4.3 getInfo() method</a> 
+    </li><li>
+      <a href="#ref-for-dom-serialportinfo-bluetoothserviceclassid-3" title="§ 4.3.1 SerialPortInfo dictionary">§ 4.3.1 SerialPortInfo dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialport-open" aria-label="Links in this document to definition: open()">
@@ -3044,6 +3225,44 @@ reader.cancel();
       <a href="#ref-for-dom-serialport-forget-1" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
     </li><li>
       <a href="#ref-for-dom-serialport-forget-2" title="§ 4.10 forget() method">§ 4.10 forget() method</a> 
+    </li>
+  </ul>
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-parsing-the-bluetooth-service-class-id-blocklist" aria-label="Links in this document to definition: parsing the Bluetooth service class ID blocklist">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dfn-parsing-the-bluetooth-service-class-id-blocklist" aria-label="Permalink for definition: parsing the Bluetooth service class ID blocklist. Activate to close this dialog.">Permalink</a>
+         
+      </div>
+      <p><b>Referenced in:</b></p>
+      <ul>
+    <li>
+      <a href="#ref-for-dfn-parsing-the-bluetooth-service-class-id-blocklist-1" title="§ 5. Blocklist">§ 5. Blocklist</a> 
+    </li>
+  </ul>
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-serial-port-profile-service-class-id" aria-label="Links in this document to definition: Serial Port Profile service class ID">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dfn-serial-port-profile-service-class-id" aria-label="Permalink for definition: Serial Port Profile service class ID. Activate to close this dialog.">Permalink</a>
+         
+      </div>
+      <p><b>Referenced in:</b></p>
+      <ul>
+    <li>
+      <a href="#ref-for-dfn-serial-port-profile-service-class-id-1" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> 
+    </li><li>
+      <a href="#ref-for-dfn-serial-port-profile-service-class-id-2" title="§ 5. Blocklist">§ 5. Blocklist</a> 
+    </li>
+  </ul>
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-blocked-bluetooth-service-class-uuid" aria-label="Links in this document to definition: blocked Bluetooth service class UUID">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dfn-blocked-bluetooth-service-class-uuid" aria-label="Permalink for definition: blocked Bluetooth service class UUID. Activate to close this dialog.">Permalink</a>
+         
+      </div>
+      <p><b>Referenced in:</b></p>
+      <ul>
+    <li>
+      <a href="#ref-for-dfn-blocked-bluetooth-service-class-uuid-1" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-serial" aria-label="Links in this document to definition: serial">
