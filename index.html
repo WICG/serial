@@ -144,6 +144,19 @@
           |options|["{{SerialPortRequestOptions/filters}}"] run the following
           steps:
             <ol>
+              <li>If |filter|["{{SerialPortFilter/bluetoothServiceClassId}}"] is
+              present:
+                <ol>
+                  <li>
+                    If |filter|["{{SerialPortFilter/usbVendorId}}"] is present,
+                    [=reject=] |promise| with a {{TypeError}} and return |promise|.
+                  </li>
+                  <li>
+                    If |filter|["{{SerialPortFilter/usbProductId}}"] is present,
+                    [=reject=] |promise| with a {{TypeError}} and return |promise|.
+                  </li>
+                </ol>
+              </li>
               <li>If |filter|["{{SerialPortFilter/usbVendorId}}"] is not
               present, [=reject=] |promise| with a {{TypeError}} and return
               |promise|.
