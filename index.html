@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 34.1.5">
+<meta name="generator" content="ReSpec 34.1.8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 span.example-title{text-transform:none}
@@ -193,8 +193,8 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "lint": {
     "informative-dfn": false
   },
-  "publishISODate": "2023-07-25T00:00:00.000Z",
-  "generatedSubtitle": "Draft Community Group Report 25 July 2023"
+  "publishISODate": "2023-09-29T00:00:00.000Z",
+  "generatedSubtitle": "Draft Community Group Report 29 September 2023"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/cg-draft"></head>
   <body class="h-entry" data-cite="WEBIDL DOM HTML Infra PERMISSIONS-POLICY STREAMS WebIDL web-bluetooth"><div class="head">
@@ -203,7 +203,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <h1 id="title" class="title">Web Serial API</h1> <h2 id="subtitle" class="subtitle">Living document</h2>
     <p id="w3c-state">
       <a href="https://www.w3.org/standards/types#reports">Draft Community Group Report</a>
-      <time class="dt-published" datetime="2023-07-25">25 July 2023</time>
+      <time class="dt-published" datetime="2023-09-29">29 September 2023</time>
     </p>
     <dl>
       
@@ -445,14 +445,27 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
           <var>options</var>["<a data-link-type="idl" href="#dom-serialportrequestoptions-filters" class="internalDFN" id="ref-for-dom-serialportrequestoptions-filters-2"><code>filters</code></a>"] run the following
           steps:
             <ol>
-              <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-1"><code>usbVendorId</code></a>"] is not
+              <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-bluetoothserviceclassid" class="internalDFN" id="ref-for-dom-serialportfilter-bluetoothserviceclassid-1"><code>bluetoothServiceClassId</code></a>"] is
+              present:
+                <ol>
+                  <li>
+                    If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-1"><code>usbVendorId</code></a>"] is present,
+                    <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#reject">reject</a> <var data-type="Promise">promise</var> with a <a data-link-type="idl" data-lt="TypeError" data-type="exception" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror"><code>TypeError</code></a> and return <var data-type="Promise">promise</var>.
+                  </li>
+                  <li>
+                    If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbproductid" class="internalDFN" id="ref-for-dom-serialportfilter-usbproductid-1"><code>usbProductId</code></a>"] is present,
+                    <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#reject">reject</a> <var data-type="Promise">promise</var> with a <a data-link-type="idl" data-lt="TypeError" data-type="exception" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror"><code>TypeError</code></a> and return <var data-type="Promise">promise</var>.
+                  </li>
+                </ol>
+              </li>
+              <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-2"><code>usbVendorId</code></a>"] is not
               present, <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#reject">reject</a> <var data-type="Promise">promise</var> with a <a data-link-type="idl" data-lt="TypeError" data-type="exception" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror"><code>TypeError</code></a> and return
               <var data-type="Promise">promise</var>.
                 <div class="note" role="note" id="issue-container-generatedID"><div role="heading" class="note-title marker" id="h-note" aria-level="4"><span>Note</span></div><div class="">
                   This check implements the combined rule that a
                   <a data-link-type="idl" data-lt="SerialPortFilter" href="#dom-serialportfilter" class="internalDFN" id="ref-for-dom-serialportfilter-1"><code>SerialPortFilter</code></a> cannot be empty and if
-                  <a data-link-type="idl" href="#dom-serialportfilter-usbproductid" class="internalDFN" id="ref-for-dom-serialportfilter-usbproductid-1"><code>usbProductId</code></a> is specified then
-                  <a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-2"><code>usbVendorId</code></a> must also be specified.
+                  <a data-link-type="idl" href="#dom-serialportfilter-usbproductid" class="internalDFN" id="ref-for-dom-serialportfilter-usbproductid-2"><code>usbProductId</code></a> is specified then
+                  <a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-3"><code>usbVendorId</code></a> must also be specified.
                 </div></div>
               </li>
             </ol>
@@ -547,9 +560,9 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
           </h4><a class="self-link" href="#serialportfilter-dictionary" aria-label="Permalink for Section 3.1.2"></a></div>
           
           <pre class="idl def" id="webidl-365048672"><span class="idlHeader"><a class="self-link" href="#webidl-365048672">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialportfilter" data-title="SerialPortFilter">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialportfilter" id="ref-for-dom-serialportfilter-3"><code>SerialPortFilter</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialportfilter-usbvendorid" data-title="usbVendorId" data-dfn-for="SerialPortFilter"><span class="idlType">
-  <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportfilter-usbvendorid" id="ref-for-dom-serialportfilter-usbvendorid-3"><code>usbVendorId</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialportfilter-usbproductid" data-title="usbProductId" data-dfn-for="SerialPortFilter"><span class="idlType">
-  <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportfilter-usbproductid" id="ref-for-dom-serialportfilter-usbproductid-2"><code>usbProductId</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialportfilter-bluetoothserviceclassid" data-title="bluetoothServiceClassId" data-dfn-for="SerialPortFilter"><span class="idlType">
-  <a data-link-type="idl" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid">BluetoothServiceUUID</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportfilter-bluetoothserviceclassid" id="ref-for-dom-serialportfilter-bluetoothserviceclassid-1"><code>bluetoothServiceClassId</code></a>;</span>
+  <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportfilter-usbvendorid" id="ref-for-dom-serialportfilter-usbvendorid-4"><code>usbVendorId</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialportfilter-usbproductid" data-title="usbProductId" data-dfn-for="SerialPortFilter"><span class="idlType">
+  <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short">unsigned short</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportfilter-usbproductid" id="ref-for-dom-serialportfilter-usbproductid-3"><code>usbProductId</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialportfilter-bluetoothserviceclassid" data-title="bluetoothServiceClassId" data-dfn-for="SerialPortFilter"><span class="idlType">
+  <a data-link-type="idl" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid">BluetoothServiceUUID</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialportfilter-bluetoothserviceclassid" id="ref-for-dom-serialportfilter-bluetoothserviceclassid-2"><code>bluetoothServiceClassId</code></a>;</span>
 };</span></code></pre>
           <dl>
             <dt>
@@ -579,13 +592,13 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
             <li>Let <var data-type="SerialPortInfo">info</var> be the result of calling
             <var data-type="SerialPort">port</var>.<a data-link-type="idl" data-lt="getInfo()" href="#dom-serialport-getinfo" class="internalDFN" id="ref-for-dom-serialport-getinfo-1"><code>getInfo</code></a><code>()</code>.
             </li>
-            <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-bluetoothserviceclassid" class="internalDFN" id="ref-for-dom-serialportfilter-bluetoothserviceclassid-2"><code>bluetoothServiceClassId</code></a>"] is
+            <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-bluetoothserviceclassid" class="internalDFN" id="ref-for-dom-serialportfilter-bluetoothserviceclassid-3"><code>bluetoothServiceClassId</code></a>"] is
             present:
               <ol>
                 <li>If the serial port is not part of a Bluetooth device,
                 return <code>false</code>.
                 </li>
-                <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-bluetoothserviceclassid" class="internalDFN" id="ref-for-dom-serialportfilter-bluetoothserviceclassid-3"><code>bluetoothServiceClassId</code></a>"]
+                <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-bluetoothserviceclassid" class="internalDFN" id="ref-for-dom-serialportfilter-bluetoothserviceclassid-4"><code>bluetoothServiceClassId</code></a>"]
                 is equal to
                 <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-bluetoothserviceclassid" class="internalDFN" id="ref-for-dom-serialportinfo-bluetoothserviceclassid-1"><code>bluetoothServiceClassId</code></a>"], return
                 <code>true</code>.
@@ -594,19 +607,19 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
                 </li>
               </ol>
             </li>
-            <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-4"><code>usbVendorId</code></a>"] is not present,
+            <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-5"><code>usbVendorId</code></a>"] is not present,
             return <code>true</code>.
             </li>
             <li>If the serial port is not part of a USB device, return <code>false</code>.
             </li>
             <li>If <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-usbvendorid" class="internalDFN" id="ref-for-dom-serialportinfo-usbvendorid-1"><code>usbVendorId</code></a>"] is not equal to
-            <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-5"><code>usbVendorId</code></a>"], return <code>false</code>.
+            <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-6"><code>usbVendorId</code></a>"], return <code>false</code>.
             </li>
-            <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbproductid" class="internalDFN" id="ref-for-dom-serialportfilter-usbproductid-3"><code>usbProductId</code></a>"] is not
+            <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbproductid" class="internalDFN" id="ref-for-dom-serialportfilter-usbproductid-4"><code>usbProductId</code></a>"] is not
             present, return <code>true</code>.
             </li>
             <li>If <var data-type="SerialPortInfo">info</var>["<a data-link-type="idl" href="#dom-serialportinfo-usbproductid" class="internalDFN" id="ref-for-dom-serialportinfo-usbproductid-1"><code>usbProductId</code></a>"] is not equal to
-            <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbproductid" class="internalDFN" id="ref-for-dom-serialportfilter-usbproductid-4"><code>usbProductId</code></a>"], return <code>false</code>.
+            <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbproductid" class="internalDFN" id="ref-for-dom-serialportfilter-usbproductid-5"><code>usbProductId</code></a>"], return <code>false</code>.
             </li>
             <li>Otherwise, return <code>true</code>.
             </li>
@@ -2217,7 +2230,7 @@ reader.cancel();
       </h2><a class="self-link" href="#acknowledgements" aria-label="Permalink for Appendix A."></a></div>
       The following people contributed to the development of this
       document.
-      <ul id="gh-contributors"><li><a href="https://github.com/spookyvision">Anatol Ulrich</a></li><li><a href="https://github.com/cmumford">Chris Mumford</a></li><li><a href="https://github.com/Clemenard">Clément Menard</a></li><li><a href="https://github.com/domenic">Domenic Denicola</a></li><li><a href="https://github.com/dontcallmedom">Dominique Hazael-Massieux</a></li><li><a href="https://github.com/floitsch">Florian Loitsch</a></li><li><a href="https://github.com/Elchi3">Florian Scholz</a></li><li><a href="https://github.com/reconbot">Francis Gulotta</a></li><li><a href="https://github.com/beaufortfrancois">François Beaufort</a></li><li><a href="https://github.com/Keavon">Keavon Chambers</a></li><li><a href="https://github.com/kenchris">Kenneth Rohde Christiansen</a></li><li><a href="https://github.com/marcoscaceres">Marcos Cáceres</a></li><li><a href="https://github.com/marcoscaceres-remote">marcoscaceres-remote</a></li><li><a href="https://github.com/nondebug">Matt Reynolds</a></li><li><a href="https://github.com/MichaelKohler">Michael Kohler</a></li><li><a href="https://github.com/Ms2ger">Ms2ger</a></li><li><a href="https://github.com/reillyeon">Reilly Grant</a></li><li><a href="https://github.com/rwaldron">Rick Waldron</a></li><li><a href="https://github.com/ngsankha">Sankha Narayan Guria</a></li><li><a href="https://github.com/zcorpan">Simon Pieters</a></li><li><a href="https://github.com/noopkat">Suz Hinton</a></li><li><a href="https://github.com/travisleithead">Travis Leithead</a></li><li><a href="https://github.com/scheib">Vincent Scheib</a></li></ul>
+      <ul id="gh-contributors"><li><a href="https://github.com/spookyvision">Anatol Ulrich</a></li><li><a href="https://github.com/cmumford">Chris Mumford</a></li><li><a href="https://github.com/Clemenard">Clément Menard</a></li><li><a href="https://github.com/domenic">Domenic Denicola</a></li><li><a href="https://github.com/dontcallmedom">Dominique Hazael-Massieux</a></li><li><a href="https://github.com/floitsch">Florian Loitsch</a></li><li><a href="https://github.com/Elchi3">Florian Scholz</a></li><li><a href="https://github.com/reconbot">Francis Gulotta</a></li><li><a href="https://github.com/beaufortfrancois">François Beaufort</a></li><li><a href="https://github.com/Keavon">Keavon Chambers</a></li><li><a href="https://github.com/kenchris">Kenneth Rohde Christiansen</a></li><li><a href="https://github.com/marcoscaceres">Marcos Cáceres</a></li><li><a href="https://github.com/marcoscaceres-remote">marcoscaceres-remote</a></li><li><a href="https://github.com/nondebug">Matt Reynolds</a></li><li><a href="https://github.com/melhuishj">melhuishj</a></li><li><a href="https://github.com/MichaelKohler">Michael Kohler</a></li><li><a href="https://github.com/Ms2ger">Ms2ger</a></li><li><a href="https://github.com/reillyeon">Reilly Grant</a></li><li><a href="https://github.com/rwaldron">Rick Waldron</a></li><li><a href="https://github.com/ngsankha">Sankha Narayan Guria</a></li><li><a href="https://github.com/zcorpan">Simon Pieters</a></li><li><a href="https://github.com/noopkat">Suz Hinton</a></li><li><a href="https://github.com/travisleithead">Travis Leithead</a></li><li><a href="https://github.com/scheib">Vincent Scheib</a></li></ul>
     </section>
   
 
@@ -2230,7 +2243,7 @@ reader.cancel();
     </dd><dt id="bib-infra">[infra]</dt><dd>
       <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Anne van Kesteren; Domenic Denicola.  WHATWG. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
     </dd><dt id="bib-permissions-policy">[PERMISSIONS-POLICY]</dt><dd>
-      <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. Ian Clelland.  W3C. 17 July 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
+      <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. Ian Clelland.  W3C. 12 September 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
     </dd><dt id="bib-streams">[STREAMS]</dt><dd>
       <a href="https://streams.spec.whatwg.org/"><cite>Streams Standard</cite></a>. Adam Rice; Domenic Denicola; Mattias Buelens; 吉野剛史 (Takeshi Yoshino).  WHATWG. Living Standard. URL: <a href="https://streams.spec.whatwg.org/">https://streams.spec.whatwg.org/</a>
     </dd><dt id="bib-web-bluetooth">[WEB-BLUETOOTH]</dt><dd>
@@ -2241,7 +2254,7 @@ reader.cancel();
   </section><section id="informative-references"><div class="header-wrapper"><h3 id="b-2-informative-references"><bdi class="secno">B.2 </bdi>Informative references</h3><a class="self-link" href="#informative-references" aria-label="Permalink for Appendix B.2"></a></div>
     
     <dl class="bibliography"><dt id="bib-csp3">[CSP3]</dt><dd>
-      <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. Mike West; Antonio Sartori.  W3C. 28 June 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+      <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. Mike West; Antonio Sartori.  W3C. 20 September 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
     </dd><dt id="bib-webusb">[WEBUSB]</dt><dd>
       <a href="https://wicg.github.io/webusb/"><cite>WebUSB API</cite></a>.  WICG. cg-draft. URL: <a href="https://wicg.github.io/webusb/">https://wicg.github.io/webusb/</a>
     </dd></dl>
@@ -2394,9 +2407,9 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialportfilter-usbvendorid-1" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> <a href="#ref-for-dom-serialportfilter-usbvendorid-2" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dom-serialportfilter-usbvendorid-1" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> <a href="#ref-for-dom-serialportfilter-usbvendorid-2" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialportfilter-usbvendorid-3" title="Reference 3">(3)</a> 
     </li><li>
-      <a href="#ref-for-dom-serialportfilter-usbvendorid-3" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> <a href="#ref-for-dom-serialportfilter-usbvendorid-4" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialportfilter-usbvendorid-5" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dom-serialportfilter-usbvendorid-4" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> <a href="#ref-for-dom-serialportfilter-usbvendorid-5" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialportfilter-usbvendorid-6" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialportfilter-usbproductid" aria-label="Links in this document to definition: usbProductId">
@@ -2408,9 +2421,9 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialportfilter-usbproductid-1" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> 
+      <a href="#ref-for-dom-serialportfilter-usbproductid-1" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> <a href="#ref-for-dom-serialportfilter-usbproductid-2" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dom-serialportfilter-usbproductid-2" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> <a href="#ref-for-dom-serialportfilter-usbproductid-3" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialportfilter-usbproductid-4" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dom-serialportfilter-usbproductid-3" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> <a href="#ref-for-dom-serialportfilter-usbproductid-4" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialportfilter-usbproductid-5" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialportfilter-bluetoothserviceclassid" aria-label="Links in this document to definition: bluetoothServiceClassId">
@@ -2422,7 +2435,9 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialportfilter-bluetoothserviceclassid-1" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> <a href="#ref-for-dom-serialportfilter-bluetoothserviceclassid-2" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialportfilter-bluetoothserviceclassid-3" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dom-serialportfilter-bluetoothserviceclassid-1" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> 
+    </li><li>
+      <a href="#ref-for-dom-serialportfilter-bluetoothserviceclassid-2" title="§ 3.1.2 SerialPortFilter dictionary">§ 3.1.2 SerialPortFilter dictionary</a> <a href="#ref-for-dom-serialportfilter-bluetoothserviceclassid-3" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialportfilter-bluetoothserviceclassid-4" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-matches-the-filter" aria-label="Links in this document to definition: matches the filter">
