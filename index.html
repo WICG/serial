@@ -173,7 +173,7 @@
             <ol>
               <li>Let |allPorts:list&lt;SerialPort&gt;| be an empty [=list=].
               </li>
-              <li>[=list/For each=] [=logically connected=] Bluetooth device:
+              <li>[=list/For each=] Bluetooth device registered with the system:
                 <ol>
                   <li>[=list/For each=] {{BluetoothServiceUUID}}
                   |uuid:BluetoothServiceUUID| supported by the device:
@@ -201,7 +201,7 @@
                   </li>
                 </ol>
               </li>
-              <li>[=list/For each=] [=logically connected=] non-Bluetooth serial port:
+              <li>[=list/For each=] [=available=] non-Bluetooth serial port:
                 <ol>
                   <li>Let |port:SerialPort| be a {{SerialPort}} representing
                   the port.
@@ -232,6 +232,12 @@
           <li>Return |promise|.
           </li>
         </ol>
+        <p>
+          A serial port is <dfn>available</dfn> if it is a wired serial port and
+          the port is physically connected to the system, or if it is a wireless
+          serial port and the wireless device hosting the port is registered
+          with the system.
+        </p>
         <section data-dfn-for="SerialPortRequestOptions">
           <h4>
             <dfn>SerialPortRequestOptions</dfn> dictionary
@@ -390,7 +396,7 @@
           </li>
           <li>Run the following steps [=in parallel=]:
             <ol>
-              <li>Let |availablePorts| be the sequence of [=logically connected=] serial
+              <li>Let |availablePorts| be the sequence of [=available=] serial
               ports which the user has allowed the site to access
               as the result of a previous call to {{Serial/requestPort()}}.
               </li>
@@ -579,8 +585,8 @@
         <p>
           A serial port is <dfn>logically connected</dfn> if it is a wired
           serial port and the port is physically connected to the system, or if
-          it is a wireless serial port and the wireless device is registered
-          with the system.
+          it is a wireless serial port and the system has active connections to
+          the wireless device (e.g. an open Bluetooth L2CAP channel).
         </p>
       </section>
       <section>
