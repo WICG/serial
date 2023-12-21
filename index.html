@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 34.1.8">
+<meta name="generator" content="ReSpec 34.2.2">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 span.example-title{text-transform:none}
@@ -193,8 +193,8 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "lint": {
     "informative-dfn": false
   },
-  "publishISODate": "2023-09-29T00:00:00.000Z",
-  "generatedSubtitle": "Draft Community Group Report 29 September 2023"
+  "publishISODate": "2023-12-21T00:00:00.000Z",
+  "generatedSubtitle": "Draft Community Group Report 21 December 2023"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/cg-draft"></head>
   <body class="h-entry" data-cite="WEBIDL DOM HTML Infra PERMISSIONS-POLICY STREAMS WebIDL web-bluetooth"><div class="head">
@@ -203,7 +203,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <h1 id="title" class="title">Web Serial API</h1> <h2 id="subtitle" class="subtitle">Living document</h2>
     <p id="w3c-state">
       <a href="https://www.w3.org/standards/types#reports">Draft Community Group Report</a>
-      <time class="dt-published" datetime="2023-09-29">29 September 2023</time>
+      <time class="dt-published" datetime="2023-12-21">21 December 2023</time>
     </p>
     <dl>
       
@@ -230,7 +230,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     </dl>
     
     <p class="copyright">
-          <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a>
+          <a href="https://www.w3.org/policies/#copyright">Copyright</a>
           ©
           2023
           
@@ -310,21 +310,23 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
               <span data-export="" data-dfn-type="enum" data-idl="enum" data-title="ParityType" data-dfn-for=""><code>ParityType</code></span> enum
             </a></li><li class="tocline"><a class="tocxref" href="#flowcontroltype-enum"><bdi class="secno">4.4.1.2 </bdi>
               <span data-export="" data-dfn-type="enum" data-idl="enum" data-title="FlowControlType" data-dfn-for=""><code>FlowControlType</code></span> enum
-            </a></li></ol></li></ol></li><li class="tocline"><a class="tocxref" href="#readable-attribute"><bdi class="secno">4.5 </bdi>
+            </a></li></ol></li></ol></li><li class="tocline"><a class="tocxref" href="#connected-attribute"><bdi class="secno">4.5 </bdi>
+          <span data-export="" data-dfn-type="attribute" data-idl="attribute" data-title="connected" data-dfn-for="SerialPort" data-type="boolean" data-lt="connected" data-local-lt="SerialPort.connected"><code>connected</code></span> attribute
+        </a></li><li class="tocline"><a class="tocxref" href="#readable-attribute"><bdi class="secno">4.6 </bdi>
           <span data-export="" data-dfn-type="attribute" data-idl="attribute" data-title="readable" data-dfn-for="SerialPort" data-type="ReadableStream" data-lt="readable" data-local-lt="SerialPort.readable"><code>readable</code></span> attribute
-        </a></li><li class="tocline"><a class="tocxref" href="#writable-attribute"><bdi class="secno">4.6 </bdi>
+        </a></li><li class="tocline"><a class="tocxref" href="#writable-attribute"><bdi class="secno">4.7 </bdi>
           <span data-export="" data-dfn-type="attribute" data-idl="attribute" data-title="writable" data-dfn-for="SerialPort" data-type="WritableStream" data-lt="writable" data-local-lt="SerialPort.writable"><code>writable</code></span> attribute
-        </a></li><li class="tocline"><a class="tocxref" href="#setsignals-method"><bdi class="secno">4.7 </bdi>
+        </a></li><li class="tocline"><a class="tocxref" href="#setsignals-method"><bdi class="secno">4.8 </bdi>
           <span data-export="" data-dfn-type="method" data-idl="operation" data-title="setSignals()" data-dfn-for="SerialPort" data-type="Promise" data-lt="setSignals()|setSignals(signals)" data-local-lt="SerialPort.setSignals|SerialPort.setSignals()|setSignals"><code>setSignals()</code></span> method
-        </a><ol class="toc"><li class="tocline"><a class="tocxref" href="#serialoutputsignals-dictionary"><bdi class="secno">4.7.1 </bdi>
+        </a><ol class="toc"><li class="tocline"><a class="tocxref" href="#serialoutputsignals-dictionary"><bdi class="secno">4.8.1 </bdi>
             <span data-export="" data-dfn-type="dictionary" data-idl="dictionary" data-title="SerialOutputSignals" data-dfn-for=""><code>SerialOutputSignals</code></span> dictionary
-          </a></li></ol></li><li class="tocline"><a class="tocxref" href="#getsignals-method"><bdi class="secno">4.8 </bdi>
+          </a></li></ol></li><li class="tocline"><a class="tocxref" href="#getsignals-method"><bdi class="secno">4.9 </bdi>
           <span data-export="" data-dfn-type="method" data-idl="operation" data-title="getSignals()" data-dfn-for="SerialPort" data-type="Promise" data-lt="getSignals()" data-local-lt="SerialPort.getSignals|SerialPort.getSignals()|getSignals"><code>getSignals()</code></span> method
-        </a><ol class="toc"><li class="tocline"><a class="tocxref" href="#serialinputsignals-dictionary"><bdi class="secno">4.8.1 </bdi>
+        </a><ol class="toc"><li class="tocline"><a class="tocxref" href="#serialinputsignals-dictionary"><bdi class="secno">4.9.1 </bdi>
             <span data-export="" data-dfn-type="dictionary" data-idl="dictionary" data-title="SerialInputSignals" data-dfn-for=""><code>SerialInputSignals</code></span> dictionary
-          </a></li></ol></li><li class="tocline"><a class="tocxref" href="#close-method"><bdi class="secno">4.9 </bdi>
+          </a></li></ol></li><li class="tocline"><a class="tocxref" href="#close-method"><bdi class="secno">4.10 </bdi>
           <span data-export="" data-dfn-type="method" data-idl="operation" data-title="close()" data-dfn-for="SerialPort" data-type="Promise" data-lt="close()" data-local-lt="SerialPort.close|SerialPort.close()|close"><code>close()</code></span> method
-        </a></li><li class="tocline"><a class="tocxref" href="#forget-method"><bdi class="secno">4.10 </bdi>
+        </a></li><li class="tocline"><a class="tocxref" href="#forget-method"><bdi class="secno">4.11 </bdi>
           <span data-export="" data-dfn-type="method" data-idl="operation" data-title="forget()" data-dfn-for="SerialPort" data-type="Promise" data-lt="forget()" data-local-lt="SerialPort.forget|SerialPort.forget()|forget"><code>forget()</code></span> method
         </a></li></ol></li><li class="tocline"><a class="tocxref" href="#blocklist"><bdi class="secno">5. </bdi>
         Blocklist
@@ -474,7 +476,7 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
             <ol>
               <li>Let <var data-type="list<SerialPort>">allPorts</var> be an empty <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list">list</a>.
               </li>
-              <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate">For each</a> paired Bluetooth device:
+              <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate">For each</a> Bluetooth device registered with the system:
                 <ol>
                   <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate">For each</a> <a data-link-type="idl" data-lt="BluetoothServiceUUID" data-type="typedef" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid"><code>BluetoothServiceUUID</code></a>
                   <var data-type="BluetoothServiceUUID">uuid</var> supported by the device:
@@ -500,7 +502,7 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
                   </li>
                 </ol>
               </li>
-              <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate">For each</a> available non-Bluetooth serial port:
+              <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate">For each</a> <a data-link-type="dfn|abstract-op" href="#dfn-available" class="internalDFN" id="ref-for-dfn-available-1">available</a> non-Bluetooth serial port:
                 <ol>
                   <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-4"><code>SerialPort</code></a> representing
                   the port.
@@ -529,6 +531,12 @@ connectButton.addEventListener(<span class="hljs-string">'click'</span>, <span c
           <li>Return <var data-type="Promise">promise</var>.
           </li>
         </ol>
+        <p>
+          A serial port is <dfn id="dfn-available" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">available</dfn> if it is a wired serial port and
+          the port is physically connected to the system, or if it is a wireless
+          serial port and the wireless device hosting the port is registered
+          with the system.
+        </p>
         <section data-dfn-for="SerialPortRequestOptions" id="serialportrequestoptions-dictionary"><div class="header-wrapper"><h4 id="x3-1-1-serialportrequestoptions-dictionary"><bdi class="secno">3.1.1 </bdi>
             <dfn data-export="" data-dfn-type="dictionary" id="dom-serialportrequestoptions" data-idl="dictionary" data-title="SerialPortRequestOptions" data-dfn-for="" tabindex="0" aria-haspopup="dialog"><code>SerialPortRequestOptions</code></dfn> dictionary
           </h4><a class="self-link" href="#serialportrequestoptions-dictionary" aria-label="Permalink for Section 3.1.1"></a></div>
@@ -680,8 +688,8 @@ navigator.serial.addEventListener(<span class="hljs-string">'disconnect'</span>,
           </li>
           <li>Run the following steps <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>:
             <ol>
-              <li>Let <var>availablePorts</var> be the sequence of available serial
-              ports on the system which the user has allowed the site to access
+              <li>Let <var>availablePorts</var> be the sequence of <a data-link-type="dfn|abstract-op" href="#dfn-available" class="internalDFN" id="ref-for-dfn-available-2">available</a> serial
+              ports which the user has allowed the site to access
               as the result of a previous call to <a data-link-type="idl" data-lt="requestPort()" href="#dom-serial-requestport" class="internalDFN" id="ref-for-dom-serial-requestport-4"><code>requestPort</code></a><code>()</code>.
               </li>
               <li>Let <var>ports</var> be the sequence of the <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-6"><code>SerialPort</code></a>s
@@ -714,10 +722,11 @@ navigator.serial.addEventListener(<span class="hljs-string">'disconnect'</span>,
         <dfn data-export="" data-dfn-type="interface" id="dom-serialport" data-idl="interface" data-title="SerialPort" data-dfn-for="" tabindex="0" aria-haspopup="dialog"><code>SerialPort</code></dfn> interface
       </h2><a class="self-link" href="#serialport-interface" aria-label="Permalink for Section 4."></a></div>
       
-      <pre class="idl def" id="webidl-1967322147"><span class="idlHeader"><a class="self-link" href="#webidl-1967322147">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-serialport" data-title="SerialPort">[<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed">Exposed</a>=(DedicatedWorker,Window)</span>, <span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext">SecureContext</a></span>]
+      <pre class="idl def" id="webidl-1462650927"><span class="idlHeader"><a class="self-link" href="#webidl-1462650927">WebIDL</a></span><code><span data-idl="" class="idlInterface" id="idl-def-serialport" data-title="SerialPort">[<span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed">Exposed</a>=(DedicatedWorker,Window)</span>, <span class="extAttr"><a data-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext">SecureContext</a></span>]
 interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-serialport" id="ref-for-dom-serialport-7"><code>SerialPort</code></a> : <span class="idlSuperclass"><a data-link-type="idl" data-type="interface" href="https://dom.spec.whatwg.org/#eventtarget">EventTarget</a></span> {<span data-idl="" class="idlAttribute" id="idl-def-serialport-onconnect" data-title="onconnect" data-dfn-for="SerialPort">
   attribute<span class="idlType"> <a data-link-type="idl" data-type="typedef" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-serialport-onconnect" id="ref-for-dom-serialport-onconnect-1"><code>onconnect</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-serialport-ondisconnect" data-title="ondisconnect" data-dfn-for="SerialPort">
-  attribute<span class="idlType"> <a data-link-type="idl" data-type="typedef" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-serialport-ondisconnect" id="ref-for-dom-serialport-ondisconnect-1"><code>ondisconnect</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-serialport-readable" data-title="readable" data-dfn-for="SerialPort">
+  attribute<span class="idlType"> <a data-link-type="idl" data-type="typedef" href="https://html.spec.whatwg.org/multipage/webappapis.html#eventhandler">EventHandler</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-serialport-ondisconnect" id="ref-for-dom-serialport-ondisconnect-1"><code>ondisconnect</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-serialport-connected" data-title="connected" data-dfn-for="SerialPort">
+  readonly attribute<span class="idlType"> <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean">boolean</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-serialport-connected" id="ref-for-dom-serialport-connected-1"><code>connected</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-serialport-readable" data-title="readable" data-dfn-for="SerialPort">
   readonly attribute<span class="idlType"> <a data-link-type="idl" data-type="interface" href="https://streams.spec.whatwg.org/#readablestream">ReadableStream</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-serialport-readable" id="ref-for-dom-serialport-readable-1"><code>readable</code></a>;</span><span data-idl="" class="idlAttribute" id="idl-def-serialport-writable" data-title="writable" data-dfn-for="SerialPort">
   readonly attribute<span class="idlType"> <a data-link-type="idl" data-type="interface" href="https://streams.spec.whatwg.org/#writablestream">WritableStream</a></span> <a class="internalDFN idlName" data-link-type="attribute" href="#dom-serialport-writable" id="ref-for-dom-serialport-writable-1"><code>writable</code></a>;</span><span data-idl="" class="idlMethod" id="idl-def-serialport-getinfo" data-title="getInfo" data-dfn-for="SerialPort"><span class="idlType">
 
@@ -773,6 +782,17 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
           </td>
           <td>
             The amount of data to buffer for transmit and receive
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <dfn data-idl="" data-dfn-for="SerialPort" data-noexport="" data-dfn-type="attribute" id="dfn-connected" tabindex="0" aria-haspopup="dialog">[[connected]]</dfn>
+          </td>
+          <td>
+            <code>false</code>
+          </td>
+          <td>
+            A flag indicating the logical connection state of serial port
           </td>
         </tr>
         <tr>
@@ -838,17 +858,25 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
         <a data-link-type="idl" href="#dom-serialport-onconnect" class="internalDFN" id="ref-for-dom-serialport-onconnect-2"><code>onconnect</code></a> is an <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-idl-attributes">event handler IDL attribute</a> for
         the <a data-link-type="idl" data-lt="connect" href="#dfn-connect" class="internalDFN" id="ref-for-dfn-connect-1"><code>connect</code></a> event type.
         <p>
-          When a serial port becomes available on the system that the user has
-          allowed the site to access as the result of a previous call to
-          <a data-link-type="idl" data-lt="requestPort()" href="#dom-serial-requestport" class="internalDFN" id="ref-for-dom-serial-requestport-5"><code>requestPort</code></a><code>()</code>, run the following steps:
+          When a serial port that the user has allowed the site to access as the
+          result of a previous call to <a data-link-type="idl" data-lt="requestPort()" href="#dom-serial-requestport" class="internalDFN" id="ref-for-dom-serial-requestport-5"><code>requestPort</code></a><code>()</code> becomes
+          <a data-link-type="dfn|abstract-op" href="#dfn-logically-connected" class="internalDFN" id="ref-for-dfn-logically-connected-1">logically connected</a>, run the following steps:
         </p>
         <ol>
           <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-12"><code>SerialPort</code></a> representing the port.
+          </li>
+          <li>Set <var data-type="SerialPort">port</var>.<a data-link-type="attribute" data-lt="[[connected]]" href="#dfn-connected" class="internalDFN" id="ref-for-dfn-connected-1"><code>[[connected]]</code></a> to <code>true</code>.
           </li>
           <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-fire">Fire an event</a> named <a data-link-type="idl" data-lt="connect" href="#dfn-connect" class="internalDFN" id="ref-for-dfn-connect-2"><code>connect</code></a> at <var data-type="SerialPort">port</var> with its
           <a data-link-type="idl" data-type="attribute" href="https://dom.spec.whatwg.org/#dom-event-bubbles"><code>bubbles</code></a> attribute initialized to <code>true</code>.
           </li>
         </ol>
+        <p>
+          A serial port is <dfn id="dfn-logically-connected" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">logically connected</dfn> if it is a wired
+          serial port and the port is physically connected to the system, or if
+          it is a wireless serial port and the system has active connections to
+          the wireless device (e.g. an open Bluetooth L2CAP channel).
+        </p>
       </section>
       <section id="ondisconnect-attribute-0"><div class="header-wrapper"><h3 id="x4-2-ondisconnect-attribute"><bdi class="secno">4.2 </bdi>
           <dfn data-export="" data-dfn-type="attribute" id="dom-serialport-ondisconnect" data-idl="attribute" data-title="ondisconnect" data-dfn-for="SerialPort" data-type="EventHandler" data-lt="ondisconnect" data-local-lt="SerialPort.ondisconnect" tabindex="0" aria-haspopup="dialog"><code>ondisconnect</code></dfn> attribute
@@ -856,12 +884,14 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
         <a data-link-type="idl" href="#dom-serialport-ondisconnect" class="internalDFN" id="ref-for-dom-serialport-ondisconnect-2"><code>ondisconnect</code></a> is an <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-handler-idl-attributes">event handler IDL attribute</a>
         for the <a data-link-type="idl" data-lt="disconnect" href="#dfn-disconnect" class="internalDFN" id="ref-for-dfn-disconnect-1"><code>disconnect</code></a> event type.
         <p>
-          When a serial port becomes unavailable on the system that the user
-          has allowed the site to access as the result of a previous call to
-          <a data-link-type="idl" data-lt="requestPort()" href="#dom-serial-requestport" class="internalDFN" id="ref-for-dom-serial-requestport-6"><code>requestPort</code></a><code>()</code>, run the following steps:
+          When a serial port that the user has allowed the site to access as the
+          result of a previous call to <a data-link-type="idl" data-lt="requestPort()" href="#dom-serial-requestport" class="internalDFN" id="ref-for-dom-serial-requestport-6"><code>requestPort</code></a><code>()</code> is no longer
+          <a data-link-type="dfn|abstract-op" href="#dfn-logically-connected" class="internalDFN" id="ref-for-dfn-logically-connected-2">logically connected</a>, run the following steps:
         </p>
         <ol>
           <li>Let <var data-type="SerialPort">port</var> be a <a data-link-type="idl" data-lt="SerialPort" href="#dom-serialport" class="internalDFN" id="ref-for-dom-serialport-13"><code>SerialPort</code></a> representing the port.
+          </li>
+          <li>Set <var data-type="SerialPort">port</var>.<a data-link-type="attribute" data-lt="[[connected]]" href="#dfn-connected" class="internalDFN" id="ref-for-dfn-connected-2"><code>[[connected]]</code></a> to <code>false</code>.
           </li>
           <li><a data-link-type="dfn|abstract-op" data-type="dfn" href="https://dom.spec.whatwg.org/#concept-event-fire">Fire an event</a> named <a data-link-type="idl" data-lt="disconnect" href="#dfn-disconnect" class="internalDFN" id="ref-for-dfn-disconnect-2"><code>disconnect</code></a> at <var data-type="SerialPort">port</var> with its
           <a data-link-type="idl" data-type="attribute" href="https://dom.spec.whatwg.org/#dom-event-bubbles"><code>bubbles</code></a> attribute initialized to <code>true</code>.
@@ -1121,9 +1151,21 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
           </section>
         </section>
       </section>
-      <section id="readable-attribute"><div class="header-wrapper"><h3 id="x4-5-readable-attribute"><bdi class="secno">4.5 </bdi>
+      <section id="connected-attribute"><div class="header-wrapper"><h3 id="x4-5-connected-attribute"><bdi class="secno">4.5 </bdi>
+          <dfn data-export="" data-dfn-type="attribute" id="dom-serialport-connected" data-idl="attribute" data-title="connected" data-dfn-for="SerialPort" data-type="boolean" data-lt="connected" data-local-lt="SerialPort.connected" tabindex="0" aria-haspopup="dialog"><code>connected</code></dfn> attribute
+        </h3><a class="self-link" href="#connected-attribute" aria-label="Permalink for Section 4.5"></a></div>
+        
+        <p>
+          The <a data-link-type="idl" href="#dom-serialport-connected" class="internalDFN" id="ref-for-dom-serialport-connected-2"><code>connected</code></a> getter steps are:
+        </p>
+        <ol>
+          <li>Return <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-link-type="attribute" data-lt="[[connected]]" href="#dfn-connected" class="internalDFN" id="ref-for-dfn-connected-3"><code>[[connected]]</code></a>.
+          </li>
+        </ol>
+      </section>
+      <section id="readable-attribute"><div class="header-wrapper"><h3 id="x4-6-readable-attribute"><bdi class="secno">4.6 </bdi>
           <dfn data-export="" data-dfn-type="attribute" id="dom-serialport-readable" data-idl="attribute" data-title="readable" data-dfn-for="SerialPort" data-type="ReadableStream" data-lt="readable" data-local-lt="SerialPort.readable" tabindex="0" aria-haspopup="dialog"><code>readable</code></dfn> attribute
-        </h3><a class="self-link" href="#readable-attribute" aria-label="Permalink for Section 4.5"></a></div>
+        </h3><a class="self-link" href="#readable-attribute" aria-label="Permalink for Section 4.6"></a></div>
         
         <aside class="example" id="readable-example"><div class="marker">
     <a class="self-link" href="#readable-example">Example<bdi> 4</bdi></a>
@@ -1389,9 +1431,9 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
           </li>
         </ol>
       </section>
-      <section id="writable-attribute"><div class="header-wrapper"><h3 id="x4-6-writable-attribute"><bdi class="secno">4.6 </bdi>
+      <section id="writable-attribute"><div class="header-wrapper"><h3 id="x4-7-writable-attribute"><bdi class="secno">4.7 </bdi>
           <dfn data-export="" data-dfn-type="attribute" id="dom-serialport-writable" data-idl="attribute" data-title="writable" data-dfn-for="SerialPort" data-type="WritableStream" data-lt="writable" data-local-lt="SerialPort.writable" tabindex="0" aria-haspopup="dialog"><code>writable</code></dfn> attribute
-        </h3><a class="self-link" href="#writable-attribute" aria-label="Permalink for Section 4.6"></a></div>
+        </h3><a class="self-link" href="#writable-attribute" aria-label="Permalink for Section 4.7"></a></div>
         
         <aside class="example" id="example-5"><div class="marker">
     <a class="self-link" href="#example-5">Example<bdi> 5</bdi></a>
@@ -1594,9 +1636,9 @@ writer.releaseLock();</code></pre>
           </li>
         </ol>
       </section>
-      <section id="setsignals-method"><div class="header-wrapper"><h3 id="x4-7-setsignals-method"><bdi class="secno">4.7 </bdi>
+      <section id="setsignals-method"><div class="header-wrapper"><h3 id="x4-8-setsignals-method"><bdi class="secno">4.8 </bdi>
           <dfn data-export="" data-dfn-type="method" id="dom-serialport-setsignals" data-idl="operation" data-title="setSignals()" data-dfn-for="SerialPort" data-type="Promise" data-lt="setSignals()|setSignals(signals)" data-local-lt="SerialPort.setSignals|SerialPort.setSignals()|setSignals" tabindex="0" aria-haspopup="dialog"><code>setSignals()</code></dfn> method
-        </h3><a class="self-link" href="#setsignals-method" aria-label="Permalink for Section 4.7"></a></div>
+        </h3><a class="self-link" href="#setsignals-method" aria-label="Permalink for Section 4.8"></a></div>
         
         <aside class="example" id="example-6"><div class="marker">
     <a class="self-link" href="#example-6">Example<bdi> 6</bdi></a>
@@ -1661,9 +1703,9 @@ writer.releaseLock();</code></pre>
           <li>Return <var>promise</var>.
           </li>
         </ol>
-        <section data-dfn-for="SerialOutputSignals" id="serialoutputsignals-dictionary"><div class="header-wrapper"><h4 id="x4-7-1-serialoutputsignals-dictionary"><bdi class="secno">4.7.1 </bdi>
+        <section data-dfn-for="SerialOutputSignals" id="serialoutputsignals-dictionary"><div class="header-wrapper"><h4 id="x4-8-1-serialoutputsignals-dictionary"><bdi class="secno">4.8.1 </bdi>
             <dfn data-export="" data-dfn-type="dictionary" id="dom-serialoutputsignals" data-idl="dictionary" data-title="SerialOutputSignals" data-dfn-for="" tabindex="0" aria-haspopup="dialog"><code>SerialOutputSignals</code></dfn> dictionary
-          </h4><a class="self-link" href="#serialoutputsignals-dictionary" aria-label="Permalink for Section 4.7.1"></a></div>
+          </h4><a class="self-link" href="#serialoutputsignals-dictionary" aria-label="Permalink for Section 4.8.1"></a></div>
           
           <pre class="idl def" id="webidl-1048921348"><span class="idlHeader"><a class="self-link" href="#webidl-1048921348">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialoutputsignals" data-title="SerialOutputSignals">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialoutputsignals" id="ref-for-dom-serialoutputsignals-2"><code>SerialOutputSignals</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialoutputsignals-dataterminalready" data-title="dataTerminalReady" data-dfn-for="SerialOutputSignals"><span class="idlType">
   <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean">boolean</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialoutputsignals-dataterminalready" id="ref-for-dom-serialoutputsignals-dataterminalready-2"><code>dataTerminalReady</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialoutputsignals-requesttosend" data-title="requestToSend" data-dfn-for="SerialOutputSignals"><span class="idlType">
@@ -1692,9 +1734,9 @@ writer.releaseLock();</code></pre>
           </dl>
         </section>
       </section>
-      <section id="getsignals-method"><div class="header-wrapper"><h3 id="x4-8-getsignals-method"><bdi class="secno">4.8 </bdi>
+      <section id="getsignals-method"><div class="header-wrapper"><h3 id="x4-9-getsignals-method"><bdi class="secno">4.9 </bdi>
           <dfn data-export="" data-dfn-type="method" id="dom-serialport-getsignals" data-idl="operation" data-title="getSignals()" data-dfn-for="SerialPort" data-type="Promise" data-lt="getSignals()" data-local-lt="SerialPort.getSignals|SerialPort.getSignals()|getSignals" tabindex="0" aria-haspopup="dialog"><code>getSignals()</code></dfn> method
-        </h3><a class="self-link" href="#getsignals-method" aria-label="Permalink for Section 4.8"></a></div>
+        </h3><a class="self-link" href="#getsignals-method" aria-label="Permalink for Section 4.9"></a></div>
         The <a data-link-type="idl" data-lt="getSignals()" href="#dom-serialport-getsignals" class="internalDFN" id="ref-for-dom-serialport-getsignals-2"><code>getSignals</code></a><code>()</code> method steps are:
         <ol>
           <li>Let <var data-type="Promise">promise</var> be <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise">a new promise</a>.
@@ -1742,9 +1784,9 @@ writer.releaseLock();</code></pre>
           <li>Return <var data-type="Promise">promise</var>.
           </li>
         </ol>
-        <section data-dfn-for="SerialInputSignals" id="serialinputsignals-dictionary"><div class="header-wrapper"><h4 id="x4-8-1-serialinputsignals-dictionary"><bdi class="secno">4.8.1 </bdi>
+        <section data-dfn-for="SerialInputSignals" id="serialinputsignals-dictionary"><div class="header-wrapper"><h4 id="x4-9-1-serialinputsignals-dictionary"><bdi class="secno">4.9.1 </bdi>
             <dfn data-export="" data-dfn-type="dictionary" id="dom-serialinputsignals" data-idl="dictionary" data-title="SerialInputSignals" data-dfn-for="" tabindex="0" aria-haspopup="dialog"><code>SerialInputSignals</code></dfn> dictionary
-          </h4><a class="self-link" href="#serialinputsignals-dictionary" aria-label="Permalink for Section 4.8.1"></a></div>
+          </h4><a class="self-link" href="#serialinputsignals-dictionary" aria-label="Permalink for Section 4.9.1"></a></div>
           
           <pre class="idl def" id="webidl-910464035"><span class="idlHeader"><a class="self-link" href="#webidl-910464035">WebIDL</a></span><code><span data-idl="" class="idlDictionary" id="idl-def-serialinputsignals" data-title="SerialInputSignals">dictionary <a class="internalDFN idlID" data-link-type="dictionary" href="#dom-serialinputsignals" id="ref-for-dom-serialinputsignals-3"><code>SerialInputSignals</code></a> {<span data-idl="" class="idlMember" id="idl-def-serialinputsignals-datacarrierdetect" data-title="dataCarrierDetect" data-dfn-for="SerialInputSignals">
   required<span class="idlType"> <a data-link-type="idl" data-type="interface" href="https://webidl.spec.whatwg.org/#idl-boolean">boolean</a></span> <a class="internalDFN idlName" data-link-type="dict-member" href="#dom-serialinputsignals-datacarrierdetect" id="ref-for-dom-serialinputsignals-datacarrierdetect-2"><code>dataCarrierDetect</code></a>;</span><span data-idl="" class="idlMember" id="idl-def-serialinputsignals-cleartosend" data-title="clearToSend" data-dfn-for="SerialInputSignals">
@@ -1780,9 +1822,9 @@ writer.releaseLock();</code></pre>
           </dl>
         </section>
       </section>
-      <section id="close-method"><div class="header-wrapper"><h3 id="x4-9-close-method"><bdi class="secno">4.9 </bdi>
+      <section id="close-method"><div class="header-wrapper"><h3 id="x4-10-close-method"><bdi class="secno">4.10 </bdi>
           <dfn data-export="" data-dfn-type="method" id="dom-serialport-close" data-idl="operation" data-title="close()" data-dfn-for="SerialPort" data-type="Promise" data-lt="close()" data-local-lt="SerialPort.close|SerialPort.close()|close" tabindex="0" aria-haspopup="dialog"><code>close()</code></dfn> method
-        </h3><a class="self-link" href="#close-method" aria-label="Permalink for Section 4.9"></a></div>
+        </h3><a class="self-link" href="#close-method" aria-label="Permalink for Section 4.10"></a></div>
         
         <aside class="example" id="example-7"><div class="marker">
     <a class="self-link" href="#example-7">Example<bdi> 7</bdi></a>
@@ -1958,9 +2000,9 @@ reader.cancel();
           </li>
         </ol>
       </section>
-      <section id="forget-method"><div class="header-wrapper"><h3 id="x4-10-forget-method"><bdi class="secno">4.10 </bdi>
+      <section id="forget-method"><div class="header-wrapper"><h3 id="x4-11-forget-method"><bdi class="secno">4.11 </bdi>
           <dfn data-export="" data-dfn-type="method" id="dom-serialport-forget" data-idl="operation" data-title="forget()" data-dfn-for="SerialPort" data-type="Promise" data-lt="forget()" data-local-lt="SerialPort.forget|SerialPort.forget()|forget" tabindex="0" aria-haspopup="dialog"><code>forget()</code></dfn> method
-        </h3><a class="self-link" href="#forget-method" aria-label="Permalink for Section 4.10"></a></div>
+        </h3><a class="self-link" href="#forget-method" aria-label="Permalink for Section 4.11"></a></div>
         
         <aside class="example" id="example-8"><div class="marker">
     <a class="self-link" href="#example-8">Example<bdi> 8</bdi></a>
@@ -1987,7 +2029,7 @@ reader.cancel();
             <ol>
               <li>Set <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-link-type="attribute" data-lt="[[state]]" href="#dfn-state" class="internalDFN" id="ref-for-dfn-state-13"><code>[[state]]</code></a> to <code>"forgetting"</code>.
               </li>
-              <li>Remove <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> from the sequence of available serial ports
+              <li>Remove <a data-link-type="dfn|abstract-op" data-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a> from the sequence of serial ports
               on the system which the user has allowed the site to access as
               the result of a previous call to <a data-link-type="idl" data-lt="requestPort()" href="#dom-serial-requestport" class="internalDFN" id="ref-for-dom-serial-requestport-7"><code>requestPort</code></a><code>()</code>.
               </li>
@@ -2243,7 +2285,7 @@ reader.cancel();
     </dd><dt id="bib-infra">[infra]</dt><dd>
       <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Anne van Kesteren; Domenic Denicola.  WHATWG. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
     </dd><dt id="bib-permissions-policy">[PERMISSIONS-POLICY]</dt><dd>
-      <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. Ian Clelland.  W3C. 12 September 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
+      <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. Ian Clelland.  W3C. 18 December 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
     </dd><dt id="bib-streams">[STREAMS]</dt><dd>
       <a href="https://streams.spec.whatwg.org/"><cite>Streams Standard</cite></a>. Adam Rice; Domenic Denicola; Mattias Buelens; 吉野剛史 (Takeshi Yoshino).  WHATWG. Living Standard. URL: <a href="https://streams.spec.whatwg.org/">https://streams.spec.whatwg.org/</a>
     </dd><dt id="bib-web-bluetooth">[WEB-BLUETOOTH]</dt><dd>
@@ -2254,7 +2296,7 @@ reader.cancel();
   </section><section id="informative-references"><div class="header-wrapper"><h3 id="b-2-informative-references"><bdi class="secno">B.2 </bdi>Informative references</h3><a class="self-link" href="#informative-references" aria-label="Permalink for Appendix B.2"></a></div>
     
     <dl class="bibliography"><dt id="bib-csp3">[CSP3]</dt><dd>
-      <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. Mike West; Antonio Sartori.  W3C. 20 September 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+      <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. Mike West; Antonio Sartori.  W3C. 6 December 2023. W3C Working Draft. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
     </dd><dt id="bib-webusb">[WEBUSB]</dt><dd>
       <a href="https://wicg.github.io/webusb/"><cite>WebUSB API</cite></a>.  WICG. cg-draft. URL: <a href="https://wicg.github.io/webusb/">https://wicg.github.io/webusb/</a>
     </dd></dl>
@@ -2333,11 +2375,25 @@ reader.cancel();
     </li><li>
       <a href="#ref-for-dom-serial-requestport-6" title="§ 4.2 ondisconnect attribute">§ 4.2 ondisconnect attribute</a> 
     </li><li>
-      <a href="#ref-for-dom-serial-requestport-7" title="§ 4.10 forget() method">§ 4.10 forget() method</a> 
+      <a href="#ref-for-dom-serial-requestport-7" title="§ 4.11 forget() method">§ 4.11 forget() method</a> 
     </li><li>
       <a href="#ref-for-dom-serial-requestport-8" title="§ 7. Security considerations">§ 7. Security considerations</a> <a href="#ref-for-dom-serial-requestport-9" title="Reference 2">(2)</a> 
     </li><li>
       <a href="#ref-for-dom-serial-requestport-10" title="§ 8. Privacy considerations">§ 8. Privacy considerations</a> 
+    </li>
+  </ul>
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-available" aria-label="Links in this document to definition: available">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dfn-available" aria-label="Permalink for definition: available. Activate to close this dialog.">Permalink</a>
+         
+      </div>
+      <p><b>Referenced in:</b></p>
+      <ul>
+    <li>
+      <a href="#ref-for-dfn-available-1" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> 
+    </li><li>
+      <a href="#ref-for-dfn-available-2" title="§ 3.2 getPorts() method">§ 3.2 getPorts() method</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialportrequestoptions" aria-label="Links in this document to definition: SerialPortRequestOptions">
@@ -2534,7 +2590,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport" aria-label="Permalink for definition: SerialPort. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2567,17 +2623,17 @@ reader.cancel();
     </li><li>
       <a href="#ref-for-dfn-serial-port-task-source-4" title="§ 4.4 open() method">§ 4.4 open() method</a> <a href="#ref-for-dfn-serial-port-task-source-5" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-serial-port-task-source-6" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> <a href="#ref-for-dfn-serial-port-task-source-7" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-serial-port-task-source-6" title="§ 4.6 readable attribute">§ 4.6 readable attribute</a> <a href="#ref-for-dfn-serial-port-task-source-7" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-serial-port-task-source-8" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> <a href="#ref-for-dfn-serial-port-task-source-9" title="Reference 2">(2)</a> <a href="#ref-for-dfn-serial-port-task-source-10" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dfn-serial-port-task-source-8" title="§ 4.7 writable attribute">§ 4.7 writable attribute</a> <a href="#ref-for-dfn-serial-port-task-source-9" title="Reference 2">(2)</a> <a href="#ref-for-dfn-serial-port-task-source-10" title="Reference 3">(3)</a> 
     </li><li>
-      <a href="#ref-for-dfn-serial-port-task-source-11" title="§ 4.7 setSignals() method">§ 4.7 setSignals() method</a> <a href="#ref-for-dfn-serial-port-task-source-12" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-serial-port-task-source-11" title="§ 4.8 setSignals() method">§ 4.8 setSignals() method</a> <a href="#ref-for-dfn-serial-port-task-source-12" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-serial-port-task-source-13" title="§ 4.8 getSignals() method">§ 4.8 getSignals() method</a> <a href="#ref-for-dfn-serial-port-task-source-14" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-serial-port-task-source-13" title="§ 4.9 getSignals() method">§ 4.9 getSignals() method</a> <a href="#ref-for-dfn-serial-port-task-source-14" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-serial-port-task-source-15" title="§ 4.9 close() method">§ 4.9 close() method</a> <a href="#ref-for-dfn-serial-port-task-source-16" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-serial-port-task-source-15" title="§ 4.10 close() method">§ 4.10 close() method</a> <a href="#ref-for-dfn-serial-port-task-source-16" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-serial-port-task-source-17" title="§ 4.10 forget() method">§ 4.10 forget() method</a> 
+      <a href="#ref-for-dfn-serial-port-task-source-17" title="§ 4.11 forget() method">§ 4.11 forget() method</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-state" aria-label="Links in this document to definition: [[state]]">
@@ -2591,17 +2647,17 @@ reader.cancel();
     <li>
       <a href="#ref-for-dfn-state-1" title="§ 4.4 open() method">§ 4.4 open() method</a> <a href="#ref-for-dfn-state-2" title="Reference 2">(2)</a> <a href="#ref-for-dfn-state-3" title="Reference 3">(3)</a> 
     </li><li>
-      <a href="#ref-for-dfn-state-4" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> <a href="#ref-for-dfn-state-5" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-state-4" title="§ 4.6 readable attribute">§ 4.6 readable attribute</a> <a href="#ref-for-dfn-state-5" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-state-6" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> <a href="#ref-for-dfn-state-7" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-state-6" title="§ 4.7 writable attribute">§ 4.7 writable attribute</a> <a href="#ref-for-dfn-state-7" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-state-8" title="§ 4.7 setSignals() method">§ 4.7 setSignals() method</a> 
+      <a href="#ref-for-dfn-state-8" title="§ 4.8 setSignals() method">§ 4.8 setSignals() method</a> 
     </li><li>
-      <a href="#ref-for-dfn-state-9" title="§ 4.8 getSignals() method">§ 4.8 getSignals() method</a> 
+      <a href="#ref-for-dfn-state-9" title="§ 4.9 getSignals() method">§ 4.9 getSignals() method</a> 
     </li><li>
-      <a href="#ref-for-dfn-state-10" title="§ 4.9 close() method">§ 4.9 close() method</a> <a href="#ref-for-dfn-state-11" title="Reference 2">(2)</a> <a href="#ref-for-dfn-state-12" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dfn-state-10" title="§ 4.10 close() method">§ 4.10 close() method</a> <a href="#ref-for-dfn-state-11" title="Reference 2">(2)</a> <a href="#ref-for-dfn-state-12" title="Reference 3">(3)</a> 
     </li><li>
-      <a href="#ref-for-dfn-state-13" title="§ 4.10 forget() method">§ 4.10 forget() method</a> <a href="#ref-for-dfn-state-14" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-state-13" title="§ 4.11 forget() method">§ 4.11 forget() method</a> <a href="#ref-for-dfn-state-14" title="Reference 2">(2)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-buffersize" aria-label="Links in this document to definition: [[bufferSize]]">
@@ -2615,9 +2671,25 @@ reader.cancel();
     <li>
       <a href="#ref-for-dfn-buffersize-1" title="§ 4.4 open() method">§ 4.4 open() method</a> 
     </li><li>
-      <a href="#ref-for-dfn-buffersize-2" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> 
+      <a href="#ref-for-dfn-buffersize-2" title="§ 4.6 readable attribute">§ 4.6 readable attribute</a> 
     </li><li>
-      <a href="#ref-for-dfn-buffersize-3" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> 
+      <a href="#ref-for-dfn-buffersize-3" title="§ 4.7 writable attribute">§ 4.7 writable attribute</a> 
+    </li>
+  </ul>
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-connected" aria-label="Links in this document to definition: [[connected]]">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dfn-connected" aria-label="Permalink for definition: [[connected]]. Activate to close this dialog.">Permalink</a>
+         
+      </div>
+      <p><b>Referenced in:</b></p>
+      <ul>
+    <li>
+      <a href="#ref-for-dfn-connected-1" title="§ 4.1 onconnect attribute">§ 4.1 onconnect attribute</a> 
+    </li><li>
+      <a href="#ref-for-dfn-connected-2" title="§ 4.2 ondisconnect attribute">§ 4.2 ondisconnect attribute</a> 
+    </li><li>
+      <a href="#ref-for-dfn-connected-3" title="§ 4.5 connected attribute">§ 4.5 connected attribute</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-readable" aria-label="Links in this document to definition: [[readable]]">
@@ -2629,11 +2701,11 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dfn-readable-1" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> <a href="#ref-for-dfn-readable-2" title="Reference 2">(2)</a> <a href="#ref-for-dfn-readable-3" title="Reference 3">(3)</a> <a href="#ref-for-dfn-readable-4" title="Reference 4">(4)</a> <a href="#ref-for-dfn-readable-5" title="Reference 5">(5)</a> <a href="#ref-for-dfn-readable-6" title="Reference 6">(6)</a> <a href="#ref-for-dfn-readable-7" title="Reference 7">(7)</a> <a href="#ref-for-dfn-readable-8" title="Reference 8">(8)</a> <a href="#ref-for-dfn-readable-9" title="Reference 9">(9)</a> <a href="#ref-for-dfn-readable-10" title="Reference 10">(10)</a> <a href="#ref-for-dfn-readable-11" title="Reference 11">(11)</a> <a href="#ref-for-dfn-readable-12" title="Reference 12">(12)</a> <a href="#ref-for-dfn-readable-13" title="Reference 13">(13)</a> <a href="#ref-for-dfn-readable-14" title="Reference 14">(14)</a> <a href="#ref-for-dfn-readable-15" title="Reference 15">(15)</a> <a href="#ref-for-dfn-readable-16" title="Reference 16">(16)</a> <a href="#ref-for-dfn-readable-17" title="Reference 17">(17)</a> 
+      <a href="#ref-for-dfn-readable-1" title="§ 4.6 readable attribute">§ 4.6 readable attribute</a> <a href="#ref-for-dfn-readable-2" title="Reference 2">(2)</a> <a href="#ref-for-dfn-readable-3" title="Reference 3">(3)</a> <a href="#ref-for-dfn-readable-4" title="Reference 4">(4)</a> <a href="#ref-for-dfn-readable-5" title="Reference 5">(5)</a> <a href="#ref-for-dfn-readable-6" title="Reference 6">(6)</a> <a href="#ref-for-dfn-readable-7" title="Reference 7">(7)</a> <a href="#ref-for-dfn-readable-8" title="Reference 8">(8)</a> <a href="#ref-for-dfn-readable-9" title="Reference 9">(9)</a> <a href="#ref-for-dfn-readable-10" title="Reference 10">(10)</a> <a href="#ref-for-dfn-readable-11" title="Reference 11">(11)</a> <a href="#ref-for-dfn-readable-12" title="Reference 12">(12)</a> <a href="#ref-for-dfn-readable-13" title="Reference 13">(13)</a> <a href="#ref-for-dfn-readable-14" title="Reference 14">(14)</a> <a href="#ref-for-dfn-readable-15" title="Reference 15">(15)</a> <a href="#ref-for-dfn-readable-16" title="Reference 16">(16)</a> <a href="#ref-for-dfn-readable-17" title="Reference 17">(17)</a> 
     </li><li>
-      <a href="#ref-for-dfn-readable-18" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> 
+      <a href="#ref-for-dfn-readable-18" title="§ 4.7 writable attribute">§ 4.7 writable attribute</a> 
     </li><li>
-      <a href="#ref-for-dfn-readable-19" title="§ 4.9 close() method">§ 4.9 close() method</a> <a href="#ref-for-dfn-readable-20" title="Reference 2">(2)</a> <a href="#ref-for-dfn-readable-21" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dfn-readable-19" title="§ 4.10 close() method">§ 4.10 close() method</a> <a href="#ref-for-dfn-readable-20" title="Reference 2">(2)</a> <a href="#ref-for-dfn-readable-21" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-readfatal" aria-label="Links in this document to definition: [[readFatal]]">
@@ -2645,9 +2717,9 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dfn-readfatal-1" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> <a href="#ref-for-dfn-readfatal-2" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-readfatal-1" title="§ 4.6 readable attribute">§ 4.6 readable attribute</a> <a href="#ref-for-dfn-readfatal-2" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-readfatal-3" title="§ 4.9 close() method">§ 4.9 close() method</a> 
+      <a href="#ref-for-dfn-readfatal-3" title="§ 4.10 close() method">§ 4.10 close() method</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-writable" aria-label="Links in this document to definition: [[writable]]">
@@ -2659,11 +2731,11 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dfn-writable-1" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> 
+      <a href="#ref-for-dfn-writable-1" title="§ 4.6 readable attribute">§ 4.6 readable attribute</a> 
     </li><li>
-      <a href="#ref-for-dfn-writable-2" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> <a href="#ref-for-dfn-writable-3" title="Reference 2">(2)</a> <a href="#ref-for-dfn-writable-4" title="Reference 3">(3)</a> <a href="#ref-for-dfn-writable-5" title="Reference 4">(4)</a> 
+      <a href="#ref-for-dfn-writable-2" title="§ 4.7 writable attribute">§ 4.7 writable attribute</a> <a href="#ref-for-dfn-writable-3" title="Reference 2">(2)</a> <a href="#ref-for-dfn-writable-4" title="Reference 3">(3)</a> <a href="#ref-for-dfn-writable-5" title="Reference 4">(4)</a> 
     </li><li>
-      <a href="#ref-for-dfn-writable-6" title="§ 4.9 close() method">§ 4.9 close() method</a> <a href="#ref-for-dfn-writable-7" title="Reference 2">(2)</a> <a href="#ref-for-dfn-writable-8" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dfn-writable-6" title="§ 4.10 close() method">§ 4.10 close() method</a> <a href="#ref-for-dfn-writable-7" title="Reference 2">(2)</a> <a href="#ref-for-dfn-writable-8" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-writefatal" aria-label="Links in this document to definition: [[writeFatal]]">
@@ -2675,9 +2747,9 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dfn-writefatal-1" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> <a href="#ref-for-dfn-writefatal-2" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-writefatal-1" title="§ 4.7 writable attribute">§ 4.7 writable attribute</a> <a href="#ref-for-dfn-writefatal-2" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-writefatal-3" title="§ 4.9 close() method">§ 4.9 close() method</a> 
+      <a href="#ref-for-dfn-writefatal-3" title="§ 4.10 close() method">§ 4.10 close() method</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-pendingclosepromise" aria-label="Links in this document to definition: [[pendingClosePromise]]">
@@ -2689,18 +2761,18 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dfn-pendingclosepromise-1" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> <a href="#ref-for-dfn-pendingclosepromise-2" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-pendingclosepromise-1" title="§ 4.6 readable attribute">§ 4.6 readable attribute</a> <a href="#ref-for-dfn-pendingclosepromise-2" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-pendingclosepromise-3" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> <a href="#ref-for-dfn-pendingclosepromise-4" title="Reference 2">(2)</a> 
+      <a href="#ref-for-dfn-pendingclosepromise-3" title="§ 4.7 writable attribute">§ 4.7 writable attribute</a> <a href="#ref-for-dfn-pendingclosepromise-4" title="Reference 2">(2)</a> 
     </li><li>
-      <a href="#ref-for-dfn-pendingclosepromise-5" title="§ 4.9 close() method">§ 4.9 close() method</a> <a href="#ref-for-dfn-pendingclosepromise-6" title="Reference 2">(2)</a> <a href="#ref-for-dfn-pendingclosepromise-7" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dfn-pendingclosepromise-5" title="§ 4.10 close() method">§ 4.10 close() method</a> <a href="#ref-for-dfn-pendingclosepromise-6" title="Reference 2">(2)</a> <a href="#ref-for-dfn-pendingclosepromise-7" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialport-onconnect" aria-label="Links in this document to definition: onconnect">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport-onconnect" aria-label="Permalink for definition: onconnect. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2710,11 +2782,25 @@ reader.cancel();
       <a href="#ref-for-dom-serialport-onconnect-2" title="§ 4.1 onconnect attribute">§ 4.1 onconnect attribute</a> 
     </li>
   </ul>
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-logically-connected" aria-label="Links in this document to definition: logically connected">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dfn-logically-connected" aria-label="Permalink for definition: logically connected. Activate to close this dialog.">Permalink</a>
+         
+      </div>
+      <p><b>Referenced in:</b></p>
+      <ul>
+    <li>
+      <a href="#ref-for-dfn-logically-connected-1" title="§ 4.1 onconnect attribute">§ 4.1 onconnect attribute</a> 
+    </li><li>
+      <a href="#ref-for-dfn-logically-connected-2" title="§ 4.2 ondisconnect attribute">§ 4.2 ondisconnect attribute</a> 
+    </li>
+  </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialport-ondisconnect" aria-label="Links in this document to definition: ondisconnect">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport-ondisconnect" aria-label="Permalink for definition: ondisconnect. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2728,7 +2814,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport-getinfo" aria-label="Permalink for definition: getInfo(). Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2808,7 +2894,7 @@ reader.cancel();
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport-open" aria-label="Permalink for definition: open(). Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2998,11 +3084,25 @@ reader.cancel();
       <a href="#ref-for-dom-flowcontroltype-hardware-1" title="§ 4.4.1.2 FlowControlType enum">§ 4.4.1.2 FlowControlType enum</a> 
     </li>
   </ul>
+    </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialport-connected" aria-label="Links in this document to definition: connected">
+      <span class="caret"></span>
+      <div>
+        <a class="self-link" href="#dom-serialport-connected" aria-label="Permalink for definition: connected. Activate to close this dialog.">Permalink</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
+      </div>
+      <p><b>Referenced in:</b></p>
+      <ul>
+    <li>
+      <a href="#ref-for-dom-serialport-connected-1" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
+    </li><li>
+      <a href="#ref-for-dom-serialport-connected-2" title="§ 4.5 connected attribute">§ 4.5 connected attribute</a> 
+    </li>
+  </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialport-readable" aria-label="Links in this document to definition: readable">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport-readable" aria-label="Permalink for definition: readable. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3011,9 +3111,9 @@ reader.cancel();
     </li><li>
       <a href="#ref-for-dom-serialport-readable-3" title="§ 4.4 open() method">§ 4.4 open() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-readable-4" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> <a href="#ref-for-dom-serialport-readable-5" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-readable-6" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dom-serialport-readable-4" title="§ 4.6 readable attribute">§ 4.6 readable attribute</a> <a href="#ref-for-dom-serialport-readable-5" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-readable-6" title="Reference 3">(3)</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-readable-7" title="§ 4.9 close() method">§ 4.9 close() method</a> <a href="#ref-for-dom-serialport-readable-8" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-readable-9" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dom-serialport-readable-7" title="§ 4.10 close() method">§ 4.10 close() method</a> <a href="#ref-for-dom-serialport-readable-8" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-readable-9" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-handle-closing-the-readable-stream" aria-label="Links in this document to definition: handle closing the readable stream">
@@ -3025,14 +3125,14 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dfn-handle-closing-the-readable-stream-1" title="§ 4.5 readable attribute">§ 4.5 readable attribute</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-2" title="Reference 2">(2)</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-3" title="Reference 3">(3)</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-4" title="Reference 4">(4)</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-5" title="Reference 5">(5)</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-6" title="Reference 6">(6)</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-7" title="Reference 7">(7)</a> 
+      <a href="#ref-for-dfn-handle-closing-the-readable-stream-1" title="§ 4.6 readable attribute">§ 4.6 readable attribute</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-2" title="Reference 2">(2)</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-3" title="Reference 3">(3)</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-4" title="Reference 4">(4)</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-5" title="Reference 5">(5)</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-6" title="Reference 6">(6)</a> <a href="#ref-for-dfn-handle-closing-the-readable-stream-7" title="Reference 7">(7)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialport-writable" aria-label="Links in this document to definition: writable">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport-writable" aria-label="Permalink for definition: writable. Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3041,9 +3141,9 @@ reader.cancel();
     </li><li>
       <a href="#ref-for-dom-serialport-writable-3" title="§ 4.4 open() method">§ 4.4 open() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-writable-4" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> 
+      <a href="#ref-for-dom-serialport-writable-4" title="§ 4.7 writable attribute">§ 4.7 writable attribute</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-writable-5" title="§ 4.9 close() method">§ 4.9 close() method</a> <a href="#ref-for-dom-serialport-writable-6" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-writable-7" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dom-serialport-writable-5" title="§ 4.10 close() method">§ 4.10 close() method</a> <a href="#ref-for-dom-serialport-writable-6" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-writable-7" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-handle-closing-the-writable-stream" aria-label="Links in this document to definition: handle closing the writable stream">
@@ -3055,21 +3155,21 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dfn-handle-closing-the-writable-stream-1" title="§ 4.6 writable attribute">§ 4.6 writable attribute</a> <a href="#ref-for-dfn-handle-closing-the-writable-stream-2" title="Reference 2">(2)</a> <a href="#ref-for-dfn-handle-closing-the-writable-stream-3" title="Reference 3">(3)</a> 
+      <a href="#ref-for-dfn-handle-closing-the-writable-stream-1" title="§ 4.7 writable attribute">§ 4.7 writable attribute</a> <a href="#ref-for-dfn-handle-closing-the-writable-stream-2" title="Reference 2">(2)</a> <a href="#ref-for-dfn-handle-closing-the-writable-stream-3" title="Reference 3">(3)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialport-setsignals" aria-label="Links in this document to definition: setSignals()">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport-setsignals" aria-label="Permalink for definition: setSignals(). Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
       <a href="#ref-for-dom-serialport-setsignals-1" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-setsignals-2" title="§ 4.7 setSignals() method">§ 4.7 setSignals() method</a> 
+      <a href="#ref-for-dom-serialport-setsignals-2" title="§ 4.8 setSignals() method">§ 4.8 setSignals() method</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialoutputsignals" aria-label="Links in this document to definition: SerialOutputSignals">
@@ -3083,7 +3183,7 @@ reader.cancel();
     <li>
       <a href="#ref-for-dom-serialoutputsignals-1" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
     </li><li>
-      <a href="#ref-for-dom-serialoutputsignals-2" title="§ 4.7.1 SerialOutputSignals dictionary">§ 4.7.1 SerialOutputSignals dictionary</a> 
+      <a href="#ref-for-dom-serialoutputsignals-2" title="§ 4.8.1 SerialOutputSignals dictionary">§ 4.8.1 SerialOutputSignals dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialoutputsignals-dataterminalready" aria-label="Links in this document to definition: dataTerminalReady">
@@ -3095,9 +3195,9 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialoutputsignals-dataterminalready-1" title="§ 4.7 setSignals() method">§ 4.7 setSignals() method</a> 
+      <a href="#ref-for-dom-serialoutputsignals-dataterminalready-1" title="§ 4.8 setSignals() method">§ 4.8 setSignals() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialoutputsignals-dataterminalready-2" title="§ 4.7.1 SerialOutputSignals dictionary">§ 4.7.1 SerialOutputSignals dictionary</a> 
+      <a href="#ref-for-dom-serialoutputsignals-dataterminalready-2" title="§ 4.8.1 SerialOutputSignals dictionary">§ 4.8.1 SerialOutputSignals dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialoutputsignals-requesttosend" aria-label="Links in this document to definition: requestToSend">
@@ -3109,9 +3209,9 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialoutputsignals-requesttosend-1" title="§ 4.7 setSignals() method">§ 4.7 setSignals() method</a> 
+      <a href="#ref-for-dom-serialoutputsignals-requesttosend-1" title="§ 4.8 setSignals() method">§ 4.8 setSignals() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialoutputsignals-requesttosend-2" title="§ 4.7.1 SerialOutputSignals dictionary">§ 4.7.1 SerialOutputSignals dictionary</a> 
+      <a href="#ref-for-dom-serialoutputsignals-requesttosend-2" title="§ 4.8.1 SerialOutputSignals dictionary">§ 4.8.1 SerialOutputSignals dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialoutputsignals-break" aria-label="Links in this document to definition: break">
@@ -3123,23 +3223,23 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialoutputsignals-break-1" title="§ 4.7 setSignals() method">§ 4.7 setSignals() method</a> 
+      <a href="#ref-for-dom-serialoutputsignals-break-1" title="§ 4.8 setSignals() method">§ 4.8 setSignals() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialoutputsignals-break-2" title="§ 4.7.1 SerialOutputSignals dictionary">§ 4.7.1 SerialOutputSignals dictionary</a> 
+      <a href="#ref-for-dom-serialoutputsignals-break-2" title="§ 4.8.1 SerialOutputSignals dictionary">§ 4.8.1 SerialOutputSignals dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialport-getsignals" aria-label="Links in this document to definition: getSignals()">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport-getsignals" aria-label="Permalink for definition: getSignals(). Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
       <a href="#ref-for-dom-serialport-getsignals-1" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-getsignals-2" title="§ 4.8 getSignals() method">§ 4.8 getSignals() method</a> 
+      <a href="#ref-for-dom-serialport-getsignals-2" title="§ 4.9 getSignals() method">§ 4.9 getSignals() method</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialinputsignals" aria-label="Links in this document to definition: SerialInputSignals">
@@ -3153,9 +3253,9 @@ reader.cancel();
     <li>
       <a href="#ref-for-dom-serialinputsignals-1" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
     </li><li>
-      <a href="#ref-for-dom-serialinputsignals-2" title="§ 4.8 getSignals() method">§ 4.8 getSignals() method</a> 
+      <a href="#ref-for-dom-serialinputsignals-2" title="§ 4.9 getSignals() method">§ 4.9 getSignals() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialinputsignals-3" title="§ 4.8.1 SerialInputSignals dictionary">§ 4.8.1 SerialInputSignals dictionary</a> 
+      <a href="#ref-for-dom-serialinputsignals-3" title="§ 4.9.1 SerialInputSignals dictionary">§ 4.9.1 SerialInputSignals dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialinputsignals-datacarrierdetect" aria-label="Links in this document to definition: dataCarrierDetect">
@@ -3167,9 +3267,9 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialinputsignals-datacarrierdetect-1" title="§ 4.8 getSignals() method">§ 4.8 getSignals() method</a> 
+      <a href="#ref-for-dom-serialinputsignals-datacarrierdetect-1" title="§ 4.9 getSignals() method">§ 4.9 getSignals() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialinputsignals-datacarrierdetect-2" title="§ 4.8.1 SerialInputSignals dictionary">§ 4.8.1 SerialInputSignals dictionary</a> 
+      <a href="#ref-for-dom-serialinputsignals-datacarrierdetect-2" title="§ 4.9.1 SerialInputSignals dictionary">§ 4.9.1 SerialInputSignals dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialinputsignals-cleartosend" aria-label="Links in this document to definition: clearToSend">
@@ -3181,9 +3281,9 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialinputsignals-cleartosend-1" title="§ 4.8 getSignals() method">§ 4.8 getSignals() method</a> 
+      <a href="#ref-for-dom-serialinputsignals-cleartosend-1" title="§ 4.9 getSignals() method">§ 4.9 getSignals() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialinputsignals-cleartosend-2" title="§ 4.8.1 SerialInputSignals dictionary">§ 4.8.1 SerialInputSignals dictionary</a> 
+      <a href="#ref-for-dom-serialinputsignals-cleartosend-2" title="§ 4.9.1 SerialInputSignals dictionary">§ 4.9.1 SerialInputSignals dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialinputsignals-ringindicator" aria-label="Links in this document to definition: ringIndicator">
@@ -3195,9 +3295,9 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialinputsignals-ringindicator-1" title="§ 4.8 getSignals() method">§ 4.8 getSignals() method</a> 
+      <a href="#ref-for-dom-serialinputsignals-ringindicator-1" title="§ 4.9 getSignals() method">§ 4.9 getSignals() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialinputsignals-ringindicator-2" title="§ 4.8.1 SerialInputSignals dictionary">§ 4.8.1 SerialInputSignals dictionary</a> 
+      <a href="#ref-for-dom-serialinputsignals-ringindicator-2" title="§ 4.9.1 SerialInputSignals dictionary">§ 4.9.1 SerialInputSignals dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialinputsignals-datasetready" aria-label="Links in this document to definition: dataSetReady">
@@ -3209,37 +3309,37 @@ reader.cancel();
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
-      <a href="#ref-for-dom-serialinputsignals-datasetready-1" title="§ 4.8 getSignals() method">§ 4.8 getSignals() method</a> 
+      <a href="#ref-for-dom-serialinputsignals-datasetready-1" title="§ 4.9 getSignals() method">§ 4.9 getSignals() method</a> 
     </li><li>
-      <a href="#ref-for-dom-serialinputsignals-datasetready-2" title="§ 4.8.1 SerialInputSignals dictionary">§ 4.8.1 SerialInputSignals dictionary</a> 
+      <a href="#ref-for-dom-serialinputsignals-datasetready-2" title="§ 4.9.1 SerialInputSignals dictionary">§ 4.9.1 SerialInputSignals dictionary</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialport-close" aria-label="Links in this document to definition: close()">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport-close" aria-label="Permalink for definition: close(). Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
       <a href="#ref-for-dom-serialport-close-1" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-close-2" title="§ 4.9 close() method">§ 4.9 close() method</a> <a href="#ref-for-dom-serialport-close-3" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-close-4" title="Reference 3">(3)</a> <a href="#ref-for-dom-serialport-close-5" title="Reference 4">(4)</a> <a href="#ref-for-dom-serialport-close-6" title="Reference 5">(5)</a> <a href="#ref-for-dom-serialport-close-7" title="Reference 6">(6)</a> 
+      <a href="#ref-for-dom-serialport-close-2" title="§ 4.10 close() method">§ 4.10 close() method</a> <a href="#ref-for-dom-serialport-close-3" title="Reference 2">(2)</a> <a href="#ref-for-dom-serialport-close-4" title="Reference 3">(3)</a> <a href="#ref-for-dom-serialport-close-5" title="Reference 4">(4)</a> <a href="#ref-for-dom-serialport-close-6" title="Reference 5">(5)</a> <a href="#ref-for-dom-serialport-close-7" title="Reference 6">(6)</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-serialport-forget" aria-label="Links in this document to definition: forget()">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-serialport-forget" aria-label="Permalink for definition: forget(). Activate to close this dialog.">Permalink</a>
-        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1967322147">IDL</a>
+        <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1462650927">IDL</a>
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
     <li>
       <a href="#ref-for-dom-serialport-forget-1" title="§ 4. SerialPort interface">§ 4. SerialPort interface</a> 
     </li><li>
-      <a href="#ref-for-dom-serialport-forget-2" title="§ 4.10 forget() method">§ 4.10 forget() method</a> 
+      <a href="#ref-for-dom-serialport-forget-2" title="§ 4.11 forget() method">§ 4.11 forget() method</a> 
     </li>
   </ul>
     </div><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dfn-parsing-the-bluetooth-service-class-id-blocklist" aria-label="Links in this document to definition: parsing the Bluetooth service class ID blocklist">
