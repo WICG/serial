@@ -173,7 +173,7 @@
             <ol>
               <li>Let |allPorts:list&lt;SerialPort&gt;| be an empty [=list=].
               </li>
-              <li>[=list/For each=] paired Bluetooth device:
+              <li>[=list/For each=] Bluetooth device registered with the system:
                 <ol>
                   <li>[=list/For each=] {{BluetoothServiceUUID}}
                   |uuid:BluetoothServiceUUID| supported by the device:
@@ -201,7 +201,7 @@
                   </li>
                 </ol>
               </li>
-              <li>[=list/For each=] available non-Bluetooth serial port:
+              <li>[=list/For each=] [=available=] non-Bluetooth serial port:
                 <ol>
                   <li>Let |port:SerialPort| be a {{SerialPort}} representing
                   the port.
@@ -232,6 +232,12 @@
           <li>Return |promise|.
           </li>
         </ol>
+        <p>
+          A serial port is <dfn>available</dfn> if it is a wired serial port and
+          the port is physically connected to the system, or if it is a wireless
+          serial port and the wireless device hosting the port is registered
+          with the system.
+        </p>
         <section data-dfn-for="SerialPortRequestOptions">
           <h4>
             <dfn>SerialPortRequestOptions</dfn> dictionary
@@ -390,8 +396,8 @@
           </li>
           <li>Run the following steps [=in parallel=]:
             <ol>
-              <li>Let |availablePorts| be the sequence of available serial
-              ports on the system which the user has allowed the site to access
+              <li>Let |availablePorts| be the sequence of [=available=] serial
+              ports which the user has allowed the site to access
               as the result of a previous call to {{Serial/requestPort()}}.
               </li>
               <li>Let |ports| be the sequence of the {{SerialPort}}s
@@ -429,6 +435,7 @@
     interface SerialPort : EventTarget {
       attribute EventHandler onconnect;
       attribute EventHandler ondisconnect;
+      readonly attribute boolean connected;
       readonly attribute ReadableStream readable;
       readonly attribute WritableStream writable;
 
@@ -486,6 +493,17 @@
           </td>
           <td>
             The amount of data to buffer for transmit and receive
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <dfn>[[\connected]]</dfn>
+          </td>
+          <td>
+            `false`
+          </td>
+          <td>
+            A flag indicating the logical connection state of serial port
           </td>
         </tr>
         <tr>
@@ -551,17 +569,25 @@
         </h3>{{SerialPort/onconnect}} is an [=event handler IDL attribute=] for
         the {{connect}} event type.
         <p>
-          When a serial port becomes available on the system that the user has
-          allowed the site to access as the result of a previous call to
-          {{Serial/requestPort()}}, run the following steps:
+          When a serial port that the user has allowed the site to access as the
+          result of a previous call to {{Serial/requestPort()}} becomes
+          [=logically connected=], run the following steps:
         </p>
         <ol>
           <li>Let |port:SerialPort| be a {{SerialPort}} representing the port.
+          </li>
+          <li>Set |port|.{{SerialPort/[[connected]]}} to `true`.
           </li>
           <li>[=Fire an event=] named {{connect}} at |port| with its
           {{Event/bubbles}} attribute initialized to `true`.
           </li>
         </ol>
+        <p>
+          A serial port is <dfn>logically connected</dfn> if it is a wired
+          serial port and the port is physically connected to the system, or if
+          it is a wireless serial port and the system has active connections to
+          the wireless device (e.g. an open Bluetooth L2CAP channel).
+        </p>
       </section>
       <section>
         <h3>
@@ -569,12 +595,14 @@
         </h3>{{SerialPort/ondisconnect}} is an [=event handler IDL attribute=]
         for the {{disconnect}} event type.
         <p>
-          When a serial port becomes unavailable on the system that the user
-          has allowed the site to access as the result of a previous call to
-          {{Serial/requestPort()}}, run the following steps:
+          When a serial port that the user has allowed the site to access as the
+          result of a previous call to {{Serial/requestPort()}} is no longer
+          [=logically connected=], run the following steps:
         </p>
         <ol>
           <li>Let |port:SerialPort| be a {{SerialPort}} representing the port.
+          </li>
+          <li>Set |port|.{{SerialPort/[[connected]]}} to `false`.
           </li>
           <li>[=Fire an event=] named {{disconnect}} at |port| with its
           {{Event/bubbles}} attribute initialized to `true`.
@@ -842,6 +870,18 @@
             </dl>
           </section>
         </section>
+      </section>
+      <section>
+        <h2>
+          <dfn>connected</dfn> attribute
+        </h2>
+        <p>
+          The {{SerialPort/connected}} getter steps are:
+        </p>
+        <ol>
+          <li>Return [=this=].{{SerialPort/[[connected]]}}.
+          </li>
+        </ol>
       </section>
       <section>
         <h2>
@@ -1743,7 +1783,7 @@
             <ol>
               <li>Set [=this=].{{SerialPort/[[state]]}} to `"forgetting"`.
               </li>
-              <li>Remove [=this=] from the sequence of available serial ports
+              <li>Remove [=this=] from the sequence of serial ports
               on the system which the user has allowed the site to access as
               the result of a previous call to {{Serial/requestPort()}}.
               </li>
