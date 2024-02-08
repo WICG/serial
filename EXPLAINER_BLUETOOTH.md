@@ -191,17 +191,16 @@ An implementation of the
 [`ondisconnect`](https://wicg.github.io/serial/#ondisconnect-attribute) port
 availability callbacks equivalent to wired serial ports would necessitate that
 the host be in a continuous state of scanning for Bluetooth devices. This would
-negatively impact battery life and other system resources. Instead, events for
-wireless serial ports will be dispatched when the wireless device exposing the
-serial interface becomes connected or disconnected.
+negatively impact battery life and other system resources. Instead, a new
+concept of a "logically connected" serial port will be introduced.
 
 The specification will be extended to specify when to dispatch `onconnect` and
-`ondisconnect` events for wireless serial ports. A new concept of a "logically
-connected" serial port will be introduced. A serial port is logically connected
-if it is a wired serial port and the port is physically connected to the system,
-or if it is a wireless serial port and the system has any active connections to
-the wireless device. `onconnect`/`ondisconnect` events are dispatched when a
-serial port transitions into and out of the logically connected state.
+`ondisconnect` events for wireless serial ports when this state changes. A
+serial port is logically connected if it is a wired serial port and the port is
+physically connected to the system, or if it is a wireless serial port and the
+system has any active connections to the wireless device.
+`onconnect`/`ondisconnect` events are dispatched when a serial port transitions
+into and out of the logically connected state.
 
 Due to the transient nature of Bluetooth serial ports, and the lack of reliable
 `onconnect`/`ondisconnect` events, applications will fall back to other Web
