@@ -166,7 +166,7 @@ SerialPortInfo will be extended by adding the following member:
 1. `bluetoothServiceClassId` (string) – The Bluetooth service class 128-bit
    UUID.
 
-Opening a mapped port will return a btServiceClassId of `0x1101`.
+Opening a mapped port will return a bluetoothServiceClassId of `0x1101`.
 
 ### Port Persistence
 
@@ -177,31 +177,48 @@ method.
 
 Browser implementations may persist Bluetooth serial port access and return them
 to the caller. User agents may remember permission decisions for particular
-devices based on available device properties.Note that a persisted Bluetooth
+devices based on available device properties. Note that a persisted Bluetooth
 serial port may no longer be in communications range. Browser implementations
 may choose to filter out devices that cannot be reached, but this is not
 required. If the browser does not check for device availability while resolving
 `Serial.getPorts()`, `SerialPort.open()` will fail just as it would had that
 Bluetooth device been mapped as a serial port by the OS.
 
-### Events
+### Connection state
 
-Implementation of the
+An implementation of the
 [`onconnect`](https://wicg.github.io/serial/#onconnect-attribute) and
 [`ondisconnect`](https://wicg.github.io/serial/#ondisconnect-attribute) port
-availability callbacks are not required. Implementation is recommended and the
-expectation is that browsers will make a "best effort" to emit these events. If
-a browser is aware of a change in a device's availability it must fire an
-`onconnect`/`ondisconnect` event. Providing an implementation equivalent to a
-wired serial port would necessitate that the host be in a continuous state of
-scanning for Bluetooth devices – as long as at least one remembered Bluetooth
-port is unavailable. This would negatively impact battery life and other system
-resources.
+availability callbacks equivalent to wired serial ports would necessitate that
+the host be in a continuous state of scanning for Bluetooth devices. This would
+negatively impact battery life and other system resources. Instead, a new
+concept of a "logically connected" serial port will be introduced.
+
+The specification will be extended to specify when to dispatch `onconnect` and
+`ondisconnect` events for wireless serial ports when this state changes. A
+serial port is logically connected if it is a wired serial port and the port is
+physically connected to the system, or if it is a wireless serial port and the
+system has any active connections to the wireless device.
+`onconnect`/`ondisconnect` events are dispatched when a serial port transitions
+into and out of the logically connected state.
 
 Due to the transient nature of Bluetooth serial ports, and the lack of reliable
 `onconnect`/`ondisconnect` events, applications will fall back to other Web
 Serial methods. For example `ReadableStreamDefaultReader.read()` will fail if
 called when the device is out of range.
+
+### Port availability
+
+The specification will be updated to redefine "available port" to include
+wireless serial ports. A serial port is "available" if it is a wired serial port
+and the port is physically connected to the system, or if it is a wireless port
+and the wireless device exposing the port is registered with the system.
+
+With this change, `Serial.requestPort()` and `Serial.getPorts()` will include
+wireless serial ports from bonded but disconnected Bluetooth devices. To help
+applications identify whether a connection attempt is likely to succeed, a
+`SerialPort.connected` attribute will be added to indicate whether the port is
+logically connected.
 
 ## Security Considerations
 
