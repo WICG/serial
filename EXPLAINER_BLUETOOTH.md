@@ -220,6 +220,25 @@ applications identify whether a connection attempt is likely to succeed, a
 `SerialPort.connected` attribute will be added to indicate whether the port is
 logically connected.
 
+The below examples shows how `SerialPort.connected` attribute can be used to
+inform user right actions if the Bluetooth device is not powered on or not in
+the proximity of the system.
+
+```javascript
+// Assuming we have `port`, which is a wireless serial port.
+try {
+   await port.open({baudRate: 115200});
+} catch(e) {
+   if (!port.connected) {
+      // Inform the user that the Bluetooth device might be out of range
+      // or powered off, as it's currently not connectable.
+      return;
+   }
+   // Other types of error handling.
+}
+```
+
+
 ## Security Considerations
 
 This API change poses security risks that are a superset of those of the Web
