@@ -225,16 +225,15 @@ inform user right actions if the Bluetooth device is not powered on or not in
 the proximity of the system.
 
 ```javascript
-// Assuming we have `port`, which is a wireless serial port.
-try {
-   await port.open({baudRate: 115200});
-} catch(e) {
-   if (!port.connected) {
-      // Inform the user that the Bluetooth device might be out of range
-      // or powered off, as it's currently not connectable.
-      return;
-   }
-   // Other types of error handling.
+let ports = await navigator.serial.getPorts();
+for (let port of ports) {
+  if (port.connected) {
+    await port.open({baudRate: 115200});
+  } else {
+    // Prompt the user to make sure the Bluetooth device is connectable to the system.
+    // Once the user thinks the device is ready to connect, the user can press a
+    // a button which runs `port.open` to trigger a connection attempt.
+  }
 }
 ```
 
