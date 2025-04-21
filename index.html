@@ -948,10 +948,23 @@
           }
         }
 
-        const lineReader = port.readable
-            .pipeThrough(new TextDecoderStream())
+        const decoder = new TextDecoderStream();
+        const streamClosed = port.readable.pipeTo(decoder.writable);
+        const lineReader = decoder.readable
             .pipeThrough(new TransformStream(new LineBreakTransformer()))
             .getReader();
+          </pre>
+          <p>
+            As in [[[#close-example]]] the pipe chain cannot be constructed
+            using only `pipeThrough()`. It is necessary to use `pipeTo()` when
+            attaching the first {{TransformStream}} to the {{SerialPort}} so
+            that you can wait for the pipe chain to be closed when you want to
+            close the port.
+          </p>
+          <pre class="js">
+        lineReader.cancel();
+        await streamClosed;
+        await port.close();
           </pre>
           <p>
             Some other ways of encoding message boundaries are to prefix each
@@ -1571,7 +1584,7 @@
         <h3>
           <dfn>close()</dfn> method
         </h3>
-        <aside class="example">
+        <aside id="close-example" class="example">
           <p>
             When communication with the port is no longer required it can be
             closed and the associated resources released by the system.
