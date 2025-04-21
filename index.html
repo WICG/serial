@@ -614,8 +614,7 @@
           <dfn>getInfo()</dfn> method
         </h3>The {{SerialPort/getInfo()}} method steps are:
         <ol>
-          <li>Let |info:SerialPortInfo| be a [=new=] {{SerialPortInfo}}
-          dictionary.
+          <li>Let |info:SerialPortInfo| be an empty [=ordered map=].
           </li>
           <li>If the port is part of a USB device, perform the following steps:
             <ol>
@@ -1501,25 +1500,24 @@
               task source=] to reject |promise| with a "{{NetworkError}}"
               {{DOMException}} and abort these steps.
               </li>
-              <li>Let |signals:SerialInputSignals| be a [=new=]
-              {{SerialInputSignals}}.
+              <li>Let |dataCarrierDetect| be `true` if the "data carrier
+              detect" or "DCD" signal has been asserted by the device, and
+              `false` otherwise.
               </li>
-              <li>Set |signals|["{{SerialInputSignals/dataCarrierDetect}}"] to
-              `true` if the "data carrier detect" or "DCD" signal has been
-              asserted by the device, and `false` otherwise.
+              <li>Let |clearToSend| be `true` if the "clear to send" or "CTS"
+              signal has been asserted by the device, and `false` otherwise.
               </li>
-              <li>Set |signals|["{{SerialInputSignals/clearToSend}}"] to `true`
-              if the "clear to send" or "CTS" signal has been asserted by the
-              device, and `false` otherwise.
+              <li>Let |ringIndicator| be `true` if the "ring indicator" or "RI"
+              signal has been asserted by the device, and `false` otherwise.
               </li>
-              <li>Set |signals|["{{SerialInputSignals/ringIndicator}}"] to
-              `true` if the "ring indicator" or "RI" signal has been asserted
-              by the device, and `false` otherwise.
+              <li>Let |dataSetReady| be `true` if the "data set ready" or "DSR"
+              signal has been asserted by the device, and `false` otherwise.
               </li>
-              <li>Set |signals|["{{SerialInputSignals/dataSetReady}}"] to
-              `true` if the "data set ready" or "DSR" signal has been asserted
-              by the device, and `false` otherwise.
-              </li>
+              <li>Let |signals| be the [=ordered map=] «[
+              "{{SerialInputSignals/dataCarrierDetect}}" → |dataCarrierDetect|,
+              "{{SerialInputSignals/clearToSend}}" → |clearToSend|,
+              "{{SerialInputSignals/ringIndicator}}" → |ringIndicator|,
+              "{{SerialInputSignals/dataSetReady}}" → |dataSetReady| ]».</li>
               <li>[=Queue a global task=] on the [=relevant global object=] of
               [=this=] using the [=serial port task source=] to [=resolve=]
               |promise| with |signals|.
