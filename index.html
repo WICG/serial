@@ -634,9 +634,21 @@
               </li>
             </ol>
           </li>
+          <li>If the port is [=identifiable=], perform the following steps:
+              <ol>
+                <li>Set |info|["{{SerialPortInfo/id}}"] to the [=identifier=]
+                  of the port.
+                </li>
+              </ol>
+            </li>
           <li>Return |info|.
           </li>
         </ol>
+        <p>
+          A serial port is <dfn>identifiable</dfn> if the port can be uniquely
+          identified through an <dfn>identifier</dfn> across the user agent
+          restarts while it remains [=logically connected=].
+        </p>
         <section data-dfn-for="SerialPortInfo">
           <h4>
             <dfn>SerialPortInfo</dfn> dictionary
@@ -646,6 +658,7 @@
         unsigned short usbVendorId;
         unsigned short usbProductId;
         BluetoothServiceUUID bluetoothServiceClassId;
+        DOMString id;
       };
           </pre>
           <dl>
@@ -672,6 +685,14 @@
               If the port is a service on a Bluetooth device this member will
               be a {{BluetoothServiceUUID}} containing the service class UUID.
               Otherwise it will be `undefined`.
+            </dd>
+            <dt>
+              <dfn>id</dfn> member
+            </dt>
+            <dd>
+              If the port is [=identifiable=], this member will be a
+              {{DOMString}} representing the [=identifier=] of the port. Otherwise
+              it will be `undefined`.
             </dd>
           </dl>
         </section>
