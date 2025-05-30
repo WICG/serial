@@ -1421,6 +1421,13 @@
           reject |promise| with {{TypeError}} and return |promise|.
           </li>
           <li>Perform the following steps [=in parallel=]:
+            <div class="note">
+              Ideally the changes specified in |signals| would be applied
+              atomically however this is not supported by either the POSIX or
+              Windows APIs user agents will use to implement these steps.
+              Therefore the ordering given below is likely to be relied upon by
+              applications.
+            </div>
             <ol>
               <li>If |signals|["{{SerialOutputSignals/dataTerminalReady}}"] is
               present, invoke the operating system to either assert (if `true`)
