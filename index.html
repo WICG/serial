@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 35.3.0">
+<meta name="generator" content="ReSpec 35.4.3">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 span.example-title{text-transform:none}
@@ -94,7 +94,7 @@ a.bibref{text-decoration:none}
 .respec-offending-element{background:url(data:image/gif;base64,R0lGODdhBAADAPEAANv///8AAP///wAAACwAAAAABAADAEACBZQjmIAFADs=) bottom repeat-x}
 }
 #references :target{background:#eaf3ff;animation:pop .4s ease-in-out 0s 1}
-cite .bibref{font-style:normal}
+cite .bibref{font-style:italic}
 a[href].orcid{padding-left:4px;padding-right:4px}
 a[href].orcid>svg{margin-bottom:-2px}
 ol.tof,ul.tof{list-style:none outside none}
@@ -199,8 +199,8 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "lint": {
     "informative-dfn": false
   },
-  "publishISODate": "2025-04-23T00:00:00.000Z",
-  "generatedSubtitle": "Draft Community Group Report 23 April 2025"
+  "publishISODate": "2025-07-30T00:00:00.000Z",
+  "generatedSubtitle": "Draft Community Group Report 30 July 2025"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/cg-draft"></head>
   <body class="h-entry" data-cite="WEBIDL DOM HTML Infra PERMISSIONS-POLICY STREAMS WebIDL web-bluetooth"><div class="head">
@@ -209,7 +209,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <h1 id="title" class="title">Web Serial API</h1> <h2 id="subtitle" class="subtitle">Living document</h2>
     <p id="w3c-state">
       <a href="https://www.w3.org/standards/types#reports">Draft Community Group Report</a>
-      <time class="dt-published" datetime="2025-04-23">23 April 2025</time>
+      <time class="dt-published" datetime="2025-07-30">30 July 2025</time>
     </p>
     <dl>
       
@@ -1684,6 +1684,13 @@ writer.<span class="hljs-title function_">releaseLock</span>();</code></pre>
           reject <var>promise</var> with <a data-link-type="exception" data-lt="TypeError" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror"><code>TypeError</code></a> and return <var>promise</var>.
           </li>
           <li>Perform the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>:
+            <div class="note" role="note" id="issue-container-generatedID-6"><div role="heading" class="note-title marker" id="h-note-6" aria-level="4"><span>Note</span></div><div class="">
+              Ideally the changes specified in <var>signals</var> would be applied
+              atomically however this is not supported by either the POSIX or
+              Windows APIs user agents will use to implement these steps.
+              Therefore the ordering given below is likely to be relied upon by
+              applications.
+            </div></div>
             <ol>
               <li>If <var>signals</var>["<a data-link-type="idl" href="#dom-serialoutputsignals-dataterminalready" class="internalDFN" id="ref-for-dom-serialoutputsignals-dataterminalready-1"><code>dataTerminalReady</code></a>"] is
               present, invoke the operating system to either assert (if <code>true</code>)
@@ -1698,7 +1705,7 @@ writer.<span class="hljs-title function_">releaseLock</span>();</code></pre>
               <li>If <var>signals</var>["<a data-link-type="idl" href="#dom-serialoutputsignals-break" class="internalDFN" id="ref-for-dom-serialoutputsignals-break-1"><code>break</code></a>"] is present,
               invoke the operating system to either assert (if <code>true</code>) or
               deassert (if <code>false</code>) the "break" signal on the serial port.
-                <div class="note" role="note" id="issue-container-generatedID-6"><div role="heading" class="note-title marker" id="h-note-6" aria-level="4"><span>Note</span></div><div class="">
+                <div class="note" role="note" id="issue-container-generatedID-7"><div role="heading" class="note-title marker" id="h-note-7" aria-level="4"><span>Note</span></div><div class="">
                   The "break" signal is typically implemented as an in-band
                   signal by holding the transmit line at the "mark" voltage and
                   thus prevents data transmission for as long as it remains
@@ -2300,7 +2307,7 @@ reader.<span class="hljs-title function_">cancel</span>();
     </dd><dt id="bib-infra">[infra]</dt><dd>
       <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Anne van Kesteren; Domenic Denicola.  WHATWG. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
     </dd><dt id="bib-permissions-policy">[PERMISSIONS-POLICY]</dt><dd>
-      <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. Ian Clelland.  W3C. 10 February 2025. W3C Working Draft. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
+      <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. Ian Clelland.  W3C. 18 July 2025. W3C Working Draft. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
     </dd><dt id="bib-streams">[STREAMS]</dt><dd>
       <a href="https://streams.spec.whatwg.org/"><cite>Streams Standard</cite></a>. Adam Rice; Domenic Denicola; Mattias Buelens; 吉野剛史 (Takeshi Yoshino).  WHATWG. Living Standard. URL: <a href="https://streams.spec.whatwg.org/">https://streams.spec.whatwg.org/</a>
     </dd><dt id="bib-web-bluetooth">[WEB-BLUETOOTH]</dt><dd>
@@ -2311,7 +2318,7 @@ reader.<span class="hljs-title function_">cancel</span>();
   </section><section id="informative-references"><div class="header-wrapper"><h3 id="b-2-informative-references"><bdi class="secno">B.2 </bdi>Informative references</h3><a class="self-link" href="#informative-references" aria-label="Permalink for Appendix B.2"></a></div>
     
     <dl class="bibliography"><dt id="bib-csp3">[CSP3]</dt><dd>
-      <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. Mike West; Antonio Sartori.  W3C. 24 March 2025. W3C Working Draft. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+      <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. Mike West; Antonio Sartori.  W3C. 11 July 2025. W3C Working Draft. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
     </dd><dt id="bib-webusb">[WEBUSB]</dt><dd>
       <a href="https://wicg.github.io/webusb/"><cite>WebUSB API</cite></a>.  W3C. Draft Community Group Report. URL: <a href="https://wicg.github.io/webusb/">https://wicg.github.io/webusb/</a>
     </dd></dl>
