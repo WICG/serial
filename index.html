@@ -1032,6 +1032,8 @@
               [=ReadableStream/current BYOB request view=]'s
               [=BufferSource/byte length=].
               </li>
+              <li>Let |promise| be [=a new Promise=].
+              </li>
               <li>Run the following steps [=in parallel=]:
                 <ol>
                   <li>Invoke the operating system to read up to |desiredSize|
@@ -1062,6 +1064,8 @@
                           </li>
                           <li>[=ReadableStream/Enqueue=] |view| into
                           [=this=].{{SerialPort/[[readable]]}}.
+                          </li>
+                          <li>[=Resolve=] |promise| with `undefined`.
                           </li>
                         </ol>
                       </li>
@@ -1115,15 +1119,9 @@
                   </li>
                 </ol>
               </li>
-              <li>Return [=a promise resolved with=] `undefined`.
+              <li>Return |promise|.
               </li>
             </ol>
-            <p class="note">
-              The {{Promise}} returned by this algorithm is immediately
-              resolved so that it does not block canceling the stream.
-              [[STREAMS]] specifies that this algorithm will not be invoked
-              again until a chunk is enqueued.
-            </p>
           </li>
           <li>Let |cancelAlgorithm| be the following steps:
             <ol>
