@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en" dir="ltr"><head>
 <meta charset="utf-8">
-<meta name="generator" content="ReSpec 35.8.0">
+<meta name="generator" content="ReSpec 37.1.0">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <style>
 span.example-title{text-transform:none}
@@ -64,6 +64,7 @@ dfn{cursor:pointer}
 .dfn-panel .marker{padding:.1em;margin-left:.5em;border-radius:.2em;text-align:center;white-space:nowrap;font-size:90%;color:#040b1c}
 .dfn-panel .marker.dfn-exported{background:#d1edfd;box-shadow:0 0 0 .125em #1ca5f940}
 .dfn-panel .marker.idl-block{background:#8ccbf2;box-shadow:0 0 0 .125em #0670b161}
+.dfn-panel .marker.cddl-block{background:#8ccbf2;box-shadow:0 0 0 .125em #0670b161}
 .dfn-panel a:not(:hover){text-decoration:none!important;border-bottom:none!important}
 .dfn-panel a[href]:hover{border-bottom-width:1px}
 .dfn-panel ul{padding:0}
@@ -94,13 +95,17 @@ a.bibref{text-decoration:none}
 .respec-offending-element{background:url(data:image/gif;base64,R0lGODdhBAADAPEAANv///8AAP///wAAACwAAAAABAADAEACBZQjmIAFADs=) bottom repeat-x}
 }
 #references :target{background:#eaf3ff;animation:pop .4s ease-in-out 0s 1}
+@media (prefers-color-scheme:dark){
+#references :target{background:color-mix(in srgb, #eaf3ff 15%, transparent)}
+}
+body:has(input[name=color-scheme][value=dark]:checked) #references :target{background:color-mix(in srgb, #eaf3ff 15%, transparent)}
 cite .bibref{font-style:italic}
 a[href].orcid{padding-left:4px;padding-right:4px}
 a[href].orcid>svg{margin-bottom:-2px}
 ol.tof,ul.tof{list-style:none outside none}
 .caption{margin-top:.5em;font-style:italic}
 #issue-summary>ul{column-count:2}
-#issue-summary li{list-style:none;display:inline-block}
+#issue-summary li{list-style:none}
 details.respec-tests-details{margin-left:1em;display:inline-block;vertical-align:top}
 details.respec-tests-details>*{padding-right:2em}
 details.respec-tests-details[open]{z-index:999999;position:absolute;border:thin solid #cad3e2;border-radius:.3em;background-color:#fff;padding-bottom:.5em}
@@ -110,7 +115,7 @@ details.respec-tests-details>li{padding-left:1em}
 .self-link:hover{opacity:1;text-decoration:none;background-color:transparent}
 aside.example .marker>a.self-link{color:inherit}
 .header-wrapper{display:flex;align-items:baseline}
-:is(h2,h3,h4,h5,h6):not(#toc>h2,#abstract>h2,#sotd>h2,.head>h2){position:relative;left:-.5em}
+:is(h2,h3,h4,h5,h6):not(#toc>h2,#abstract>h2,#sotd>h2,.head>h2):has(+a.self-link){position:relative;left:-.5em}
 :is(h2,h3,h4,h5,h6):not(#toch2)+a.self-link{color:inherit;order:-1;position:relative;left:-1.1em;font-size:1rem;opacity:.5}
 :is(h2,h3,h4,h5,h6)+a.self-link::before{content:"§";text-decoration:none;color:var(--heading-text)}
 :is(h2,h3)+a.self-link{top:-.2em}
@@ -121,12 +126,41 @@ dd{margin-left:0}
 @media print{
 .removeOnSave{display:none}
 }
+body:has(input[name=color-scheme][value=light]:checked),head:not(:has(meta[name=color-scheme][content~=dark]))+body{color-scheme:light}
+body:has(input[name=color-scheme][value=dark]:checked){color-scheme:dark}
 </style>
 <meta name="color-scheme" content="light">
 <style>
-.hljs{--base:#fafafa;--mono-1:#383a42;--mono-2:#686b77;--mono-3:#717277;--hue-1:#0b76c5;--hue-2:#336ae3;--hue-3:#a626a4;--hue-4:#42803c;--hue-5:#ca4706;--hue-5-2:#c91243;--hue-6:#986801;--hue-6-2:#9a6a01}
+.hljs,body:has(input[name=color-scheme][value=light]:checked) .hljs,head:not(:has(meta[name=color-scheme][content~=dark]))+body .hljs{--base:#fafafa;--mono-1:#383a42;--mono-2:#686b77;--mono-3:#717277;--hue-1:#0b76c5;--hue-2:#336ae3;--hue-3:#a626a4;--hue-4:#42803c;--hue-5:#ca4706;--hue-5-2:#c91243;--hue-6:#986801;--hue-6-2:#9a6a01}
 @media (prefers-color-scheme:dark){
-.hljs{--base:#282c34;--mono-1:#abb2bf;--mono-2:#818896;--mono-3:#5c6370;--hue-1:#56b6c2;--hue-2:#61aeee;--hue-3:#c678dd;--hue-4:#98c379;--hue-5:#e06c75;--hue-5-2:#be5046;--hue-6:#d19a66;--hue-6-2:#e6c07b}
+.hljs{
+  --base: #282c34;
+  --mono-1: #abb2bf;
+  --mono-2: #818896;
+  --mono-3: #5c6370;
+  --hue-1: #56b6c2;
+  --hue-2: #61aeee;
+  --hue-3: #c678dd;
+  --hue-4: #98c379;
+  --hue-5: #e06c75;
+  --hue-5-2: #be5046;
+  --hue-6: #d19a66;
+  --hue-6-2: #e6c07b;
+}
+}
+body:has(input[name=color-scheme][value=dark]:checked) .hljs{
+  --base: #282c34;
+  --mono-1: #abb2bf;
+  --mono-2: #818896;
+  --mono-3: #5c6370;
+  --hue-1: #56b6c2;
+  --hue-2: #61aeee;
+  --hue-3: #c678dd;
+  --hue-4: #98c379;
+  --hue-5: #e06c75;
+  --hue-5-2: #be5046;
+  --hue-6: #d19a66;
+  --hue-6-2: #e6c07b;
 }
 .hljs{display:block;overflow-x:auto;padding:.5em;color:#383a42;color:var(--mono-1,#383a42);background:#fafafa;background:var(--base,#fafafa)}
 .hljs-comment,.hljs-quote{color:#717277;color:var(--mono-3,#717277);font-style:italic}
@@ -159,7 +193,7 @@ var.respec-hl{background:0 0;color:#000;box-shadow:unset}
 }
 </style>
 <style>
-var{position:relative;cursor:pointer}
+var[data-type]{position:relative}
 var[data-type]::after,var[data-type]::before{position:absolute;left:50%;top:-6px;opacity:0;transition:opacity .4s;pointer-events:none}
 var[data-type]::before{content:"";transform:translateX(-50%);border-width:4px 6px 0 6px;border-style:solid;border-color:transparent;border-top-color:#222}
 var[data-type]::after{content:attr(data-type);transform:translateX(-50%) translateY(-100%);background:#222;text-align:center;font-family:"Dank Mono","Fira Code",monospace;font-style:normal;padding:6px;border-radius:3px;color:#daca88;text-indent:0;font-weight:400}
@@ -199,8 +233,8 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
   "lint": {
     "informative-dfn": false
   },
-  "publishISODate": "2026-03-02T00:00:00.000Z",
-  "generatedSubtitle": "Draft Community Group Report 02 March 2026"
+  "publishISODate": "2026-06-02T00:00:00.000Z",
+  "generatedSubtitle": "Draft Community Group Report 02 June 2026"
 }</script>
 <link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/2021/cg-draft"></head>
   <body class="h-entry" data-cite="WEBIDL DOM HTML Infra PERMISSIONS-POLICY STREAMS WebIDL web-bluetooth"><div class="head">
@@ -209,7 +243,7 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
     <h1 id="title" class="title">Web Serial API</h1> <h2 id="subtitle" class="subtitle">Living document</h2>
     <p id="w3c-state">
       <a href="https://www.w3.org/standards/types#reports">Draft Community Group Report</a>
-      <time class="dt-published" datetime="2026-03-02">02 March 2026</time>
+      <time class="dt-published" datetime="2026-06-02">02 June 2026</time>
     </p>
     <dl>
       
@@ -221,7 +255,9 @@ var[data-type]:hover::after,var[data-type]:hover::before{opacity:1}
       
       
       
-      <dt>Editor:</dt><dd class="editor p-author h-card vcard">
+      <dt>
+              Editor:
+            </dt><dd class="editor p-author h-card vcard">
     <a class="u-url url p-name fn" href="https://github.com/wicg/serial/graphs/contributors">See contributors on GH</a>
   </dd>
       
@@ -469,7 +505,7 @@ connectButton.<span class="hljs-title function_">addEventListener</span>(<span c
               <li>If <var data-type="SerialPortFilter">filter</var>["<a data-link-type="idl" href="#dom-serialportfilter-usbvendorid" class="internalDFN" id="ref-for-dom-serialportfilter-usbvendorid-2"><code>usbVendorId</code></a>"] is not
               present, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject">reject</a> <var data-type="Promise">promise</var> with a <a data-link-type="exception" data-lt="TypeError" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror"><code>TypeError</code></a> and return
               <var data-type="Promise">promise</var>.
-                <div class="note" role="note" id="issue-container-generatedID"><div role="heading" class="note-title marker" id="h-note" aria-level="4"><span>Note</span></div><div class="">
+                <div class="note" role="note" id="issue-container-generatedID"><div class="note-title marker" id="h-note"><span>Note</span></div><div class="">
                   This check implements the combined rule that a
                   <a data-link-type="idl" data-lt="SerialPortFilter" href="#dom-serialportfilter" class="internalDFN" id="ref-for-dom-serialportfilter-1"><code>SerialPortFilter</code></a> cannot be empty and if
                   <a data-link-type="idl" href="#dom-serialportfilter-usbproductid" class="internalDFN" id="ref-for-dom-serialportfilter-usbproductid-2"><code>usbProductId</code></a> is specified then
@@ -1060,7 +1096,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
             <dd>
               A positive, non-zero value indicating the baud rate at which
               serial communication should be established.
-              <div class="note" role="note" id="issue-container-generatedID-0"><div role="heading" class="note-title marker" id="h-note-0" aria-level="5"><span>Note</span></div><div class="">
+              <div class="note" role="note" id="issue-container-generatedID-0"><div class="note-title marker" id="h-note-0"><span>Note</span></div><div class="">
                 <a data-link-type="idl" href="#dom-serialoptions-baudrate" class="internalDFN" id="ref-for-dom-serialoptions-baudrate-3"><code>baudRate</code></a> is the only required member of this
                 dictionary. While there are common default for other connection
                 parameters it is important for developers to consider and
@@ -1318,7 +1354,7 @@ interface <a class="internalDFN idlID" data-link-type="interface" href="#dom-ser
                 <ol>
                   <li>Invoke the operating system to read up to <var>desiredSize</var>
                   bytes from the port, putting the result in the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#byte-sequence">byte sequence</a> <var>bytes</var>.
-                    <div class="note" role="note" id="issue-container-generatedID-1"><div role="heading" class="note-title marker" id="h-note-1" aria-level="4"><span>Note</span></div><div class="">
+                    <div class="note" role="note" id="issue-container-generatedID-1"><div class="note-title marker" id="h-note-1"><span>Note</span></div><div class="">
                       <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-link-type="attribute" data-lt="[[state]]" href="#dfn-state" class="internalDFN" id="ref-for-dfn-state-5"><code>[[state]]</code></a> becoming <code>"forgotten"</code>
                       must be treated as if <var>the port was disconnected</var>.
                     </div></div>
@@ -1511,12 +1547,12 @@ writer.<span class="hljs-title function_">releaseLock</span>();</code></pre>
                 <ol>
                   <li>Invoke the operating system to write <var>bytes</var> to the port.
                   Alternately, store the chunk for future coalescing.
-                    <div class="note" role="note" id="issue-container-generatedID-2"><div role="heading" class="note-title marker" id="h-note-2" aria-level="4"><span>Note</span></div><div class="">
+                    <div class="note" role="note" id="issue-container-generatedID-2"><div class="note-title marker" id="h-note-2"><span>Note</span></div><div class="">
                       The operating system may return from this operation once
                       <var>bytes</var> has been queued for transmission rather than
                       after it has been transmitted.
                     </div></div>
-                    <div class="note" role="note" id="issue-container-generatedID-3"><div role="heading" class="note-title marker" id="h-note-3" aria-level="4"><span>Note</span></div><div class="">
+                    <div class="note" role="note" id="issue-container-generatedID-3"><div class="note-title marker" id="h-note-3"><span>Note</span></div><div class="">
                       <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#this">this</a>.<a data-link-type="attribute" data-lt="[[state]]" href="#dfn-state" class="internalDFN" id="ref-for-dfn-state-7"><code>[[state]]</code></a> becoming <code>"forgotten"</code>
                       must be treated as if <var>the port was disconnected</var>.
                     </div></div>
@@ -1528,7 +1564,7 @@ writer.<span class="hljs-title function_">releaseLock</span>();</code></pre>
                       <li>If the chunk was successfully written, or was stored
                       for future coalescing, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve">resolve</a> <var data-type="Promise">promise</var> with
                       <code>undefined</code>.
-                        <div class="note" role="note" id="issue-container-generatedID-4"><div role="heading" class="note-title marker" id="h-note-4" aria-level="4"><span>Note</span></div><div class="">
+                        <div class="note" role="note" id="issue-container-generatedID-4"><div class="note-title marker" id="h-note-4"><span>Note</span></div><div class="">
                           [<cite><a class="bibref" data-link-type="biblio" href="#bib-streams" title="Streams Standard">STREAMS</a></cite>] specifies that <var>writeAlgorithm</var> will only
                           be invoked after the <a data-link-type="interface" data-lt="Promise" href="https://webidl.spec.whatwg.org/#idl-promise"><code>Promise</code></a> returned by a
                           previous invocation of this algorithm has resolved.
@@ -1684,7 +1720,7 @@ writer.<span class="hljs-title function_">releaseLock</span>();</code></pre>
           reject <var>promise</var> with a <a data-link-type="exception" data-lt="TypeError" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror"><code>TypeError</code></a> and return <var>promise</var>.
           </li>
           <li>Perform the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>:
-            <div class="note" role="note" id="issue-container-generatedID-5"><div role="heading" class="note-title marker" id="h-note-5" aria-level="4"><span>Note</span></div><div class="">
+            <div class="note" role="note" id="issue-container-generatedID-5"><div class="note-title marker" id="h-note-5"><span>Note</span></div><div class="">
               Ideally the changes specified in <var>signals</var> would be applied
               atomically however this is not supported by either the POSIX or
               Windows APIs user agents will use to implement these steps.
@@ -1705,7 +1741,7 @@ writer.<span class="hljs-title function_">releaseLock</span>();</code></pre>
               <li>If <var>signals</var>["<a data-link-type="idl" href="#dom-serialoutputsignals-break" class="internalDFN" id="ref-for-dom-serialoutputsignals-break-1"><code>break</code></a>"] is present,
               invoke the operating system to either assert (if <code>true</code>) or
               deassert (if <code>false</code>) the "break" signal on the serial port.
-                <div class="note" role="note" id="issue-container-generatedID-6"><div role="heading" class="note-title marker" id="h-note-6" aria-level="4"><span>Note</span></div><div class="">
+                <div class="note" role="note" id="issue-container-generatedID-6"><div class="note-title marker" id="h-note-6"><span>Note</span></div><div class="">
                   The "break" signal is typically implemented as an in-band
                   signal by holding the transmit line at the "mark" voltage and
                   thus prevents data transmission for as long as it remains
@@ -2087,7 +2123,7 @@ reader.<span class="hljs-title function_">cancel</span>();
         "<code>00001101-0000-1000-8000-00805f9b34fb</code>".
       </p>
       <p>
-        A {{BluetoothServiceUUID} <var data-type="BluetoothServiceUUID">serviceUuid</var> is a
+        A <a data-link-type="typedef" data-lt="BluetoothServiceUUID" href="https://webbluetoothcg.github.io/web-bluetooth/#typedefdef-bluetoothserviceuuid"><code>BluetoothServiceUUID</code></a> <var data-type="BluetoothServiceUUID">serviceUuid</var> is a
         <dfn id="dfn-blocked-bluetooth-service-class-uuid" tabindex="0" aria-haspopup="dialog" data-dfn-type="dfn">blocked Bluetooth service class UUID</dfn> if the following steps
         return <code>true</code>:
       </p>
@@ -2096,7 +2132,7 @@ reader.<span class="hljs-title function_">cancel</span>();
         <a data-link-type="interface" data-lt="BluetoothUUID" href="https://webbluetoothcg.github.io/web-bluetooth/#bluetoothuuid"><code>BluetoothUUID</code></a>.<a data-link-type="method" data-lt="getService()" href="https://webbluetoothcg.github.io/web-bluetooth/#dom-bluetoothuuid-getservice"><code>getService</code></a><code>()</code> with <var data-type="BluetoothServiceUUID">serviceUuid</var>.
         </li>
         <li>Let <var data-type="list&lt;BluetoothServiceUUID&gt;">blocklist</var> be the result of
-        <a data-link-type="dfn|abstract-op" href="#dfn-parsing-the-bluetooth-service-class-id-blocklist" class="internalDFN" id="ref-for-dfn-parsing-the-bluetooth-service-class-id-blocklist-1">parsing the Bluetooth service class ID blocklist</a> at <a href="https://github.com/WICG/serial/blob/main/blocklist.txt">https://github.com/WICG/serial/blob/main/blocklist.txt</a>.
+        <a data-link-type="dfn|abstract-op" href="#dfn-parsing-the-bluetooth-service-class-id-blocklist" class="internalDFN" id="ref-for-dfn-parsing-the-bluetooth-service-class-id-blocklist-1">parsing the Bluetooth service class ID blocklist</a> at <a href="https://github.com/WICG/serial/blob/main/bluetooth-service-blocklist.txt">https://github.com/WICG/serial/blob/main/bluetooth-service-blocklist.txt</a>.
         </li>
         <li>If <var data-type="list&lt;BluetoothServiceUUID&gt;">blocklist</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain">contains</a> <var data-type="UUID">uuid</var>, return <code>true</code>.
         </li>
@@ -2298,37 +2334,12 @@ reader.<span class="hljs-title function_">cancel</span>();
     </section>
   
 
-<section id="references" class="appendix"><div class="header-wrapper"><h2 id="b-references"><bdi class="secno">B. </bdi>References</h2><a class="self-link" href="#references" aria-label="Permalink for Appendix B."></a></div><section id="normative-references"><div class="header-wrapper"><h3 id="b-1-normative-references"><bdi class="secno">B.1 </bdi>Normative references</h3><a class="self-link" href="#normative-references" aria-label="Permalink for Appendix B.1"></a></div>
-    
-    <dl class="bibliography"><dt id="bib-dom">[dom]</dt><dd>
-      <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Anne van Kesteren.  WHATWG. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
-    </dd><dt id="bib-html">[html]</dt><dd>
-      <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Anne van Kesteren; Domenic Denicola; Dominic Farolino; Ian Hickson; Philip Jägenstedt; Simon Pieters.  WHATWG. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
-    </dd><dt id="bib-infra">[infra]</dt><dd>
-      <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Anne van Kesteren; Domenic Denicola.  WHATWG. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
-    </dd><dt id="bib-permissions-policy">[PERMISSIONS-POLICY]</dt><dd>
-      <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. Ian Clelland.  W3C. 6 October 2025. W3C Working Draft. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
-    </dd><dt id="bib-streams">[STREAMS]</dt><dd>
-      <a href="https://streams.spec.whatwg.org/"><cite>Streams Standard</cite></a>. Adam Rice; Domenic Denicola; Mattias Buelens; 吉野剛史 (Takeshi Yoshino).  WHATWG. Living Standard. URL: <a href="https://streams.spec.whatwg.org/">https://streams.spec.whatwg.org/</a>
-    </dd><dt id="bib-web-bluetooth">[WEB-BLUETOOTH]</dt><dd>
-      <a href="https://webbluetoothcg.github.io/web-bluetooth/"><cite>Web Bluetooth</cite></a>. Jeffrey Yasskin.  W3C Web Bluetooth Community Group. Draft Community Group Report. URL: <a href="https://webbluetoothcg.github.io/web-bluetooth/">https://webbluetoothcg.github.io/web-bluetooth/</a>
-    </dd><dt id="bib-webidl">[WEBIDL]</dt><dd>
-      <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Edgar Chen; Timothy Gu.  WHATWG. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
-    </dd></dl>
-  </section><section id="informative-references"><div class="header-wrapper"><h3 id="b-2-informative-references"><bdi class="secno">B.2 </bdi>Informative references</h3><a class="self-link" href="#informative-references" aria-label="Permalink for Appendix B.2"></a></div>
-    
-    <dl class="bibliography"><dt id="bib-csp3">[CSP3]</dt><dd>
-      <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. Mike West; Antonio Sartori.  W3C. 11 February 2026. W3C Working Draft. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
-    </dd><dt id="bib-webusb">[WEBUSB]</dt><dd>
-      <a href="https://wicg.github.io/webusb/"><cite>WebUSB API</cite></a>.  W3C. Draft Community Group Report. URL: <a href="https://wicg.github.io/webusb/">https://wicg.github.io/webusb/</a>
-    </dd></dl>
-  </section></section><p role="navigation" id="back-to-top">
-    <a href="#title"><abbr title="Back to Top">↑</abbr></a>
-  </p><div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-navigator-serial" aria-label="Links in this document to definition: serial">
+<div class="dfn-panel" hidden="" role="dialog" aria-modal="true" id="dfn-panel-for-dom-navigator-serial" aria-label="Links in this document to definition: serial">
       <span class="caret"></span>
       <div>
         <a class="self-link" href="#dom-navigator-serial" aria-label="Permalink for definition: serial. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-216783249">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2347,6 +2358,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-workernavigator-serial" aria-label="Permalink for definition: serial. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-169119904">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2361,6 +2373,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serial" aria-label="Permalink for definition: Serial. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> 
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2383,6 +2396,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serial-requestport" aria-label="Permalink for definition: requestPort(). Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1469373565">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2409,6 +2423,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-available" aria-label="Permalink for definition: available. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2423,6 +2438,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportrequestoptions" aria-label="Permalink for definition: SerialPortRequestOptions. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1146248160">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2437,6 +2453,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportrequestoptions-filters" aria-label="Permalink for definition: filters. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1146248160">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2451,6 +2468,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportrequestoptions-allowedbluetoothserviceclassids" aria-label="Permalink for definition: allowedBluetoothServiceClassIds. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1146248160">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2465,6 +2483,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportfilter" aria-label="Permalink for definition: SerialPortFilter. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-365048672">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2481,6 +2500,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportfilter-usbvendorid" aria-label="Permalink for definition: usbVendorId. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-365048672">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2495,6 +2515,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportfilter-usbproductid" aria-label="Permalink for definition: usbProductId. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-365048672">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2509,6 +2530,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportfilter-bluetoothserviceclassid" aria-label="Permalink for definition: bluetoothServiceClassId. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-365048672">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2523,6 +2545,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-matches-the-filter" aria-label="Permalink for definition: matches the filter. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2535,6 +2558,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-match-any-filter" aria-label="Permalink for definition: matches any filter. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2547,6 +2571,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serial-getports" aria-label="Permalink for definition: getPorts(). Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1469373565">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2561,6 +2586,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serial-onconnect" aria-label="Permalink for definition: onconnect. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1469373565">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2575,6 +2601,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-connect" aria-label="Permalink for definition: connect. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2587,6 +2614,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serial-ondisconnect" aria-label="Permalink for definition: ondisconnect. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1469373565">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2601,6 +2629,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-disconnect" aria-label="Permalink for definition: disconnect. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2613,6 +2642,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport" aria-label="Permalink for definition: SerialPort. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2637,6 +2667,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-serial-port-task-source" aria-label="Permalink for definition: serial port task source. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2665,6 +2696,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-state" aria-label="Permalink for definition: [[state]]. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2689,6 +2721,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-buffersize" aria-label="Permalink for definition: [[bufferSize]]. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2705,6 +2738,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-connected" aria-label="Permalink for definition: [[connected]]. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2721,6 +2755,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-readable" aria-label="Permalink for definition: [[readable]]. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2737,6 +2772,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-readfatal" aria-label="Permalink for definition: [[readFatal]]. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2751,6 +2787,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-writable" aria-label="Permalink for definition: [[writable]]. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2767,6 +2804,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-writefatal" aria-label="Permalink for definition: [[writeFatal]]. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2781,6 +2819,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-pendingclosepromise" aria-label="Permalink for definition: [[pendingClosePromise]]. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2797,6 +2836,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-onconnect" aria-label="Permalink for definition: onconnect. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2811,6 +2851,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-logically-connected" aria-label="Permalink for definition: logically connected. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2825,6 +2866,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-ondisconnect" aria-label="Permalink for definition: ondisconnect. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2839,6 +2881,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-getinfo" aria-label="Permalink for definition: getInfo(). Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2855,6 +2898,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportinfo" aria-label="Permalink for definition: SerialPortInfo. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1960202070">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2869,6 +2913,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportinfo-usbvendorid" aria-label="Permalink for definition: usbVendorId. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1960202070">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2885,6 +2930,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportinfo-usbproductid" aria-label="Permalink for definition: usbProductId. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1960202070">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2901,6 +2947,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialportinfo-bluetoothserviceclassid" aria-label="Permalink for definition: bluetoothServiceClassId. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1960202070">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2917,6 +2964,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-open" aria-label="Permalink for definition: open(). Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2931,6 +2979,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoptions" aria-label="Permalink for definition: SerialOptions. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2945,6 +2994,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoptions-baudrate" aria-label="Permalink for definition: baudRate. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2959,6 +3009,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoptions-databits" aria-label="Permalink for definition: dataBits. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2973,6 +3024,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoptions-stopbits" aria-label="Permalink for definition: stopBits. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2987,6 +3039,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoptions-parity" aria-label="Permalink for definition: parity. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -2999,6 +3052,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoptions-buffersize" aria-label="Permalink for definition: bufferSize. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3013,6 +3067,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoptions-flowcontrol" aria-label="Permalink for definition: flowControl. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-547934505">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3025,6 +3080,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-paritytype" aria-label="Permalink for definition: ParityType. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-2140913730">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3039,6 +3095,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-paritytype-none" aria-label="Permalink for definition: none. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-2140913730">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3051,6 +3108,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-paritytype-even" aria-label="Permalink for definition: even. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-2140913730">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3063,6 +3121,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-paritytype-odd" aria-label="Permalink for definition: odd. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-2140913730">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3075,6 +3134,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-flowcontroltype" aria-label="Permalink for definition: FlowControlType. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1109025009">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3089,6 +3149,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-flowcontroltype-none" aria-label="Permalink for definition: none. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1109025009">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3101,6 +3162,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-flowcontroltype-hardware" aria-label="Permalink for definition: hardware. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1109025009">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3113,6 +3175,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-connected" aria-label="Permalink for definition: connected. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3127,6 +3190,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-readable" aria-label="Permalink for definition: readable. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3145,6 +3209,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-handle-closing-the-readable-stream" aria-label="Permalink for definition: handle closing the readable stream. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3157,6 +3222,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-writable" aria-label="Permalink for definition: writable. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3175,6 +3241,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-handle-closing-the-writable-stream" aria-label="Permalink for definition: handle closing the writable stream. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3187,6 +3254,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-setsignals" aria-label="Permalink for definition: setSignals(). Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3201,6 +3269,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoutputsignals" aria-label="Permalink for definition: SerialOutputSignals. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1048921348">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3215,6 +3284,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoutputsignals-dataterminalready" aria-label="Permalink for definition: dataTerminalReady. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1048921348">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3229,6 +3299,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoutputsignals-requesttosend" aria-label="Permalink for definition: requestToSend. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1048921348">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3243,6 +3314,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialoutputsignals-break" aria-label="Permalink for definition: break. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-1048921348">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3257,6 +3329,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-getsignals" aria-label="Permalink for definition: getSignals(). Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3271,6 +3344,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialinputsignals" aria-label="Permalink for definition: SerialInputSignals. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-910464035">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3285,6 +3359,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialinputsignals-datacarrierdetect" aria-label="Permalink for definition: dataCarrierDetect. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-910464035">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3299,6 +3374,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialinputsignals-cleartosend" aria-label="Permalink for definition: clearToSend. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-910464035">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3313,6 +3389,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialinputsignals-ringindicator" aria-label="Permalink for definition: ringIndicator. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-910464035">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3327,6 +3404,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialinputsignals-datasetready" aria-label="Permalink for definition: dataSetReady. Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-910464035">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3341,6 +3419,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-close" aria-label="Permalink for definition: close(). Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3355,6 +3434,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dom-serialport-forget" aria-label="Permalink for definition: forget(). Activate to close this dialog.">Permalink</a>
         <span class="marker dfn-exported" title="Definition can be referenced by other specifications">exported</span> <a class="marker idl-block" title="Jump to IDL declaration" href="#webidl-522066859">IDL</a>
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3369,6 +3449,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-parsing-the-bluetooth-service-class-id-blocklist" aria-label="Permalink for definition: parsing the Bluetooth service class ID blocklist. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3381,6 +3462,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-serial-port-profile-service-class-id" aria-label="Permalink for definition: Serial Port Profile service class ID. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3395,6 +3477,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-blocked-bluetooth-service-class-uuid" aria-label="Permalink for definition: blocked Bluetooth service class UUID. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3407,6 +3490,7 @@ reader.<span class="hljs-title function_">cancel</span>();
       <div>
         <a class="self-link" href="#dfn-serial" aria-label="Permalink for definition: serial. Activate to close this dialog.">Permalink</a>
          
+        
       </div>
       <p><b>Referenced in:</b></p>
       <ul>
@@ -3414,7 +3498,44 @@ reader.<span class="hljs-title function_">cancel</span>();
       <a href="#ref-for-dfn-serial-1" title="§ 3.1 requestPort() method">§ 3.1 requestPort() method</a> 
     </li>
   </ul>
-    </div><script id="respec-highlight-vars">(() => {
+    </div><script id="respec-copy-paste">
+    document.querySelectorAll(".respec-button-copy-paste").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var pre = this.closest("pre");
+        if (!pre) return;
+        var sel = this.dataset.copyHeader;
+        var clone = pre.cloneNode(true);
+        if (sel) { var h = clone.querySelector(sel); if (h) h.remove(); }
+        navigator.clipboard.writeText(clone.textContent);
+      });
+    });
+  </script><section id="references" class="appendix"><div class="header-wrapper"><h2 id="b-references"><bdi class="secno">B. </bdi>References</h2><a class="self-link" href="#references" aria-label="Permalink for Appendix B."></a></div><section id="normative-references"><div class="header-wrapper"><h3 id="b-1-normative-references"><bdi class="secno">B.1 </bdi>Normative references</h3><a class="self-link" href="#normative-references" aria-label="Permalink for Appendix B.1"></a></div>
+    
+    <dl class="bibliography"><dt id="bib-dom">[dom]</dt><dd>
+      <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Anne van Kesteren.  WHATWG. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
+    </dd><dt id="bib-html">[html]</dt><dd>
+      <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Anne van Kesteren; Domenic Denicola; Dominic Farolino; Ian Hickson; Philip Jägenstedt; Simon Pieters.  WHATWG. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
+    </dd><dt id="bib-infra">[infra]</dt><dd>
+      <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Anne van Kesteren; Domenic Denicola.  WHATWG. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
+    </dd><dt id="bib-permissions-policy">[PERMISSIONS-POLICY]</dt><dd>
+      <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. Ian Clelland.  W3C. 6 October 2025. W3C Working Draft. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
+    </dd><dt id="bib-streams">[STREAMS]</dt><dd>
+      <a href="https://streams.spec.whatwg.org/"><cite>Streams Standard</cite></a>. Adam Rice; Domenic Denicola; Mattias Buelens; 吉野剛史 (Takeshi Yoshino).  WHATWG. Living Standard. URL: <a href="https://streams.spec.whatwg.org/">https://streams.spec.whatwg.org/</a>
+    </dd><dt id="bib-web-bluetooth">[WEB-BLUETOOTH]</dt><dd>
+      <a href="https://webbluetoothcg.github.io/web-bluetooth/"><cite>Web Bluetooth</cite></a>. Jeffrey Yasskin.  W3C Web Bluetooth Community Group. Draft Community Group Report. URL: <a href="https://webbluetoothcg.github.io/web-bluetooth/">https://webbluetoothcg.github.io/web-bluetooth/</a>
+    </dd><dt id="bib-webidl">[WEBIDL]</dt><dd>
+      <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Edgar Chen; Timothy Gu.  WHATWG. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
+    </dd></dl>
+  </section><section id="informative-references"><div class="header-wrapper"><h3 id="b-2-informative-references"><bdi class="secno">B.2 </bdi>Informative references</h3><a class="self-link" href="#informative-references" aria-label="Permalink for Appendix B.2"></a></div>
+    
+    <dl class="bibliography"><dt id="bib-csp3">[CSP3]</dt><dd>
+      <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. Mike West; Antonio Sartori.  W3C. 5 May 2026. W3C Working Draft. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+    </dd><dt id="bib-webusb">[WEBUSB]</dt><dd>
+      <a href="https://wicg.github.io/webusb/"><cite>WebUSB API</cite></a>.  W3C. Draft Community Group Report. URL: <a href="https://wicg.github.io/webusb/">https://wicg.github.io/webusb/</a>
+    </dd></dl>
+  </section></section><p role="navigation" id="back-to-top">
+    <a href="#title"><abbr title="Back to Top">↑</abbr></a>
+  </p><script id="respec-highlight-vars">(() => {
 // @ts-check
 
 if (document.respec) {
@@ -3429,9 +3550,12 @@ function setupVarHighlighter() {
     .forEach(varElem => varElem.addEventListener("click", highlightListener));
 }
 
+/**
+ * @param {MouseEvent} ev
+ */
 function highlightListener(ev) {
   ev.stopPropagation();
-  const { target: varElem } = ev;
+  const varElem = /** @type {HTMLElement} */ (ev.target);
   const hightligtedElems = highlightVars(varElem);
   const resetListener = () => {
     const hlColor = getHighlightColor(varElem);
@@ -3454,6 +3578,9 @@ const HL_COLORS = new Map([
   ["respec-hl-c7", true],
 ]);
 
+/**
+ * @param {HTMLElement} target
+ */
 function getHighlightColor(target) {
   // return current colors if applicable
   const { value } = target.classList;
@@ -3468,9 +3595,15 @@ function getHighlightColor(target) {
   return [...HL_COLORS.keys()].find(c => HL_COLORS.get(c)) || "respec-hl-c1";
 }
 
+/**
+ * @param {HTMLElement} varElem
+ */
 function highlightVars(varElem) {
   const textContent = norm(varElem.textContent);
-  const parent = varElem.closest(".algorithm, section");
+  const parent = /** @type {HTMLElement} */ (
+    varElem.closest(".algorithm, section")
+  );
+  if (!parent) return [];
   const highlightColor = getHighlightColor(varElem);
 
   const varsToHighlight = [...parent.querySelectorAll("var")].filter(
@@ -3493,12 +3626,20 @@ function highlightVars(varElem) {
   return varsToHighlight;
 }
 
+/**
+ * @param {HTMLElement} el
+ * @param {string} highlightColor
+ */
 function removeHighlight(el, highlightColor) {
   el.classList.remove("respec-hl", highlightColor);
   // clean up empty class attributes so they don't come in export
   if (!el.classList.length) el.removeAttribute("class");
 }
 
+/**
+ * @param {HTMLElement} elem
+ * @param {string} highlightColor
+ */
 function addHighlight(elem, highlightColor) {
   elem.classList.add("respec-hl", highlightColor);
 }
@@ -3526,8 +3667,11 @@ function setupPanel() {
 }
 
 function panelListener() {
-  /** @type {HTMLElement} */
+  /** @type {HTMLElement | null} */
   let panel = null;
+  /**
+   * @param {KeyboardEvent|MouseEvent} event
+   */
   return event => {
     const { target, type } = event;
 
@@ -3535,24 +3679,34 @@ function panelListener() {
 
     // For keys, we only care about Enter key to activate the panel
     // otherwise it's activated via a click.
-    if (type === "keydown" && event.key !== "Enter") return;
+    if (
+      type === "keydown" &&
+      /** @type {KeyboardEvent} */ (event).key !== "Enter"
+    )
+      return;
 
     const action = deriveAction(event);
 
     switch (action) {
       case "show": {
         hidePanel(panel);
-        /** @type {HTMLElement} */
+        /** @type {HTMLElement | null} */
         const dfn = target.closest("dfn, .index-term");
+        if (!dfn?.id) break;
         panel = document.getElementById(`dfn-panel-for-${dfn.id}`);
-        const coords = deriveCoordinates(event);
+        if (!panel) break;
+        const coords = deriveCoordinates(
+          /** @type {MouseEvent|KeyboardEvent} */ (event)
+        );
         displayPanel(dfn, panel, coords);
         break;
       }
       case "dock": {
-        panel.style.left = null;
-        panel.style.top = null;
-        panel.classList.add("docked");
+        if (panel) {
+          panel.style.left = "";
+          panel.style.top = "";
+          panel.classList.add("docked");
+        }
         break;
       }
       case "hide": {
@@ -3603,7 +3757,8 @@ function deriveAction(event) {
     if (hitALink) {
       return target.classList.contains("self-link") ? "hide" : "dock";
     }
-    const panel = target.closest(".dfn-panel");
+
+    const panel = /** @type {HTMLElement} */ (target.closest(".dfn-panel"));
     return panel.classList.contains("docked") ? "hide" : "none";
   }
   if (document.querySelector(".dfn-panel:not([hidden])")) {
@@ -3647,9 +3802,9 @@ function displayPanel(dfn, panel, { x, y }) {
     const newLeft = Math.max(MARGIN, x + MARGIN - panelRect.width);
     const newCaretOffset = left - newLeft;
     panel.style.left = `${newLeft}px`;
-    /** @type {HTMLElement} */
+    /** @type {HTMLElement | null} */
     const caret = panel.querySelector(".caret");
-    caret.style.left = `${newCaretOffset}px`;
+    if (caret) caret.style.left = `${newCaretOffset}px`;
   }
 
   // As it's a dialog, we trap focus.
@@ -3698,6 +3853,9 @@ function trapFocus(panel, dfn) {
 function createTrapListener(anchors, panel, dfn) {
   const lastIndex = anchors.length - 1;
   let currentIndex = 0;
+  /**
+   * @param {KeyboardEvent} event
+   */
   return event => {
     switch (event.key) {
       // Hitting "Tab" traps us in a nice loop around elements.
@@ -3727,7 +3885,7 @@ function createTrapListener(anchors, panel, dfn) {
   };
 }
 
-/** @param {HTMLElement} panel */
+/** @param {HTMLElement | null} panel */
 function hidePanel(panel) {
   if (!panel) return;
   panel.hidden = true;
