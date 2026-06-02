@@ -1838,7 +1838,7 @@
         "`00001101-0000-1000-8000-00805f9b34fb`".
       </p>
       <p>
-        A {{BluetoothServiceUUID} |serviceUuid:BluetoothServiceUUID| is a
+        A {{BluetoothServiceUUID}} |serviceUuid:BluetoothServiceUUID| is a
         <dfn>blocked Bluetooth service class UUID</dfn> if the following steps
         return `true`:
       </p>
@@ -1848,7 +1848,7 @@
         </li>
         <li>Let |blocklist:list&lt;BluetoothServiceUUID&gt;| be the result of
         [=parsing the Bluetooth service class ID blocklist=] at <a href=
-        "https://github.com/WICG/serial/blob/main/blocklist.txt">https://github.com/WICG/serial/blob/main/blocklist.txt</a>.
+        "https://github.com/WICG/serial/blob/main/bluetooth-service-blocklist.txt">https://github.com/WICG/serial/blob/main/bluetooth-service-blocklist.txt</a>.
         </li>
         <li>If |blocklist| [=list/contains=] |uuid|, return `true`.
         </li>
