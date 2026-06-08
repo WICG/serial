@@ -400,6 +400,17 @@
               ports which the user has allowed the site to access
               as the result of a previous call to {{Serial/requestPort()}}.
               </li>
+              <div class="note">
+                An implementation is allowed to have a storage mechanism that
+                remembers ports that have been allowed from previous calls of
+                {{Serial/requestPort()}} from previous times the user has
+                visited the same site. Implementations should take caution that
+                a device will not always have the same port name, as this is up
+                to the operating system, and thus there is a danger that
+                allowing access to a previously allowed port may grant access
+                to a different device than the user intended. As such,
+                implementations should communicate this risk to the user.
+              </div>
               <li>Let |ports| be the sequence of the {{SerialPort}}s
               representing the ports in |availablePorts|.
               </li>
